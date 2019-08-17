@@ -32,5 +32,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-thom/the-index.git"
+  },
+  "author": "Stuart Thomson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/s-thom/the-index/issues"
+  },
+  "homepage": "https://github.com/s-thom/the-index#readme"
 }
