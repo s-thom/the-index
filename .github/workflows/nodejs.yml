@@ -69,16 +69,3 @@ jobs:
           cd backend
           npm ci
           npm run migrate
-  envar-test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
-    steps:
-      - uses: actions/checkout@v1
-      - name: test envars
-        env:
-          CI: "true"
-          ANOTHER_VAR: a value
-        run: |
-          echo "$CI $ANOTHER_VAR"
