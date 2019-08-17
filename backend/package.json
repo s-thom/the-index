@@ -1,0 +1,31 @@
+{
+  "name": "the-index_backend",
+  "version": "1.0.0",
+  "description": "A personal index",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-thom/the-index.git"
+  },
+  "author": "Stuart Thomson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/s-thom/the-index/issues"
+  },
+  "homepage": "https://github.com/s-thom/the-index#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.17",
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.1",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.0",
+    "express": "^4.17.1",
+    "typescript": "^3.5.3"
+  }
+}
