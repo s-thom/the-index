@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsc && node build/index.js",
     "dev": "nodemon --inspect=5858 src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "migrate": "dotenv -- flyway -locations=filesystem:./sql migrate"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,8 @@
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/jest": "^24.0.17",
+    "dotenv-cli": "^2.0.1",
+    "flywaydb-cli": "^0.6.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.1",
     "ts-jest": "^24.0.2",
@@ -35,6 +38,7 @@
     "dotenv-expand": "^5.1.0",
     "express": "^4.17.1",
     "helmet": "^3.20.0",
+    "sqlite3": "^4.1.0",
     "typescript": "^3.5.3"
   }
 }
