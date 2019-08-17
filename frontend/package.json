@@ -16,6 +16,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:ci": "cross-env CI=true react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -42,5 +43,7 @@
   "bugs": {
     "url": "https://github.com/s-thom/the-index/issues"
   },
-  "homepage": "https://github.com/s-thom/the-index#readme"
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  }
 }
