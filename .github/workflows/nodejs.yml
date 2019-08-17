@@ -19,6 +19,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build, and test
+        env:
+          ci: "true"
         run: |
           cd frontend
           npm ci
@@ -37,6 +39,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build, and test
         env:
+          ci: "true"
           db_path: database.sqlite
           db_user: ${{ secrets.DB_USER }}
           db_pass: ${{ secrets.DB_PASS }}
@@ -58,7 +61,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm install, run migration
         env:
-          flyway_url: jdbc:sqlite:database.sqlite
+          ci: "true"
+          flyway_url: jdbc:sqlite:${GITHUB_WORKSPACE}/the-index/backend/database.sqlite
           flyway_user: ${{ secrets.FLYWAY_USER }}
           flyway_password: ${{ secrets.FLYWAY_PASSWORD }}
         run: |
