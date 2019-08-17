@@ -13,6 +13,14 @@
       "sourceMapPathOverrides": {
         "webpack:///src/*": "${webRoot}/*"
       }
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Dev Server",
+      "port": 5858,
+      "restart": true,
+      "protocol": "inspector"
     }
   ]
 }
