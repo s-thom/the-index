@@ -36,6 +36,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build, and test
+        env:
+          db_path: database.sqlite
+          db_user: ${{ secrets.DB_USER }}
+          db_pass: ${{ secrets.DB_PASS }}
         run: |
           cd backend
           npm ci
@@ -53,6 +57,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install, run migration
+        env:
+          flyway_url: jdbc:sqlite:database.sqlite
+          flyway_user: ${{ secrets.FLYWAY_USER }}
+          flyway_password: ${{ secrets.FLYWAY_PASSWORD }}
         run: |
           cd backend
           npm ci
