@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import './index.css';
+import { LinkDetail } from '../types';
+import LinkItem from '../components/LinkItem';
+import {searchByTag} from '../requests';
 
-const App: React.FC = () => {
+export default function App() {
+  const [links, setLinks] = useState<LinkDetail[]>([]);
+
+  async function requestLinksByTags(tags: string[]) {
+    const links = await searchByTag(tags);
+    setLinks(links);
+  }
+
+  useEffect(() => {
+    requestLinksByTags(['test']);
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React {process.env.REACT_APP_SERVER_PATH} foo
-        </a>
-      </header>
+      <div className="App-link-list">
+        {links.map((link) => (<LinkItem key={link.id} link={link} />))}
+      </div>
     </div>
-  );
+  )
 }
-
-export default App;
