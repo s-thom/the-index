@@ -1,14 +1,53 @@
-import { run } from "./db";
+import { run, generateID } from "./db";
 import { Link } from "../functions/links";
 
-export function insertLink(url: string, title: string) {}
+interface LinkRow {
+  id: string;
+  url_path: string;
+  title: string;
+  inserted_dts: string;
+}
+
+export function insertLink(url: string, title: string) {
+  return run<Link | null>(db => {
+    return new Promise((res, rej) => {
+      const statement = db.prepare("INSERT INTO links VALUES (?, ?, ?, ?)");
+      const newId = generateID();
+      const insertionDate = new Date();
+
+      const link: Link = {
+        id: newId,
+        url,
+        title,
+        inserted: insertionDate
+      };
+
+      statement.run(
+        newId,
+        url,
+        title,
+        insertionDate.toISOString(),
+        (err?: Error) => {
+          if (err) {
+            rej(err);
+            return;
+          }
+
+          res(link);
+        }
+      );
+
+      statement.finalize();
+    });
+  });
+}
 
 export function getLinkById(id: string) {
   return run<Link | null>(db => {
     return new Promise((res, rej) => {
       const statement = db.prepare("SELECT * FROM links WHERE id = ?");
 
-      statement.run(id, (err?: Error, row?: any) => {
+      statement.run(id, (err?: Error, row?: LinkRow) => {
         if (err) {
           rej(err);
           return;
@@ -16,6 +55,7 @@ export function getLinkById(id: string) {
 
         if (!row) {
           res(null);
+          return;
         }
 
         const link: Link = {
