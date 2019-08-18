@@ -62,4 +62,8 @@ npm run dev
 
 ## TODO
 
-- []
+- [ ] Basic prototype
+- [ ] Login via TOTP code (single user)
+- [ ] Public tag
+- [ ] Required tags
+- [ ] Multiuser
