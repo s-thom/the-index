@@ -22,6 +22,8 @@
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/jest": "^24.0.17",
+    "@types/node": "^12.7.2",
+    "@types/sqlite3": "^3.1.5",
     "dotenv-cli": "^2.0.1",
     "flywaydb-cli": "^0.6.0",
     "jest": "^24.9.0",
@@ -37,6 +39,7 @@
     "dotenv": "^8.0.0",
     "dotenv-expand": "^5.1.0",
     "express": "^4.17.1",
+    "extended-snowflake": "^2.1.0",
     "helmet": "^3.20.0",
     "sqlite3": "^4.1.0",
     "typescript": "^3.5.3"

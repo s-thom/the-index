@@ -12,7 +12,7 @@ Required environment variables (Normal CRA `.env` rules apply):
 
 ## Backend
 
-Uses an SQLite3 database for now. Database versioning is done with [flyway](https://flywaydb.org/).
+Uses an SQLite3 database for now. Database versioning is done with [flyway](https://flywaydb.org/). While a username and password is not required for SQLite, I've added them in anyway for the future.
 
 Required environment variables (a `.env` file is supported):
 
@@ -22,3 +22,7 @@ Required environment variables (a `.env` file is supported):
 - `FLYWAY_URL`: JDBC path to the database e.g. `jdbc:sqlite:database.sqlite`
 - `FLYWAY_USER`: Same as `DB_USER`
 - `FLYWAY_PASSWORD`: Same as `DB_PASS`
+
+Optional variables:
+
+- `SERVER_PORT`: Port for express to run on

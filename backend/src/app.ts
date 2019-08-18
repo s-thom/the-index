@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import compression from "compression";
 import helmet from "helmet";
-import { version } from "../package.json";
+import versionRoute from "./endpoints/version";
 
 const app = express();
 app.use(helmet());
@@ -12,6 +12,6 @@ app.get("/", (req: Request, res: Response) =>
   res.send("Hello World from app.ts!")
 );
 
-app.get("/version", (req: Request, res: Response) => res.send({ version }));
+app.get("/version", versionRoute);
 
 export default app;
