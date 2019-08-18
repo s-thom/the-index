@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import compression from "compression";
 import helmet from "helmet";
 import versionRoute from "./endpoints/version";
+import { getLinkByIdRoute } from "./endpoints/links";
 
 const app = express();
 app.use(helmet());
@@ -13,5 +14,7 @@ app.get("/", (req: Request, res: Response) =>
 );
 
 app.get("/version", versionRoute);
+
+app.get("/link", getLinkByIdRoute);
 
 export default app;

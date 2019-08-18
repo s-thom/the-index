@@ -17,9 +17,15 @@ const idGenerator = new ExtSnowflakeGenerator(0);
 
 export default db;
 
-export function run(fn: (db: sqlite3.Database) => void) {
-  db.serialize(() => {
-    fn(db);
+export function run<T>(fn: (db: sqlite3.Database) => Promise<T>) {
+  return new Promise<T>((res, rej) => {
+    try {
+      db.serialize(() => {
+        fn(db).then(res, rej);
+      });
+    } catch (err) {
+      rej(err);
+    }
   });
 }
 
