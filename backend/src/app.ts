@@ -16,7 +16,7 @@ app.get("/", (req: Request, res: Response) =>
 
 app.get("/version", versionRoute);
 
-app.get("/link", getLinkByIdRoute);
-app.post("/link", addNewLinkRoute);
+app.get("/links/:id", getLinkByIdRoute);
+app.post("/links", addNewLinkRoute);
 
 export default app;
