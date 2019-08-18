@@ -1,4 +1,4 @@
-import { getLinkByIdFn, addNewLinkFn } from "./links";
+import { getLinkByIdFn, addNewLinkFn, getLinkDetailByIdFn } from "./links";
 jest.mock("../database/links");
 jest.mock("../database/tags");
 
@@ -20,6 +20,18 @@ test("getLinkByID returns the link if set", async () => {
     url: "https://example.com",
     title: "Example",
     inserted: expect.anything()
+  });
+});
+
+test("getLinkDetailByID returns the link if set", async () => {
+  expect.assertions(1);
+  const link = await getLinkDetailByIdFn("1");
+  expect(link).toEqual({
+    id: "1",
+    url: "https://example.com",
+    title: "Example",
+    inserted: expect.anything(),
+    tags: ["example", "test", "another"]
   });
 });
 

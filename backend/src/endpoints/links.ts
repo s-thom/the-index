@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
-import { Link, getLinkByIdFn, addNewLinkFn } from "../functions/links";
+import {
+  LinkDetail,
+  getLinkDetailByIdFn,
+  addNewLinkFn
+} from "../functions/links";
 
 interface GetLinkResponse {
-  link: Link;
+  link: LinkDetail;
 }
 
 interface AddNewLinkRequest {
@@ -22,7 +26,7 @@ export async function getLinkByIdRoute(req: Request, res: Response) {
       throw new Error('No "id" parameter specified');
     }
 
-    const link = await getLinkByIdFn(id);
+    const link = await getLinkDetailByIdFn(id);
 
     const response: GetLinkResponse = {
       link

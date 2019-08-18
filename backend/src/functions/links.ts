@@ -1,11 +1,19 @@
 import { getLinkById, insertLink } from "../database/links";
-import { getOrInsertTags, addTagsToLink } from "../database/tags";
+import {
+  getOrInsertTags,
+  addTagsToLink,
+  getTagsForLinkId
+} from "../database/tags";
 
 export interface Link {
   id: string;
   url: string;
   title: string;
   inserted: Date;
+}
+
+export interface LinkDetail extends Link {
+  tags: string[];
 }
 
 export async function getLinkByIdFn(id: string) {
@@ -20,6 +28,25 @@ export async function getLinkByIdFn(id: string) {
   }
 
   return link;
+}
+
+export async function getLinkDetailByIdFn(id: string): Promise<LinkDetail> {
+  if (typeof id !== "string") {
+    throw new Error("Invalid ID");
+  }
+
+  const link = await getLinkById(id);
+
+  if (!link) {
+    throw new Error("Invalid ID");
+  }
+
+  const tagsInfo = await getTagsForLinkId(id);
+
+  return {
+    ...link,
+    tags: tagsInfo.map(tag => tag.name)
+  };
 }
 
 export async function addNewLinkFn(url: string, title: string, tags: string[]) {

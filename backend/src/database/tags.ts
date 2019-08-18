@@ -6,9 +6,42 @@ interface TagRow {
   tag_name: string;
 }
 
-export async function getAllTags(): Promise<Tag[] | null> {
-  // TODO:
-  return null;
+interface LinkIdRow {
+  link_id: string;
+}
+
+export async function getAllTags(): Promise<Tag[]> {
+  return run<Tag[]>(db => {
+    return new Promise((res, rej) => {
+      const statement = db.prepare(
+        `SELECT *
+FROM tags
+ORDER BY t.tag_name`
+      );
+
+      // Generally using .all or .getAll is discouraged, but I think the result set size will be
+      // low enough to not matter for performance
+      statement.all((err?: Error, rows?: TagRow[]) => {
+        if (err) {
+          rej(err);
+          return;
+        }
+
+        if (!rows) {
+          res([]);
+          return;
+        }
+
+        const tags = rows.map(row => ({
+          id: row.id,
+          name: row.tag_name
+        }));
+        res(tags);
+      });
+
+      statement.finalize();
+    });
+  });
 }
 
 export function insertTag(tagName: string) {
@@ -123,6 +156,80 @@ export function addTagsToLink(linkId: string, tagIds: string[]) {
       statement.finalize();
 
       res();
+    });
+  });
+}
+
+export function searchLinkIdsByTags(tags: string[]): Promise<string[]> {
+  return run<string[]>(db => {
+    return new Promise((res, rej) => {
+      // SQLite doesn't support binding for lists, so have to build the entire query string ourselves
+      const paramString = tags.map(() => "?").join(", ");
+
+      const statement = db.prepare(
+        `SELECT DISTINCT(link_id)
+FROM tags t
+  JOIN link_tags lt ON t.id = lt.tag_id
+WHERE tag_name IN (${paramString})
+GROUP BY link_id
+ORDER BY
+  COUNT(tag_id) DESC,
+  link_id DESC`
+      );
+
+      // Generally using .all or .getAll is discouraged, but I think the result set size will be
+      // low enough to not matter for performance
+      statement.all(...tags, (err?: Error, rows?: LinkIdRow[]) => {
+        if (err) {
+          rej(err);
+          return;
+        }
+
+        if (!rows) {
+          res([]);
+          return;
+        }
+
+        res(rows.map(row => row.link_id));
+      });
+
+      statement.finalize();
+    });
+  });
+}
+
+export function getTagsForLinkId(linkId: string): Promise<Tag[]> {
+  return run<Tag[]>(db => {
+    return new Promise((res, rej) => {
+      const statement = db.prepare(
+        `SELECT t.*
+FROM link_tags lt
+  JOIN tags t ON lt.tag_id = t.id
+WHERE link_id = ?
+ORDER BY t.tag_name`
+      );
+
+      // Generally using .all or .getAll is discouraged, but I think the result set size will be
+      // low enough to not matter for performance
+      statement.all(linkId, (err?: Error, rows?: TagRow[]) => {
+        if (err) {
+          rej(err);
+          return;
+        }
+
+        if (!rows) {
+          res([]);
+          return;
+        }
+
+        const tags = rows.map(row => ({
+          id: row.id,
+          name: row.tag_name
+        }));
+        res(tags);
+      });
+
+      statement.finalize();
     });
   });
 }

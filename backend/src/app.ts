@@ -3,6 +3,7 @@ import compression from "compression";
 import helmet from "helmet";
 import versionRoute from "./endpoints/version";
 import { getLinkByIdRoute, addNewLinkRoute } from "./endpoints/links";
+import { searchLinksByTags } from "./endpoints/search";
 
 const app = express();
 app.use(helmet());
@@ -18,5 +19,7 @@ app.get("/version", versionRoute);
 
 app.get("/links/:id", getLinkByIdRoute);
 app.post("/links", addNewLinkRoute);
+
+app.post("/search", searchLinksByTags);
 
 export default app;
