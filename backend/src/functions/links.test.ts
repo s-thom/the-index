@@ -1,7 +1,8 @@
 import { getLinkByIdFn } from "./links";
-jest.mock("./links");
+jest.mock("../database/links");
+jest.mock("../database/tags");
 
-test("throw when the link is not present", async () => {
+test("getLinkByID throws when the link is not present", async () => {
   expect.assertions(1);
   try {
     await getLinkByIdFn("0");
@@ -11,13 +12,13 @@ test("throw when the link is not present", async () => {
   }
 });
 
-test("return the link if set", async () => {
+test("getLinkByID returns the link if set", async () => {
   expect.assertions(1);
-  const link = getLinkByIdFn("1");
+  const link = await getLinkByIdFn("1");
   expect(link).toEqual({
     id: "1",
     url: "https://example.com",
     title: "Example",
-    inserted: new Date()
+    inserted: expect.anything()
   });
 });

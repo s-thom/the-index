@@ -6,8 +6,7 @@
   "scripts": {
     "start": "tsc && node build/index.js",
     "dev": "nodemon --inspect=5858 src/index.ts",
-    "test": "echo \"Tests are broken. npm run test:broken if you want to try\" && exit 1",
-    "test:broken": "dotenv -- jest",
+    "test": "dotenv -- jest",
     "migrate": "dotenv -- flyway -locations=filesystem:./sql migrate"
   },
   "repository": {

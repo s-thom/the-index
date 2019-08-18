@@ -1,6 +1,21 @@
 import { Link } from "../../functions/links";
 
-export async function insertLink(url: string, title: string) {}
+export async function insertLink(
+  url: string,
+  title: string
+): Promise<Link | null> {
+  switch (url) {
+    case "https://example.com":
+      return {
+        id: "1",
+        url,
+        title,
+        inserted: new Date()
+      };
+    default:
+      throw new Error("Unmocked value");
+  }
+}
 
 export async function getLinkById(id: string): Promise<Link | null> {
   switch (id) {
