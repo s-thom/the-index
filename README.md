@@ -4,11 +4,27 @@ A personal index.
 
 I needed a place to store links to things in an organised manner, so I built one. It's still a work in progress.
 
+This project uses VS Code's dev containers. If you want your dev environment consistent with what I use, then install the "Remote - Containers" extension.
+
 ## Frontend
 
 Required environment variables (Normal CRA `.env` rules apply):
 
 - `REACT_APP_SERVER_PATH`: Where to find the server e.g. `http://localhost:7000`
+
+To build:
+
+```sh
+cd frontend
+npm run build
+```
+
+For development:
+
+```sh
+cd frontend
+npm start
+```
 
 ## Backend
 
@@ -27,3 +43,23 @@ Required environment variables (a `.env` file is supported):
 Optional variables:
 
 - `SERVER_PORT`: Port for express to run on
+
+To build:
+
+```sh
+cd backend
+npm run migrate
+npm run build # Or `npm start` to run it
+```
+
+For development:
+
+```sh
+cd backend
+npm run migrate
+npm run dev
+```
+
+## TODO
+
+- []
