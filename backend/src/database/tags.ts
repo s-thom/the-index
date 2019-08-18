@@ -69,7 +69,7 @@ export function getOrInsertTags(tags: string[]) {
         // to a single reduce call. But if we're getting to that stage then
         // we may as well abandon functional programming altogether
         const insertPromises = tags
-          .filter(name => nameExistsMap.has(name))
+          .filter(name => !nameExistsMap.has(name))
           .map(name => insertTag(name));
 
         Promise.all(insertPromises).then(insertResults => {

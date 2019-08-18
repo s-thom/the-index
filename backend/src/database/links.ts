@@ -47,7 +47,7 @@ export function getLinkById(id: string) {
     return new Promise((res, rej) => {
       const statement = db.prepare("SELECT * FROM links WHERE id = ?");
 
-      statement.run(id, (err?: Error, row?: LinkRow) => {
+      statement.get(id, (err?: Error, row?: LinkRow) => {
         if (err) {
           rej(err);
           return;
