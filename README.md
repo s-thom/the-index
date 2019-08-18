@@ -8,7 +8,7 @@ I needed a place to store links to things in an organised manner, so I built one
 
 Required environment variables (Normal CRA `.env` rules apply):
 
-- `SERVER_PATH`: Where to find the server
+- `REACT_APP_SERVER_PATH`: Where to find the server e.g. `http://localhost:7000`
 
 ## Backend
 
@@ -16,6 +16,7 @@ Uses an SQLite3 database for now. Database versioning is done with [flyway](http
 
 Required environment variables (a `.env` file is supported):
 
+- `CORS_ALLOWED`: Hostname to allow requests from e.g. `http://localhost:3000`
 - `DB_PATH`: File for the SQLite databse e.g. `database.sqlite`
 - `DB_USER`: Username for the database
 - `DB_PASS`: Password for the database
