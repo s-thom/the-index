@@ -22,7 +22,7 @@ export async function getLinkByIdFn(id: string) {
   return link;
 }
 
-export async function addNewLink(url: string, title: string, tags: string[]) {
+export async function addNewLinkFn(url: string, title: string, tags: string[]) {
   if (typeof url !== "string") {
     throw new Error("Invalid URL");
   }

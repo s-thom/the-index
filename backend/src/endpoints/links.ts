@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Link, getLinkByIdFn, addNewLink } from "../functions/links";
+import { Link, getLinkByIdFn, addNewLinkFn } from "../functions/links";
 
 interface GetLinkResponse {
   link: Link;
@@ -37,7 +37,7 @@ export async function addNewLinkRoute(req: Request, res: Response) {
   try {
     const body: AddNewLinkRequest = req.body;
 
-    const newLinkId = await addNewLink(body.url, body.title, body.tags);
+    const newLinkId = await addNewLinkFn(body.url, body.title, body.tags);
 
     const response: AddNewLinkResponse = {
       id: newLinkId

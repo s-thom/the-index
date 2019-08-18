@@ -12,6 +12,8 @@ export async function insertLink(
         title,
         inserted: new Date()
       };
+    case "fail link":
+      return null;
     default:
       throw new Error("Unmocked value");
   }
