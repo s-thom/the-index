@@ -4,11 +4,14 @@ import { LinkDetail } from "../../types";
 import LinkItem from "../LinkItem";
 import { searchByTag } from "../../requests";
 import { RouteComponentProps } from "@reach/router";
+import { getParamAsArray } from "../../util/getParam";
 
 interface SearchPageProps extends RouteComponentProps {}
 
 export default function SearchPage(props: SearchPageProps) {
   const [links, setLinks] = useState<LinkDetail[]>([]);
+
+  const tags = getParamAsArray("t");
 
   async function requestLinksByTags(tags: string[]) {
     const links = await searchByTag(tags);
@@ -16,8 +19,8 @@ export default function SearchPage(props: SearchPageProps) {
   }
 
   useEffect(() => {
-    requestLinksByTags(["test", "example"]);
-  }, []);
+    requestLinksByTags(tags);
+  }, [tags.join(",")]);
 
   return (
     <div className="SearchPage">
