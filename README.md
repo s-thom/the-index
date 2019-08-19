@@ -62,7 +62,8 @@ npm run dev
 
 ## TODO
 
-- [ ] Basic prototype
+- [x] Basic prototype
+- [ ] Remove title
 - [ ] Paginated APIs
 - [ ] Version check
 - [x] Router
