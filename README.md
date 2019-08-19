@@ -65,7 +65,7 @@ npm run dev
 - [ ] Basic prototype
 - [ ] Paginated APIs
 - [ ] Version check
-- [ ] Router
+- [x] Router
 - [ ] Users
 - [ ] Login via [TOTP code](https://www.npmjs.com/package/otplib) (single user)
 - [ ] Login via WebAuthn
