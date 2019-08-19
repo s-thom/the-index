@@ -19,9 +19,12 @@ export default function SearchPage(props: SearchPageProps) {
     setLinks(links);
   }
 
+  const tagsString = tags.join(",");
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     requestLinksByTags(tags);
-  }, [tags.join(",")]);
+  }, [tagsString]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   return (
     <div className="SearchPage">

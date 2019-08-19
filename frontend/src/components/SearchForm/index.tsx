@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState } from "react";
 import "./index.css";
 import { getParamAsArray, setParam } from "../../util/getParam";
 import { deduplicate } from "../../util/array";
