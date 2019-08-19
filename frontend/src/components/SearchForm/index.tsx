@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./index.css";
 import { getParamAsArray, setParam } from "../../util/getParam";
 import { deduplicate } from "../../util/array";
+import TextButton from "../TextButton";
 
 interface SearchFormProps {}
 
@@ -14,6 +15,11 @@ export default function SearchForm(props: SearchFormProps) {
     tags.push(inputVal);
     const deduped = deduplicate(tags);
     setParam("t", deduped);
+  }
+
+  function removeTag(tag: string) {
+    const filtered = tags.filter(t => t !== tag);
+    setParam("t", filtered);
   }
 
   function onInputChange(event: React.FormEvent<HTMLInputElement>) {
@@ -40,13 +46,20 @@ export default function SearchForm(props: SearchFormProps) {
           onKeyPress={onInputKeyPress}
         />
       </div>
-      <div className="SearchForm-tag-list">
+      <ul className="SearchForm-tag-list">
         {tags.map(tag => (
-          <p className="SearchForm-tag" key={tag}>
+          <li className="SearchForm-tag" key={tag}>
+            <TextButton
+              onClick={() => removeTag(tag)}
+              title="Remove"
+              aria-label={`Remove ${tag}`}
+            >
+              -
+            </TextButton>{" "}
             {tag}
-          </p>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }

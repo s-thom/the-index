@@ -1,0 +1,14 @@
+.TextButton {
+  background: transparent;
+  border: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  vertical-align: baseline;
+  outline: 0;
+}
+
+.TextButton:hover {
+  text-decoration: underline;
+}

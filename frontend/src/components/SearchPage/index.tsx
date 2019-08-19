@@ -28,7 +28,9 @@ export default function SearchPage(props: SearchPageProps) {
 
   return (
     <div className="SearchPage">
-      <SearchForm />
+      <div className="SearchPage-form">
+        <SearchForm />
+      </div>
       <div className="SearchPage-link-list">
         {links.map(link => (
           <LinkItem key={link.id} link={link} />
