@@ -42,7 +42,7 @@ Required environment variables (a `.env` file is supported):
 
 Optional variables:
 
-- `SERVER_PORT`: Port for express to run on
+- `SERVER_PORT`: Port for express to run on e.g. 7000
 
 To build:
 
@@ -63,7 +63,13 @@ npm run dev
 ## TODO
 
 - [ ] Basic prototype
-- [ ] Login via TOTP code (single user)
+- [ ] Paginated APIs
+- [ ] Version check
+- [ ] Router
+- [ ] Users
+- [ ] Login via [TOTP code](https://www.npmjs.com/package/otplib) (single user)
+- [ ] Login via WebAuthn
 - [ ] Public tag
 - [ ] Required tags
-- [ ] Multiuser
+- [ ] Service Worker
+- [ ] [Share target](https://developers.google.com/web/updates/2018/12/web-share-target)
