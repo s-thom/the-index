@@ -1,6 +1,5 @@
-import React, { ButtonHTMLAttributes, DOMAttributes } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import "./index.css";
-import { LinkDetail } from "../../types";
 
 export default function TextButton(props: ButtonHTMLAttributes<{}>) {
   const propsClone = Object.assign({}, props);
