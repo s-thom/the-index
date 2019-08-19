@@ -5,6 +5,7 @@ import LinkItem from "../LinkItem";
 import { searchByTag } from "../../requests";
 import { RouteComponentProps } from "@reach/router";
 import { getParamAsArray } from "../../util/getParam";
+import SearchForm from "../SearchForm";
 
 interface SearchPageProps extends RouteComponentProps {}
 
@@ -24,6 +25,7 @@ export default function SearchPage(props: SearchPageProps) {
 
   return (
     <div className="SearchPage">
+      <SearchForm />
       <div className="SearchPage-link-list">
         {links.map(link => (
           <LinkItem key={link.id} link={link} />

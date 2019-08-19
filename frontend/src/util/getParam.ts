@@ -1,4 +1,5 @@
 import queryString from "query-string";
+import { navigate } from "@reach/router";
 
 const location = window.location;
 
@@ -36,4 +37,20 @@ export function getParamAsArray(key: string): string[] {
   } else {
     return [];
   }
+}
+
+export function setParam(
+  key: string,
+  value: string | string[] | null | undefined
+) {
+  const currentQuery = queryString.parse(location.search, {
+    arrayFormat: "comma"
+  });
+
+  currentQuery[key] = value;
+
+  const query = queryString.stringify(currentQuery, {
+    arrayFormat: "comma"
+  });
+  navigate(`?${query}`);
 }
