@@ -4,11 +4,19 @@
   display: inline-block;
   padding: 0;
   margin: 0;
-  cursor: pointer;
   vertical-align: baseline;
   outline: 0;
+  font-size: 1em;
 }
 
-.TextButton:hover {
+.TextButton:not(:disabled) {
+  cursor: pointer;
+}
+
+.TextButton:not(:disabled):hover {
   text-decoration: underline;
+}
+
+.TextButton:disabled {
+  opacity: 0.8;
 }

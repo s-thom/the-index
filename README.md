@@ -63,10 +63,12 @@ npm run dev
 ## TODO
 
 - [x] Basic prototype
-- [ ] Remove title
+- [x] Remove title
+- [ ] Add new link
 - [ ] Paginated APIs
 - [ ] Version check
 - [x] Router
+- [ ] Suspense
 - [ ] Users
 - [ ] Login via [TOTP code](https://www.npmjs.com/package/otplib) (single user)
 - [ ] Login via WebAuthn

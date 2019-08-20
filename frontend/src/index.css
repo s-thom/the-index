@@ -11,3 +11,15 @@ code {
   font-family: "Fira Code", source-code-pro, Menlo, Monaco, Consolas,
     "Courier New", monospace;
 }
+
+.hide-link,
+.hide-link:hover,
+.hide-link:active,
+.hide-link:focus,
+.hide-link:visited {
+  color: initial;
+}
+
+.hide-link:not(:hover) {
+  text-decoration: none;
+}
