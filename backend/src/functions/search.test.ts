@@ -9,7 +9,6 @@ test("getLinkDetailByID returns successfully", async () => {
     {
       id: "1",
       url: "https://example.com",
-      title: "Example",
       inserted: expect.anything(),
       tags: ["example", "test", "another"]
     }

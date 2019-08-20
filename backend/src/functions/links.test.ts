@@ -38,7 +38,7 @@ test("getLinkDetailByID returns the link if set", async () => {
 test("addNewLinkFn throws when the link insertion fails", async () => {
   expect.assertions(1);
   try {
-    await addNewLinkFn("fail link", "Example", []);
+    await addNewLinkFn("fail link", []);
     throw new Error("No error was thrown");
   } catch (e) {
     expect(e).toEqual(new Error("Unable to save"));
@@ -47,12 +47,12 @@ test("addNewLinkFn throws when the link insertion fails", async () => {
 
 test("addNewLinkFn returns the data is valid", async () => {
   expect.assertions(1);
-  const id = await addNewLinkFn("https://example.com", "Example", ["example"]);
+  const id = await addNewLinkFn("https://example.com", ["example"]);
   expect(id).toEqual("1");
 });
 
 test("addNewLinkFn returns the data is valid but the tags don't insert", async () => {
   expect.assertions(1);
-  const id = await addNewLinkFn("https://example.com", "Example", ["null"]);
+  const id = await addNewLinkFn("https://example.com", ["null"]);
   expect(id).toEqual("1");
 });
