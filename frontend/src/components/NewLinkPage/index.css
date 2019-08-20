@@ -1,6 +1,11 @@
 .NewLinkPage {
 }
 
-.NewLinkPage-heading {
+.NewLinkPage-heading,
+.NewLinkPage-error {
   text-align: center;
+}
+
+.NewLinkPage-error-text {
+  color: #e70c37;
 }

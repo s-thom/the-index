@@ -23,6 +23,7 @@
 
 .NewLinkForm-tag-input-container {
   margin-bottom: 0.5em;
+  display: flex;
 }
 
 .NewLinkForm-tags {
