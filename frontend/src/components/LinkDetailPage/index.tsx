@@ -16,22 +16,22 @@ export default function LinkDetailPage({ id }: LinkDetailPageProps) {
   const [detail, setDetail] = useState<LinkDetail | undefined>();
   const [error, setError] = useState<Error | undefined>();
 
-  async function getDetail() {
-    const trueId = (id || "").toString();
-    if (!trueId) {
-      setDetail(undefined);
-      setError(new Error("No ID was passed"));
-      return;
-    }
-    setDetail(undefined);
-
-    try {
-      const link = await getLinkById(trueId);
-      setDetail(link);
-    } catch (err) {}
-  }
-
   useEffect(() => {
+    async function getDetail() {
+      const trueId = (id || "").toString();
+      if (!trueId) {
+        setDetail(undefined);
+        setError(new Error("No ID was passed"));
+        return;
+      }
+      setDetail(undefined);
+
+      try {
+        const link = await getLinkById(trueId);
+        setDetail(link);
+      } catch (err) {}
+    }
+
     getDetail();
   }, [id]);
 
