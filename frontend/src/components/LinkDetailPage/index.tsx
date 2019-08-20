@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
 import { RouteComponentProps } from "@reach/router";
-import NewLinkForm from "../NewLinkForm";
-import { addNewLink, getLinkById } from "../../requests";
-import TextButton from "../TextButton";
+import { getLinkById } from "../../requests";
 import { StringLiteral } from "@babel/types";
 import { LinkDetail } from "../../types";
 import LinkItem from "../LinkItem";
-import { link } from "fs";
 
 interface LinkDetailPagePath {
   id: StringLiteral;
