@@ -18,7 +18,6 @@ test("getLinkByID returns the link if set", async () => {
   expect(link).toEqual({
     id: "1",
     url: "https://example.com",
-    title: "Example",
     inserted: expect.anything()
   });
 });
@@ -29,7 +28,6 @@ test("getLinkDetailByID returns the link if set", async () => {
   expect(link).toEqual({
     id: "1",
     url: "https://example.com",
-    title: "Example",
     inserted: expect.anything(),
     tags: ["example", "test", "another"]
   });
