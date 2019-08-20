@@ -1,15 +1,11 @@
 import "./env";
+import db from "./database/db";
 import app from "./app";
-import compression from "compression";
-import helmet from "helmet";
 
-app.use(helmet()); // set well-known security-related HTTP headers
-app.use(compression());
+const SERVER_PORT = process.env.SERVER_PORT || "7000";
+const port = parseInt(SERVER_PORT);
 
-app.disable("x-powered-by");
-
-const server = app.listen(3000, () =>
-  console.log("Starting ExpressJS server on Port 3000")
+app.listen(port, () =>
+  console.log(`Starting ExpressJS server on Port ${port}`)
 );
-
-export default server;
+export default app;

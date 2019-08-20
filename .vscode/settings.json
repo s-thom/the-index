@@ -1,0 +1,15 @@
+{
+  "terminals.terminals": [
+    {
+      "name": "Backend",
+      "cwd": "./backend",
+      "open": true
+    },
+    {
+      "name": "Frontend",
+      "cwd": "./frontend",
+      "open": true
+    }
+  ],
+  "terminals.autorun": true
+}

@@ -1,0 +1,23 @@
+.SearchPage {
+  display: flex;
+  flex-direction: column;
+}
+
+.SearchPage-link-list,
+.SearchPage-form {
+  margin: 0.5em;
+}
+
+.SearchPage-link-list {
+  flex-grow: 1;
+}
+
+@media (min-width: 768px) {
+  .SearchPage {
+    flex-direction: row;
+  }
+
+  .SearchPage-form {
+    width: 250px;
+  }
+}

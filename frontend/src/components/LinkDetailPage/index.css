@@ -1,0 +1,11 @@
+.LinkDetailPage {
+}
+
+.LinkDetailPage-heading,
+.LinkDetailPage-error {
+  text-align: center;
+}
+
+.LinkDetailPage-error-text {
+  color: #e70c37;
+}
