@@ -8,7 +8,6 @@ import {
 export interface Link {
   id: string;
   url: string;
-  title: string;
   inserted: Date;
 }
 
@@ -49,12 +48,9 @@ export async function getLinkDetailByIdFn(id: string): Promise<LinkDetail> {
   };
 }
 
-export async function addNewLinkFn(url: string, title: string, tags: string[]) {
+export async function addNewLinkFn(url: string, tags: string[]) {
   if (typeof url !== "string") {
     throw new Error("Invalid URL");
-  }
-  if (typeof title !== "string") {
-    throw new Error("Invalid title");
   }
   if (!Array.isArray(tags)) {
     throw new Error("Invalid tags");
@@ -64,7 +60,7 @@ export async function addNewLinkFn(url: string, title: string, tags: string[]) {
   const tagsPromise = getOrInsertTags(tags);
 
   // Insert new Link
-  const linkPromise = insertLink(url, title);
+  const linkPromise = insertLink(url);
 
   // Wait for both to complete, they can be done async
   const [tagValues, link] = await Promise.all([tagsPromise, linkPromise]);

@@ -10,5 +10,6 @@
       "cwd": "./frontend",
       "open": true
     }
-  ]
+  ],
+  "terminals.autorun": true
 }

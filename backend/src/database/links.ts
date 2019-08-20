@@ -4,38 +4,32 @@ import { Link } from "../functions/links";
 interface LinkRow {
   id: string;
   url_path: string;
-  title: string;
   inserted_dts: string;
 }
 
-export function insertLink(url: string, title: string) {
+export function insertLink(url: string) {
   return run<Link | null>(db => {
     return new Promise((res, rej) => {
-      const statement = db.prepare("INSERT INTO links VALUES (?, ?, ?, ?)");
+      const statement = db.prepare(
+        "INSERT INTO links (id, url_path, inserted_dts) VALUES (?, ?, ?)"
+      );
       const newId = generateID();
       const insertionDate = new Date();
 
       const link: Link = {
         id: newId,
         url,
-        title,
         inserted: insertionDate
       };
 
-      statement.run(
-        newId,
-        url,
-        title,
-        insertionDate.toISOString(),
-        (err?: Error) => {
-          if (err) {
-            rej(err);
-            return;
-          }
-
-          res(link);
+      statement.run(newId, url, insertionDate.toISOString(), (err?: Error) => {
+        if (err) {
+          rej(err);
+          return;
         }
-      );
+
+        res(link);
+      });
 
       statement.finalize();
     });
@@ -61,7 +55,6 @@ export function getLinkById(id: string) {
         const link: Link = {
           id: row.id,
           url: row.url_path,
-          title: row.title,
           inserted: new Date(row.inserted_dts)
         };
         res(link);

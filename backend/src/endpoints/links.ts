@@ -11,7 +11,6 @@ interface GetLinkResponse {
 
 interface AddNewLinkRequest {
   url: string;
-  title: string;
   tags: string[];
 }
 
@@ -41,7 +40,7 @@ export async function addNewLinkRoute(req: Request, res: Response) {
   try {
     const body: AddNewLinkRequest = req.body;
 
-    const newLinkId = await addNewLinkFn(body.url, body.title, body.tags);
+    const newLinkId = await addNewLinkFn(body.url, body.tags);
 
     const response: AddNewLinkResponse = {
       id: newLinkId
