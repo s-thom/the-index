@@ -7,6 +7,12 @@ interface SearchByTagResponse {
   links: LinkDetail[];
 }
 
+export async function getLinkById(id: string): Promise<LinkDetail> {
+  const response = await axios.get(`${SERVER_HOST}/links/${id}`);
+
+  return response.data.link;
+}
+
 export async function searchByTag(tags: string[]): Promise<LinkDetail[]> {
   const response = await axios.post(`${SERVER_HOST}/search`, {
     tags

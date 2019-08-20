@@ -41,7 +41,7 @@ export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
               className="NewLinkForm-url-input"
               placeholder="Enter URL"
               aria-label="Enter URL"
-              pattern="^https?:\/\/(?:\w+\.)*\w+(?::\d{1,5})(?:\/.*)?$"
+              pattern="^https?:\/\/(?:\w+\.)*\w+(?::\d{1,5})?(?:\/.*)?$"
               required
             />
             <TextButton type="submit" disabled={disabled}>

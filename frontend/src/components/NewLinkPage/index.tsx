@@ -16,7 +16,7 @@ export default function NewLinkPage(props: NewLinkPageProps) {
 
     try {
       const newLinkId = await addNewLink(url, tags);
-      navigate(`/link/${newLinkId}`);
+      navigate(`/links/${newLinkId}`);
 
       setSubmitting(false);
     } catch (err) {

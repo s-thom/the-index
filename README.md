@@ -64,7 +64,7 @@ npm run dev
 
 - [x] Basic prototype
 - [x] Remove title
-- [ ] Add new link
+- [x] Add new link
 - [ ] Paginated APIs
 - [ ] Version check
 - [x] Router

@@ -4,6 +4,7 @@ import { Router, Redirect } from "@reach/router";
 import SearchPage from "../SearchPage";
 import NotFoundPage from "../NotFoundPage";
 import NewLinkPage from "../NewLinkPage";
+import LinkDetailPage from "../LinkDetailPage";
 
 interface BodyAreaProps {}
 
@@ -13,6 +14,7 @@ export default function BodyArea(props: BodyAreaProps) {
       <Router primary={true}>
         <SearchPage path="search" />
         <NewLinkPage path="new" />
+        <LinkDetailPage path="links/:id" />
         <Redirect from="/" to="search" noThrow />
         <NotFoundPage default />
       </Router>
