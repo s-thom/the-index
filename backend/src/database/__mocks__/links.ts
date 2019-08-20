@@ -9,7 +9,6 @@ export async function insertLink(
       return {
         id: "1",
         url,
-        title,
         inserted: new Date()
       };
     case "fail link":
@@ -27,7 +26,6 @@ export async function getLinkById(id: string): Promise<Link | null> {
       return {
         id: "1",
         url: "https://example.com",
-        title: "Example",
         inserted: new Date()
       };
     default:
