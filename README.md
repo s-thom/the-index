@@ -33,6 +33,7 @@ Uses an SQLite3 database for now. Database versioning is done with [flyway](http
 Required environment variables (a `.env` file is supported):
 
 - `CORS_ALLOWED`: Hostname to allow requests from e.g. `http://localhost:3000`
+- `JWT_SECRET`: Secret used for generating JWTs. Make it a nice big random string
 - `DB_PATH`: File for the SQLite databse e.g. `database.sqlite`
 - `DB_USER`: Username for the database
 - `DB_PASS`: Password for the database
@@ -59,6 +60,12 @@ cd backend
 npm run migrate
 npm run dev
 ```
+
+### Securing
+
+There are files that contain things that shouldn't be read by an attacker. Set the file permissions for your SQLite DB and .env file to `600`.
+
+You'll want to put a reverse proxy in front for HTTPS. Block directly incoming connections using firewall rules.
 
 ## TODO
 
