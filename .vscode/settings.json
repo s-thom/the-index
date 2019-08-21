@@ -11,5 +11,7 @@
       "open": true
     }
   ],
-  "terminals.autorun": true
+  "terminals.autorun": true,
+  "prettier.eslintIntegration": true,
+  "prettier.tslintIntegration": true
 }
