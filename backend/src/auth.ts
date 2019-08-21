@@ -55,3 +55,20 @@ export function checkTokenMiddleware(
     });
   }
 }
+
+export async function generateJwt(token: DecodedToken) {
+  return new Promise((res, rej) => {
+    jwt.sign(
+      token,
+      JWT_TOKEN as string,
+      { algorithm: "RS256", expiresIn: "30d" },
+      (err, jwtToken) => {
+        if (err) {
+          rej(err);
+          return;
+        }
+        res(jwtToken);
+      }
+    );
+  });
+}
