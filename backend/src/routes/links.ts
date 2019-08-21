@@ -18,7 +18,7 @@ interface AddNewLinkResponse {
   id: string;
 }
 
-export const getLinkByRouteId = wrapPromiseRoute<any, GetLinkResponse>(
+export const getLinkByIdRoute = wrapPromiseRoute<any, GetLinkResponse>(
   async (body, req) => {
     const id = req.param("id");
     if (!id) {
