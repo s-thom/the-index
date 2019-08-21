@@ -38,3 +38,8 @@ export class StatusError extends Error {
     this.status = status;
   }
 }
+
+const IDENTIFIER_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$/;
+export function isValidIdentifier(value: string) {
+  return IDENTIFIER_REGEX.test(value);
+}

@@ -1,4 +1,4 @@
-import { User } from "../../functions/auth";
+import { User } from "../../functions/users";
 
 export async function insertUser(name: string) {
   switch (name) {
