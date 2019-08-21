@@ -4,6 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import { getLinkByIdRoute, addNewLinkRoute } from "./routes/links";
 import { searchLinksByTags } from "./routes/search";
+import { loginRoute } from "./routes/auth";
 
 const CORS_ALLOWED = process.env.CORS_ALLOWED;
 const corsConfig = {
@@ -26,5 +27,7 @@ app.get("/links/:id", getLinkByIdRoute);
 app.post("/links", addNewLinkRoute);
 
 app.post("/search", searchLinksByTags);
+
+app.post("/login", loginRoute);
 
 export default app;

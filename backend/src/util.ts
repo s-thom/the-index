@@ -3,14 +3,22 @@ import { Request, Response } from "express";
 /**
  * Wraps a Promise function to work with Express
  * @param routeFn Route to call
+ * @param preResponseFn Place to inject things like headers, if necessary
  */
 export function wrapPromiseRoute<T = any, U = any>(
-  routeFn: (requestBody: T, request: Request) => Promise<U>
+  routeFn: (body: T, req: Request) => Promise<U>,
+  preResponseFn?: (reqBody: T, resBody: U, res: Response) => Promise<void>
 ) {
-  return async (request: Request, response: Response) => {
+  return async (req: Request, res: Response) => {
     try {
-      const responseData = await routeFn(request.body, request);
-      response.json(responseData);
+      const responseData = await routeFn(req.body, req);
+
+      // Run the pre-response function
+      if (preResponseFn) {
+        await preResponseFn(req.body, responseData, res);
+      }
+
+      res.json(responseData);
     } catch (err) {
       let statusCode = 500;
       let message = "Internal server error";
@@ -24,7 +32,7 @@ export function wrapPromiseRoute<T = any, U = any>(
         }
       }
 
-      response.status(statusCode).json({ message });
+      res.status(statusCode).json({ message });
     }
   };
 }

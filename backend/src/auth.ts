@@ -57,7 +57,7 @@ export function checkTokenMiddleware(
 }
 
 export async function generateJwt(token: DecodedToken) {
-  return new Promise((res, rej) => {
+  return new Promise<string>((res, rej) => {
     jwt.sign(
       token,
       JWT_TOKEN as string,
