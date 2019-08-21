@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
-import { getLinkByIdRoute, addNewLinkRoute } from "./endpoints/links";
-import { searchLinksByTags } from "./endpoints/search";
+import { getLinkByIdRoute, addNewLinkRoute } from "./routes/links";
+import { searchLinksByTags } from "./routes/search";
 
 const CORS_ALLOWED = process.env.CORS_ALLOWED;
 const corsConfig = {
