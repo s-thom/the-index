@@ -1,4 +1,4 @@
-import { getUserById, insertUser } from "../database/users";
+import { getUserById, insertUser, getUserByName } from "../database/users";
 import { isValidIdentifier } from "../util";
 
 export interface User {
@@ -16,6 +16,20 @@ export async function getUserByIdFn(id: string) {
 
   if (!user) {
     throw new Error("Invalid ID");
+  }
+
+  return user;
+}
+
+export async function getUserByNameFn(name: string) {
+  if (typeof name !== "string") {
+    throw new Error("Invalid name");
+  }
+
+  const user = await getUserByName(name);
+
+  if (!user) {
+    throw new Error("Invalid name");
   }
 
   return user;

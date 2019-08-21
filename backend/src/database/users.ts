@@ -1,5 +1,5 @@
 import { run, generateID } from "./db";
-import { User } from "../functions/auth";
+import { User } from "../functions/users";
 
 interface UserRow {
   id: string;
@@ -42,6 +42,35 @@ export function getUserById(id: string) {
       const statement = db.prepare("SELECT * FROM users WHERE id = ?");
 
       statement.get(id, (err?: Error, row?: UserRow) => {
+        if (err) {
+          rej(err);
+          return;
+        }
+
+        if (!row) {
+          res(null);
+          return;
+        }
+
+        const user: User = {
+          id: row.id,
+          name: row.user_name,
+          created: new Date(row.created_dts)
+        };
+        res(user);
+      });
+
+      statement.finalize();
+    });
+  });
+}
+
+export function getUserByName(name: string) {
+  return run<User | null>(db => {
+    return new Promise((res, rej) => {
+      const statement = db.prepare("SELECT * FROM users WHERE name = ?");
+
+      statement.get(name, (err?: Error, row?: UserRow) => {
         if (err) {
           rej(err);
           return;
