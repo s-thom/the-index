@@ -4,8 +4,8 @@ import { Request, Response } from "express";
  * Wraps a Promise function to work with Express
  * @param routeFn Route to call
  */
-export function wrapPromiseRoute(
-  routeFn: (requestBody: any, request: Request) => Promise<any>
+export function wrapPromiseRoute<T = any, U = any>(
+  routeFn: (requestBody: T, request: Request) => Promise<U>
 ) {
   return async (request: Request, response: Response) => {
     try {

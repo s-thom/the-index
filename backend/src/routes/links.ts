@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
 import {
   LinkDetail,
   getLinkDetailByIdFn,
   addNewLinkFn
 } from "../functions/links";
+import { wrapPromiseRoute } from "../util";
 
 interface GetLinkResponse {
   link: LinkDetail;
@@ -18,8 +18,8 @@ interface AddNewLinkResponse {
   id: string;
 }
 
-export async function getLinkByIdRoute(req: Request, res: Response) {
-  try {
+export const getLinkByRouteId = wrapPromiseRoute<any, GetLinkResponse>(
+  async (body, req) => {
     const id = req.param("id");
     if (!id) {
       throw new Error('No "id" parameter specified');
@@ -27,26 +27,19 @@ export async function getLinkByIdRoute(req: Request, res: Response) {
 
     const link = await getLinkDetailByIdFn(id);
 
-    const response: GetLinkResponse = {
+    return {
       link
     };
-    res.json(response);
-  } catch (err) {
-    res.status(500).json({ error: err.toString() });
   }
-}
+);
 
-export async function addNewLinkRoute(req: Request, res: Response) {
-  try {
-    const body: AddNewLinkRequest = req.body;
+export const addNewLinkRoute = wrapPromiseRoute<
+  AddNewLinkRequest,
+  AddNewLinkResponse
+>(async (body, req) => {
+  const newLinkId = await addNewLinkFn(body.url, body.tags);
 
-    const newLinkId = await addNewLinkFn(body.url, body.tags);
-
-    const response: AddNewLinkResponse = {
-      id: newLinkId
-    };
-    res.json(response);
-  } catch (err) {
-    res.status(500).json({ error: err.toString() });
-  }
-}
+  return {
+    id: newLinkId
+  };
+});
