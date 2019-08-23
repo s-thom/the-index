@@ -11,7 +11,8 @@ test("getLinkDetailByID returns successfully", async () => {
       id: "1",
       url: "https://example.com",
       inserted: expect.anything(),
-      tags: ["example", "test", "another"]
+      tags: ["example", "test", "another"],
+      userId: "user"
     }
   ]);
 });

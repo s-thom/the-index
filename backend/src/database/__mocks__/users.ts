@@ -9,7 +9,7 @@ export async function insertUser(name: string) {
         created: new Date()
       } as User;
     case "null":
-      return null;
+      throw new Error("Unable to save");
     default:
       throw new Error("Unmocked value");
   }

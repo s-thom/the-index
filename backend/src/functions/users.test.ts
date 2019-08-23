@@ -15,7 +15,7 @@ test("getUserByIdFn returns the id if set", async () => {
   expect.assertions(1);
   const user = await getUserByIdFn("user");
   expect(user).toEqual({
-    id: "1",
+    id: "user",
     name: "example-user",
     created: expect.anything()
   });
