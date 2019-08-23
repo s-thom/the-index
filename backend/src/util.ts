@@ -37,16 +37,6 @@ export function wrapPromiseRoute<T = any, U = any>(
   };
 }
 
-export class StatusError extends Error {
-  public readonly status: number;
-
-  constructor(status: number, message: string) {
-    super(message);
-
-    this.status = status;
-  }
-}
-
 const IDENTIFIER_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$/;
 export function isValidIdentifier(value: string) {
   return IDENTIFIER_REGEX.test(value);
