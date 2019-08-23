@@ -32,7 +32,10 @@ test("getLinkDetailByID returns the link if set", async () => {
     url: "https://example.com",
     inserted: expect.anything(),
     tags: ["example", "test", "another"],
-    userId: "user"
+    user: {
+      id: "user",
+      name: "example-user"
+    }
   });
 });
 

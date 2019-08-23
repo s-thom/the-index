@@ -3,7 +3,7 @@ jest.mock("../database/links");
 jest.mock("../database/tags");
 jest.mock("../database/users");
 
-test("getLinkDetailByID returns successfully", async () => {
+test("searchLinksByTagsFn returns successfully", async () => {
   expect.assertions(1);
   const link = await searchLinksByTagsFn(["example"], "user");
   expect(link).toEqual([
@@ -12,7 +12,10 @@ test("getLinkDetailByID returns successfully", async () => {
       url: "https://example.com",
       inserted: expect.anything(),
       tags: ["example", "test", "another"],
-      userId: "user"
+      user: {
+        id: "user",
+        name: "example-user"
+      }
     }
   ]);
 });

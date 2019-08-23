@@ -4,6 +4,7 @@ import {
   addTagsToLink,
   getTagsForLinkId
 } from "../database/tags";
+import { getUserById } from "../database/users";
 
 export interface Link {
   id: string;
@@ -12,8 +13,15 @@ export interface Link {
   userId: string;
 }
 
-export interface LinkDetail extends Link {
+export interface LinkDetail {
+  id: string;
+  url: string;
+  inserted: Date;
   tags: string[];
+  user: {
+    id: string;
+    name: string;
+  };
 }
 
 export async function getLinkByIdFn(id: string, userId: string) {
@@ -44,11 +52,27 @@ export async function getLinkDetailByIdFn(
     throw new Error("Invalid ID");
   }
 
-  const tagsInfo = await getTagsForLinkId(id, userId);
+  const tagsInfoPromise = getTagsForLinkId(id, userId);
+  const userInfoPromise = getUserById(userId);
+
+  const [tagsInfo, userInfo] = await Promise.all([
+    tagsInfoPromise,
+    userInfoPromise
+  ]);
+
+  if (!userInfo) {
+    throw new Error("Unable to get user info");
+  }
 
   return {
-    ...link,
-    tags: tagsInfo.map(tag => tag.name)
+    id: link.id,
+    url: link.url,
+    inserted: link.inserted,
+    tags: tagsInfo.map(tag => tag.name),
+    user: {
+      id: userInfo.id,
+      name: userInfo.name
+    }
   };
 }
 
