@@ -11,7 +11,7 @@ interface LoginResponse {
 }
 
 export const loginRoute = wrapPromiseRoute<LoginRequest, LoginResponse>(
-  async (body, req) => {
+  async (body, params, token) => {
     const name = body.name;
 
     const user = await getUserByNameFn(name);

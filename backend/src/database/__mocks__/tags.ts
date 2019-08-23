@@ -50,11 +50,17 @@ export async function getOrInsertTags(
 
 export async function addTagsToLink(linkId: string, tagIds: string[]) {}
 
-export async function searchLinkIdsByTags(tags: string[]): Promise<string[]> {
+export async function searchLinkIdsByTags(
+  tags: string[],
+  userId: string
+): Promise<string[]> {
   return ["1"];
 }
 
-export async function getTagsForLinkId(linkId: string): Promise<Tag[]> {
+export async function getTagsForLinkId(
+  linkId: string,
+  userId: string
+): Promise<Tag[]> {
   return [
     {
       id: "1",

@@ -1,10 +1,11 @@
 import { searchLinksByTagsFn } from "./search";
 jest.mock("../database/links");
 jest.mock("../database/tags");
+jest.mock("../database/users");
 
 test("getLinkDetailByID returns successfully", async () => {
   expect.assertions(1);
-  const link = await searchLinksByTagsFn(["example"]);
+  const link = await searchLinksByTagsFn(["example"], "user");
   expect(link).toEqual([
     {
       id: "1",

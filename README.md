@@ -4,8 +4,6 @@ A personal index.
 
 I needed a place to store links to things in an organised manner, so I built one. It's still a work in progress.
 
-This project uses VS Code's dev containers. If you want your dev environment consistent with what I use, then install the "Remote - Containers" extension.
-
 ## Frontend
 
 Required environment variables (Normal CRA `.env` rules apply):
@@ -61,6 +59,10 @@ npm run migrate
 npm run dev
 ```
 
+### Adding users
+
+There's currently no way to actually add users via API, so for now you'll need to insert into the `users` table yourself. The `created_dts` column has a default.
+
 ### Securing
 
 There are files that contain things that shouldn't be read by an attacker. Set the file permissions for your SQLite DB and .env file to `600`.
@@ -79,9 +81,13 @@ You'll want to put a reverse proxy in front for HTTPS. Block directly incoming c
 - [x] Router
 - [x] Suspense
 - [ ] Users
+- [ ] Delete user
+- [ ] Download user data
 - [ ] Login via [TOTP code](https://www.npmjs.com/package/otplib) (single user)
 - [ ] Login via WebAuthn
-- [ ] Public tag
+- [ ] Public ~~tag~~ links (not based on tags)
+- [ ] Groups
+- [ ] Group visibility
 - [ ] Required tags
 - [ ] Service Worker
 - [ ] [Share target](https://developers.google.com/web/updates/2018/12/web-share-target)
