@@ -71,6 +71,8 @@ You'll want to put a reverse proxy in front for HTTPS. Block directly incoming c
 
 ## TODO
 
+Some of these things are important, some are not.
+
 - [x] Basic prototype
 - [x] Remove title
 - [x] Add new link
@@ -89,5 +91,6 @@ You'll want to put a reverse proxy in front for HTTPS. Block directly incoming c
 - [ ] Groups
 - [ ] Group visibility
 - [ ] Required tags
+- [ ] Tag combination logic
 - [ ] Service Worker
 - [ ] [Share target](https://developers.google.com/web/updates/2018/12/web-share-target)

@@ -2,20 +2,21 @@ import React, { useState } from "react";
 import "./index.css";
 import { RouteComponentProps, navigate } from "@reach/router";
 import NewLinkForm from "../NewLinkForm";
-import { addNewLink } from "../../requests";
 import TextButton from "../TextButton";
+import { useRequester } from "../../hooks/requests";
 
 interface NewLinkPageProps extends RouteComponentProps {}
 
 export default function NewLinkPage(props: NewLinkPageProps) {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<Error | undefined>(undefined);
+  const requester = useRequester();
 
   async function onFormSubmit(url: string, tags: string[]) {
     setSubmitting(true);
 
     try {
-      const newLinkId = await addNewLink(url, tags);
+      const newLinkId = await requester.addNewLink(url, tags);
       navigate(`/links/${newLinkId}`);
 
       setSubmitting(false);

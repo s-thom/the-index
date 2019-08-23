@@ -3,29 +3,37 @@ import { LinkDetail } from "./types";
 
 const SERVER_HOST = process.env.REACT_APP_SERVER_PATH;
 
-interface SearchByTagResponse {
-  links: LinkDetail[];
-}
+export default class Requester {
+  private token: string | null = null;
+  private setTokenFn: (newToken: string | null) => void = (
+    newToken: string | null
+  ) => console.warn("Tried to set token in requester before hooks were run");
 
-export async function getLinkById(id: string): Promise<LinkDetail> {
-  const response = await axios.get(`${SERVER_HOST}/links/${id}`);
+  setToken(token: string | null, setToken: (newToken: string | null) => void) {
+    this.token = token;
+    this.setTokenFn = setToken;
+  }
 
-  return response.data.link;
-}
+  async getLinkById(id: string): Promise<LinkDetail> {
+    const response = await axios.get(`${SERVER_HOST}/links/${id}`);
 
-export async function searchByTag(tags: string[]): Promise<LinkDetail[]> {
-  const response = await axios.post(`${SERVER_HOST}/search`, {
-    tags
-  });
+    return response.data.link;
+  }
 
-  return response.data.links;
-}
+  async searchByTag(tags: string[]): Promise<LinkDetail[]> {
+    const response = await axios.post(`${SERVER_HOST}/search`, {
+      tags
+    });
 
-export async function addNewLink(url: string, tags: string[]): Promise<string> {
-  const response = await axios.post(`${SERVER_HOST}/links`, {
-    url,
-    tags
-  });
+    return response.data.links;
+  }
 
-  return response.data.id;
+  async addNewLink(url: string, tags: string[]): Promise<string> {
+    const response = await axios.post(`${SERVER_HOST}/links`, {
+      url,
+      tags
+    });
+
+    return response.data.id;
+  }
 }
