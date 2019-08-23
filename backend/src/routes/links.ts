@@ -3,8 +3,9 @@ import {
   getLinkDetailByIdFn,
   addNewLinkFn
 } from "../functions/links";
-import { wrapPromiseRoute } from "../util";
-import StatusError, { CODES } from "../StatusError";
+import { wrapPromiseRoute } from "../util/request";
+import StatusError, { CODES } from "../util/StatusError";
+import { getParam } from "../util/validation";
 
 interface GetLinkResponse {
   link: LinkDetail;
@@ -21,13 +22,7 @@ interface AddNewLinkResponse {
 
 export const getLinkByIdRoute = wrapPromiseRoute<any, GetLinkResponse>(
   async (body, params, token) => {
-    const id = params.id;
-    if (!id) {
-      throw new Error('No "id" parameter specified');
-    }
-    if (typeof id !== "string") {
-      throw new Error('Invalid "id" parameter specified');
-    }
+    const id = getParam(params, "id");
 
     if (!token) {
       throw new StatusError(CODES.UNAUTHORIZED, "Not logged in");
