@@ -13,18 +13,35 @@ export function isValidIdentifier(value: string) {
  * @param optional Whether the parameter is optional
  */
 export function getParam(params: Params, key: string): string;
-export function getParam(
+export function getParam<T>(
   params: Params,
   key: string,
-  optional: true
-): string | undefined;
-export function getParam(params: Params, key: string, optional = false) {
-  if (
-    typeof params[key] === "string" ||
-    (optional && params[key] === undefined)
-  ) {
+  validator: (param: any) => T
+): T;
+export function getParam<T>(
+  params: Params,
+  key: string,
+  validator?: (param: any) => T
+) {
+  if (validator) {
+    try {
+      validator(params[key]);
+    } catch (err) {
+      throw new StatusError(CODES.BAD_REQUEST, `Invalid parameter "${key}"`);
+    }
+  } else if (typeof params[key] === "string") {
     return params[key];
   } else {
     throw new StatusError(CODES.BAD_REQUEST, `Invalid parameter "${key}"`);
   }
 }
+
+export const VALIDATORS = {
+  optionalString: (param: any) => {
+    if (typeof param === "string" || param === undefined) {
+      return param as string | undefined;
+    } else {
+      throw new Error();
+    }
+  }
+};
