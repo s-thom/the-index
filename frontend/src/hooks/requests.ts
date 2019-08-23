@@ -7,7 +7,7 @@ export function useRequester() {
   const [token, setToken] = useToken();
 
   useEffect(() => {
-    requester.setToken(token, setToken);
+    requester.setTokenFromHook(token, setToken);
   }, [requester, token, setToken]);
 
   return requester;
