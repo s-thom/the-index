@@ -4,15 +4,18 @@ export async function getAllTags(): Promise<Tag[]> {
   return [
     {
       id: "1",
-      name: "example"
+      name: "example",
+      userId: "user"
     },
     {
       id: "2",
-      name: "test"
+      name: "test",
+      userId: "user"
     },
     {
       id: "3",
-      name: "another"
+      name: "another",
+      userId: "user"
     }
   ];
 }
@@ -22,7 +25,8 @@ export async function insertTag(tagName: string): Promise<Tag | null> {
     case "example":
       return {
         id: "1",
-        name: tagName
+        name: tagName,
+        userId: "user"
       };
     case "null":
       return null;
@@ -64,15 +68,18 @@ export async function getTagsForLinkId(
   return [
     {
       id: "1",
-      name: "example"
+      name: "example",
+      userId: "user"
     },
     {
       id: "2",
-      name: "test"
+      name: "test",
+      userId: "user"
     },
     {
       id: "3",
-      name: "another"
+      name: "another",
+      userId: "user"
     }
   ];
 }

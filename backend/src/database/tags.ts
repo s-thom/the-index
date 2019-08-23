@@ -4,6 +4,7 @@ import { Tag } from "../functions/tags";
 interface TagRow {
   id: string;
   tag_name: string;
+  user_id: string;
 }
 
 interface LinkIdRow {
@@ -34,7 +35,8 @@ ORDER BY t.tag_name`
 
         const tags = rows.map(row => ({
           id: row.id,
-          name: row.tag_name
+          name: row.tag_name,
+          userId: row.user_id
         }));
         res(tags);
       });
@@ -44,18 +46,21 @@ ORDER BY t.tag_name`
   });
 }
 
-export function insertTag(tagName: string) {
+export function insertTag(tagName: string, userId: string) {
   return run<Tag | null>(db => {
     return new Promise((res, rej) => {
-      const statement = db.prepare("INSERT INTO tags VALUES (?, ?)");
+      const statement = db.prepare(
+        "INSERT INTO tags (id, tag_name, user_id) VALUES (?, ?, ?)"
+      );
       const newId = generateID();
 
       const tag: Tag = {
         id: newId,
-        name: tagName
+        name: tagName,
+        userId
       };
 
-      statement.run(newId, tagName, (err?: Error) => {
+      statement.run(newId, tagName, userId, (err?: Error) => {
         if (err) {
           rej(err);
           return;
@@ -69,19 +74,19 @@ export function insertTag(tagName: string) {
   });
 }
 
-export function getOrInsertTags(tags: string[]) {
+export function getOrInsertTags(tags: string[], userId: string) {
   return run<Map<string, Tag>>(db => {
     return new Promise((res, rej) => {
       // SQLite doesn't support binding for lists, so have to build the entire query string ourselves
       const paramString = tags.map(() => "?").join(", ");
 
       const statement = db.prepare(
-        `SELECT * FROM tags WHERE tag_name IN (${paramString})`
+        `SELECT * FROM tags WHERE tag_name IN (${paramString}) AND user_id = ?`
       );
 
       // Generally using .all or .getAll is discouraged, but I think the result set size will be
       // low enough to not matter for performance
-      statement.all(...tags, (err?: Error, rows?: TagRow[]) => {
+      statement.all(...tags, userId, (err?: Error, rows?: TagRow[]) => {
         if (err) {
           rej(err);
           return;
@@ -93,7 +98,7 @@ export function getOrInsertTags(tags: string[]) {
         // Add existing tags to the map
         if (rows) {
           rows.forEach((row: TagRow) => {
-            tagMap.set(row.id, { id: row.id, name: row.tag_name });
+            tagMap.set(row.id, { id: row.id, name: row.tag_name, userId });
             nameExistsMap.set(row.tag_name, true);
           });
         }
@@ -103,7 +108,7 @@ export function getOrInsertTags(tags: string[]) {
         // we may as well abandon functional programming altogether
         const insertPromises = tags
           .filter(name => !nameExistsMap.has(name))
-          .map(name => insertTag(name));
+          .map(name => insertTag(name, userId));
 
         Promise.all(insertPromises).then(insertResults => {
           let failedInserts = 0;
@@ -236,7 +241,8 @@ ORDER BY t.tag_name`
 
         const tags = rows.map(row => ({
           id: row.id,
-          name: row.tag_name
+          name: row.tag_name,
+          userId
         }));
         res(tags);
       });

@@ -89,7 +89,7 @@ export async function addNewLinkFn(
   }
 
   // Add/fetch tags
-  const tagsPromise = getOrInsertTags(tags);
+  const tagsPromise = getOrInsertTags(tags, userId);
 
   // Insert new Link
   const linkPromise = insertLink(url, userId);
