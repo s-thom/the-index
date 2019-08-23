@@ -9,11 +9,11 @@ export interface AuthorisedRequest extends Request {
   token: DecodedToken;
 }
 
-const JWT_TOKEN = process.env.JWT_TOKEN;
+const JWT_SECRET = process.env.JWT_SECRET;
 
-if (!JWT_TOKEN) {
+if (!JWT_SECRET) {
   throw new Error(
-    "JWT_TOKEN environment variable not set. While you're at it, check the others."
+    "JWT_SECRET environment variable not set. While you're at it, check the others."
   );
 }
 
@@ -39,7 +39,7 @@ export function checkTokenMiddleware(
     if (token.startsWith("Bearer ")) {
       token = token.slice(7, token.length);
     }
-    jwt.verify(token, JWT_TOKEN as string, (err: Error, decoded: any) => {
+    jwt.verify(token, JWT_SECRET as string, (err: Error, decoded: any) => {
       if (err) {
         return res.status(401).json({
           message: "Token is not valid"
@@ -60,7 +60,7 @@ export async function generateJwt(token: DecodedToken) {
   return new Promise<string>((res, rej) => {
     jwt.sign(
       token,
-      JWT_TOKEN as string,
+      JWT_SECRET as string,
       { algorithm: "RS256", expiresIn: "30d" },
       (err, jwtToken) => {
         if (err) {
