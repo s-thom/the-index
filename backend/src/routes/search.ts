@@ -1,7 +1,7 @@
 import { searchLinksByTagsFn } from "../functions/search";
 import { LinkDetail } from "../functions/links";
-import { wrapPromiseRoute } from "../util";
-import StatusError, { CODES } from "../StatusError";
+import { wrapPromiseRoute } from "../util/request";
+import StatusError, { CODES } from "../util/StatusError";
 
 interface SearchLinksByTagsRequest {
   tags: string[];

@@ -1,6 +1,6 @@
-import { DecodedToken, generateJwt } from "../auth";
+import { DecodedToken, generateJwt } from "../util/auth";
 import { getUserByNameFn } from "../functions/users";
-import { wrapPromiseRoute } from "../util";
+import { wrapPromiseRoute } from "../util/request";
 
 interface LoginRequest {
   name: string;

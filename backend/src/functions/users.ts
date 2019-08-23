@@ -1,5 +1,5 @@
 import { getUserById, insertUser, getUserByName } from "../database/users";
-import { isValidIdentifier } from "../util";
+import { isValidIdentifier } from "../util/request";
 
 export interface User {
   id: string;
