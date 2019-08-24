@@ -21,7 +21,7 @@ if (!JWT_SECRET) {
 // https://medium.com/dev-bits/c403f7cf04f4
 
 export function checkTokenMiddleware(
-  req: AuthorisedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) {
@@ -40,19 +40,13 @@ export function checkTokenMiddleware(
       token = token.slice(7, token.length);
     }
     jwt.verify(token, JWT_SECRET as string, (err: Error, decoded: any) => {
-      if (err) {
-        return res.status(401).json({
-          message: "Token is not valid"
-        });
-      } else {
-        req.token = decoded;
-        next();
+      if (!err) {
+        (req as AuthorisedRequest).token = decoded;
       }
+      next();
     });
   } else {
-    return res.status(401).json({
-      message: "Auth token is not supplied"
-    });
+    next();
   }
 }
 
