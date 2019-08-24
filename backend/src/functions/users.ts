@@ -7,6 +7,12 @@ export interface User {
   created: Date;
 }
 
+export interface UserAuth {
+  userId: string;
+  method: string;
+  secret: string;
+}
+
 export async function getUserByIdFn(id: string) {
   if (typeof id !== "string") {
     throw new Error("Invalid ID");
