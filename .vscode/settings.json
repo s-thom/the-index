@@ -1,6 +1,18 @@
 {
   "terminals.terminals": [
     {
+      "name": "Backend Dev Server",
+      "cwd": "./backend",
+      "commands": ["npm run dev"],
+      "open": true
+    },
+    {
+      "name": "React Dev Server",
+      "cwd": "./frontend",
+      "commands": ["npm start"],
+      "open": true
+    },
+    {
       "name": "Backend",
       "cwd": "./backend",
       "open": true

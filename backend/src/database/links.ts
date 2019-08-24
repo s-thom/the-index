@@ -5,13 +5,14 @@ interface LinkRow {
   id: string;
   url_path: string;
   inserted_dts: string;
+  user_id: string;
 }
 
-export function insertLink(url: string) {
+export function insertLink(url: string, userId: string) {
   return run<Link | null>(db => {
     return new Promise((res, rej) => {
       const statement = db.prepare(
-        "INSERT INTO links (id, url_path, inserted_dts) VALUES (?, ?, ?)"
+        "INSERT INTO links (id, url_path, inserted_dts, user_id) VALUES (?, ?, ?, ?)"
       );
       const newId = generateID();
       const insertionDate = new Date();
@@ -19,29 +20,38 @@ export function insertLink(url: string) {
       const link: Link = {
         id: newId,
         url,
-        inserted: insertionDate
+        inserted: insertionDate,
+        userId
       };
 
-      statement.run(newId, url, insertionDate.toISOString(), (err?: Error) => {
-        if (err) {
-          rej(err);
-          return;
-        }
+      statement.run(
+        newId,
+        url,
+        insertionDate.toISOString(),
+        userId,
+        (err?: Error) => {
+          if (err) {
+            rej(err);
+            return;
+          }
 
-        res(link);
-      });
+          res(link);
+        }
+      );
 
       statement.finalize();
     });
   });
 }
 
-export function getLinkById(id: string) {
+export function getLinkById(id: string, userId: string) {
   return run<Link | null>(db => {
     return new Promise((res, rej) => {
-      const statement = db.prepare("SELECT * FROM links WHERE id = ?");
+      const statement = db.prepare(
+        "SELECT * FROM links WHERE id = ? AND user_id = ?"
+      );
 
-      statement.get(id, (err?: Error, row?: LinkRow) => {
+      statement.get(id, userId, (err?: Error, row?: LinkRow) => {
         if (err) {
           rej(err);
           return;
@@ -55,7 +65,8 @@ export function getLinkById(id: string) {
         const link: Link = {
           id: row.id,
           url: row.url_path,
-          inserted: new Date(row.inserted_dts)
+          inserted: new Date(row.inserted_dts),
+          userId: row.user_id
         };
         res(link);
       });

@@ -1,6 +1,7 @@
 import { searchLinksByTagsFn } from "../functions/search";
 import { LinkDetail } from "../functions/links";
-import { wrapPromiseRoute } from "../util";
+import { wrapPromiseRoute } from "../util/request";
+import StatusError, { CODES } from "../util/StatusError";
 
 interface SearchLinksByTagsRequest {
   tags: string[];
@@ -13,8 +14,12 @@ interface SearchLinksByTagsResponse {
 export const searchLinksByTags = wrapPromiseRoute<
   SearchLinksByTagsRequest,
   SearchLinksByTagsResponse
->(async (body, req) => {
-  const links = await searchLinksByTagsFn(body.tags);
+>(async (body, params, token) => {
+  if (!token) {
+    throw new StatusError(CODES.UNAUTHORIZED, "Not logged in");
+  }
+
+  const links = await searchLinksByTagsFn(body.tags, token.userId);
 
   return {
     links

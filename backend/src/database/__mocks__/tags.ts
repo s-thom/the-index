@@ -4,15 +4,18 @@ export async function getAllTags(): Promise<Tag[]> {
   return [
     {
       id: "1",
-      name: "example"
+      name: "example",
+      userId: "user"
     },
     {
       id: "2",
-      name: "test"
+      name: "test",
+      userId: "user"
     },
     {
       id: "3",
-      name: "another"
+      name: "another",
+      userId: "user"
     }
   ];
 }
@@ -22,7 +25,8 @@ export async function insertTag(tagName: string): Promise<Tag | null> {
     case "example":
       return {
         id: "1",
-        name: tagName
+        name: tagName,
+        userId: "user"
       };
     case "null":
       return null;
@@ -50,23 +54,32 @@ export async function getOrInsertTags(
 
 export async function addTagsToLink(linkId: string, tagIds: string[]) {}
 
-export async function searchLinkIdsByTags(tags: string[]): Promise<string[]> {
+export async function searchLinkIdsByTags(
+  tags: string[],
+  userId: string
+): Promise<string[]> {
   return ["1"];
 }
 
-export async function getTagsForLinkId(linkId: string): Promise<Tag[]> {
+export async function getTagsForLinkId(
+  linkId: string,
+  userId: string
+): Promise<Tag[]> {
   return [
     {
       id: "1",
-      name: "example"
+      name: "example",
+      userId: "user"
     },
     {
       id: "2",
-      name: "test"
+      name: "test",
+      userId: "user"
     },
     {
       id: "3",
-      name: "another"
+      name: "another",
+      userId: "user"
     }
   ];
 }

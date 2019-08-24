@@ -1,4 +1,4 @@
-import "./env";
+import "./util/env";
 import db from "./database/db";
 import app from "./app";
 

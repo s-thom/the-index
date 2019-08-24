@@ -1,31 +1,115 @@
-import axios from "axios";
-import { LinkDetail } from "./types";
+import axios, { AxiosRequestConfig, AxiosError } from "axios";
+import { LinkDetail, DecodedToken } from "./types";
 
 const SERVER_HOST = process.env.REACT_APP_SERVER_PATH;
 
-interface SearchByTagResponse {
+interface LinkDetailResponse {
+  link: LinkDetail;
+}
+
+interface SearchResponse {
   links: LinkDetail[];
 }
 
-export async function getLinkById(id: string): Promise<LinkDetail> {
-  const response = await axios.get(`${SERVER_HOST}/links/${id}`);
-
-  return response.data.link;
+interface NewLinkResponse {
+  id: string;
 }
 
-export async function searchByTag(tags: string[]): Promise<LinkDetail[]> {
-  const response = await axios.post(`${SERVER_HOST}/search`, {
-    tags
-  });
-
-  return response.data.links;
+interface LoginResponse {
+  token: string;
+  content: DecodedToken;
 }
 
-export async function addNewLink(url: string, tags: string[]): Promise<string> {
-  const response = await axios.post(`${SERVER_HOST}/links`, {
-    url,
-    tags
-  });
+export default class Requester {
+  private token: string | null = null;
+  private setTokenFn: (newToken: string | null) => void = (
+    newToken: string | null
+  ) => console.warn("Tried to set token in requester before hooks were run");
 
-  return response.data.id;
+  setTokenFromHook(
+    token: string | null,
+    setToken: (newToken: string | null) => void
+  ) {
+    this.token = token;
+    this.setTokenFn = setToken;
+  }
+
+  setToken(token: string | null) {
+    this.setTokenFn(token);
+  }
+
+  private getConfig() {
+    const headers: { [x: string]: string } = {};
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
+    }
+
+    return {
+      withCredentials: true,
+      headers
+    } as AxiosRequestConfig;
+  }
+
+  private errorHandler(err: AxiosError): never {
+    if (err.response) {
+      switch (err.response.status) {
+        case 401:
+          if (this.token !== null) {
+            this.setToken(null);
+          }
+          break;
+      }
+    }
+
+    // Re-throw the error to ensure proper flow
+    throw err;
+  }
+
+  private async get<T>(path: string) {
+    const response = await axios
+      .get<T>(path, this.getConfig())
+      .catch(err => this.errorHandler(err));
+
+    return response.data;
+  }
+
+  private async post<T>(path: string, data: any) {
+    const response = await axios
+      .post<T>(path, data, this.getConfig())
+      .catch(err => this.errorHandler(err));
+
+    return response.data;
+  }
+
+  async getLinkById(id: string) {
+    const data = await this.get<LinkDetailResponse>(
+      `${SERVER_HOST}/links/${id}`
+    );
+    return data.link;
+  }
+
+  async searchByTag(tags: string[]) {
+    const data = await this.post<SearchResponse>(`${SERVER_HOST}/search`, {
+      tags
+    });
+
+    return data.links;
+  }
+
+  async addNewLink(url: string, tags: string[]) {
+    const data = await this.post<NewLinkResponse>(`${SERVER_HOST}/links`, {
+      url,
+      tags
+    });
+
+    return data.id;
+  }
+
+  async login(name: string) {
+    const data = await this.post<LoginResponse>(`${SERVER_HOST}/login`, {
+      name
+    });
+
+    return data.token;
+  }
 }

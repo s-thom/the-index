@@ -20,6 +20,9 @@ export default function Header(props: HeaderProps) {
         <Link to="/new" className="Header-nav-link hide-link">
           <TextButton>New Link</TextButton>
         </Link>
+        <Link to="/login" className="Header-nav-link hide-link">
+          <TextButton>Log in</TextButton>
+        </Link>
       </nav>
     </div>
   );
