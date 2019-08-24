@@ -11,7 +11,7 @@ export function insertUser(name: string) {
   return run<User | null>(db => {
     return new Promise((res, rej) => {
       const statement = db.prepare(
-        "INSERT INTO users (id, name, created_dts) VALUES (?, ?, ?)"
+        "INSERT INTO users (id, user_name, created_dts) VALUES (?, ?, ?)"
       );
       const newId = generateID();
       const createdDate = new Date();
@@ -68,7 +68,7 @@ export function getUserById(id: string) {
 export function getUserByName(name: string) {
   return run<User | null>(db => {
     return new Promise((res, rej) => {
-      const statement = db.prepare("SELECT * FROM users WHERE name = ?");
+      const statement = db.prepare("SELECT * FROM users WHERE user_name = ?");
 
       statement.get(name, (err?: Error, row?: UserRow) => {
         if (err) {

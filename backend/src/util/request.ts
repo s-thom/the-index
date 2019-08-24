@@ -8,11 +8,9 @@ export interface Params {
 /**
  * Wraps a Promise function to work with Express
  * @param routeFn Route to call
- * @param preResponseFn Place to inject things like headers, if necessary
  */
 export function wrapPromiseRoute<T = any, U = any>(
-  routeFn: (body: T, params: Params, token?: DecodedToken) => Promise<U>,
-  preResponseFn?: (reqBody: T, resBody: U, res: Response) => Promise<void>
+  routeFn: (body: T, params: Params, token?: DecodedToken) => Promise<U>
 ) {
   return async (req: Request, res: Response) => {
     try {
@@ -24,11 +22,6 @@ export function wrapPromiseRoute<T = any, U = any>(
         params,
         (req as AuthorisedRequest).token
       );
-
-      // Run the pre-response function
-      if (preResponseFn) {
-        await preResponseFn(req.body, responseData, res);
-      }
 
       res.json(responseData);
     } catch (err) {

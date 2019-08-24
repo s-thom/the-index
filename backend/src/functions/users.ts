@@ -23,13 +23,13 @@ export async function getUserByIdFn(id: string) {
 
 export async function getUserByNameFn(name: string) {
   if (typeof name !== "string") {
-    throw new Error("Invalid name");
+    throw new Error("Invalid details");
   }
 
   const user = await getUserByName(name);
 
   if (!user) {
-    throw new Error("Invalid name");
+    throw new Error("Invalid details");
   }
 
   return user;

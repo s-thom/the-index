@@ -7,7 +7,8 @@ interface LoginRequest {
 }
 
 interface LoginResponse {
-  token: DecodedToken;
+  token: string;
+  content: DecodedToken;
 }
 
 export const loginRoute = wrapPromiseRoute<LoginRequest, LoginResponse>(
@@ -16,15 +17,18 @@ export const loginRoute = wrapPromiseRoute<LoginRequest, LoginResponse>(
 
     const user = await getUserByNameFn(name);
 
+    const tokenContent: DecodedToken = {
+      userId: user.id
+    };
+
+    const jwt = await generateJwt(tokenContent);
+
     // There is no security at the moment. This will need to change before any prod deployment
     return {
-      token: {
+      token: jwt,
+      content: {
         userId: user.id
       }
     };
-  },
-  async (reqBody, resBody, res) => {
-    const jwt = await generateJwt(resBody.token);
-    res.setHeader("Authorization", `Bearer: ${jwt}`);
   }
 );
