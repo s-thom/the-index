@@ -33,13 +33,16 @@ export default function SearchForm(props: SearchFormProps) {
   return (
     <div className="SearchForm">
       <div className="SearchForm-tags">
+        <h4 className="SearchForm-section-heading">Tags</h4>
         <TagsForm tags={tags} onTagsChange={onTagsChange} />
       </div>
       <div className="SearchForm-dates">
         <div className="SearchForm-dates-before">
+          <h4 className="SearchForm-section-heading">Before</h4>
           <DatetimeForm date={beforeDate} onDateChange={onBeforeDateChange} />
         </div>
         <div className="SearchForm-dates-after">
+          <h4 className="SearchForm-section-heading">After</h4>
           <DatetimeForm date={afterDate} onDateChange={onAfterDateChange} />
         </div>
       </div>

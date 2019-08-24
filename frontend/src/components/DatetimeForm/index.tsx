@@ -17,6 +17,13 @@ export default function DatetimeForm({
 
   function onDateInputChange(event: React.FormEvent<HTMLInputElement>) {
     const value = event.currentTarget.value;
+    if (!value) {
+      setDateValue("");
+      if (onDateChange) {
+        onDateChange(undefined);
+      }
+    }
+
     const match = value.match(/(\d{4})-(\d{2})-(\d{2})/);
     if (!match) {
       console.warn("Bad value for date input", value);
