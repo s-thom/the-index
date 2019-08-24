@@ -3,7 +3,7 @@ import "./index.css";
 import { LinkDetail } from "../../types";
 import LinkItem from "../LinkItem";
 import { RouteComponentProps } from "@reach/router";
-import { getParamAsArray } from "../../util/getParam";
+import { getParamAsArray, getParamAsString } from "../../util/getParam";
 import SearchForm from "../SearchForm";
 import { useRequester } from "../../hooks/requests";
 
@@ -14,17 +14,22 @@ export default function SearchPage(props: SearchPageProps) {
   const requester = useRequester();
 
   const tags = getParamAsArray("t");
-
-  async function requestLinksByTags(tags: string[]) {
-    const links = await requester.searchByTag(tags);
-    setLinks(links);
-  }
+  const beforeString = getParamAsString("b");
+  const afterString = getParamAsString("a");
 
   const tagsString = tags.join(",");
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    requestLinksByTags(tags);
-  }, [tagsString]);
+    const beforeDate = beforeString ? new Date(beforeString) : undefined;
+    const afterDate = afterString ? new Date(afterString) : undefined;
+
+    async function requestLinksByTags() {
+      const links = await requester.searchByTag(tags, beforeDate, afterDate);
+      setLinks(links);
+    }
+
+    requestLinksByTags();
+  }, [tagsString, beforeString, afterString]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
   return (
