@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
-import { deduplicate } from "../../util/array";
-import TextButton from "../TextButton";
 
 interface DatetimeFormProps {
   date?: Date;
@@ -14,23 +12,24 @@ export default function DatetimeForm({
   name,
   onDateChange
 }: DatetimeFormProps) {
-  const [timeValue, setTimeValue] = useState("");
   const [dateValue, setDateValue] = useState("");
   const [prefix] = useState(name || Math.floor(Math.random() * 100).toString());
 
   function onDateInputChange(event: React.FormEvent<HTMLInputElement>) {
-    setDateValue(event.currentTarget.value);
-
-    if (timeValue && onDateChange) {
-      onDateChange(new Date(`${event.currentTarget.value}T${timeValue}`));
+    const value = event.currentTarget.value;
+    const match = value.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (!match) {
+      console.warn("Bad value for date input", value);
+      return;
     }
-  }
 
-  function onTimeInputChange(event: React.FormEvent<HTMLInputElement>) {
-    setTimeValue(event.currentTarget.value);
+    const year = parseInt(match[1]);
+    const month = parseInt(match[2]) - 1;
+    const day = parseInt(match[3]);
 
-    if (dateValue && onDateChange) {
-      onDateChange(new Date(`${dateValue}T${event.currentTarget.value}`));
+    setDateValue(value);
+    if (onDateChange) {
+      onDateChange(new Date(year, month, day));
     }
   }
 
@@ -50,22 +49,6 @@ export default function DatetimeForm({
             .toString()
             .padStart(2, "0")
       );
-      setTimeValue(
-        date
-          .getHours()
-          .toString()
-          .padStart(2, "0") +
-          ":" +
-          date
-            .getMinutes()
-            .toString()
-            .padStart(2, "0") +
-          ":" +
-          date
-            .getSeconds()
-            .toString()
-            .padStart(2, "0")
-      );
     }
   }, [date]);
 
@@ -79,16 +62,6 @@ export default function DatetimeForm({
           type="date"
           value={dateValue}
           onChange={onDateInputChange}
-        />
-      </div>
-      <div className="DatetimeForm-input-container">
-        <input
-          className="DatetimeForm-input"
-          name={`${prefix}-time`}
-          placeholder="Time"
-          type="time"
-          value={timeValue}
-          onChange={onTimeInputChange}
         />
       </div>
     </div>
