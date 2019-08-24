@@ -3,13 +3,17 @@ import { searchLinkIdsByTags } from "../database/tags";
 
 export async function searchLinksByTagsFn(
   tags: string[],
-  userId: string
+  userId: string,
+  dateRange: {
+    before?: Date;
+    after?: Date;
+  }
 ): Promise<LinkDetail[]> {
   if (!Array.isArray(tags)) {
     throw new Error("Invalid tags");
   }
 
-  const linkIds = await searchLinkIdsByTags(tags, userId);
+  const linkIds = await searchLinkIdsByTags(tags, userId, dateRange);
 
   const detailPromises = linkIds.map(id => getLinkDetailByIdFn(id, userId));
 

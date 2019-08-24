@@ -56,7 +56,11 @@ export async function addTagsToLink(linkId: string, tagIds: string[]) {}
 
 export async function searchLinkIdsByTags(
   tags: string[],
-  userId: string
+  userId: string,
+  dateRange: {
+    before?: Date;
+    after?: Date;
+  }
 ): Promise<string[]> {
   return ["1"];
 }
