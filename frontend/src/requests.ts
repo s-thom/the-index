@@ -41,10 +41,8 @@ export default class Requester {
   private getConfig() {
     const headers: { [x: string]: string } = {};
     if (this.token) {
-      console.log("adding bearer");
       headers.Authorization = `Bearer ${this.token}`;
     }
-    console.log("headers:", headers);
 
     return {
       withCredentials: true,

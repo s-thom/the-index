@@ -5,7 +5,7 @@ import LoginUserForm from "../LoginUserForm";
 import { useRequester } from "../../hooks/requests";
 import { useToken } from "../../hooks/token";
 
-export default function LoginPage(props: RouteComponentProps) {
+export default function LoginPage({ navigate }: RouteComponentProps) {
   const requester = useRequester();
   const [, setToken] = useToken();
 
@@ -13,6 +13,10 @@ export default function LoginPage(props: RouteComponentProps) {
     const token = await requester.login(name);
     if (token) {
       setToken(token);
+    }
+
+    if (navigate) {
+      navigate("/");
     }
   }
 
