@@ -15,10 +15,38 @@ interface NewLinkResponse {
   id: string;
 }
 
-interface LoginResponse {
+interface LoginBlankRequest {
+  name: string;
+}
+
+interface LoginTotpRequest {
+  name: string;
+  challenge: "TOTP";
+  response: string;
+}
+
+type LoginRequest = LoginBlankRequest | LoginTotpRequest;
+
+interface LoginSuccessResponse {
   token: string;
   content: DecodedToken;
 }
+
+interface LoginTotpSetupResponse {
+  requires: "setup";
+  code: string;
+  url: string;
+}
+
+interface LoginChallengeResponse {
+  requires: "challenge";
+  totp: true;
+}
+
+type LoginResponse =
+  | LoginSuccessResponse
+  | LoginTotpSetupResponse
+  | LoginChallengeResponse;
 
 export default class Requester {
   private token: string | null = null;
@@ -105,11 +133,12 @@ export default class Requester {
     return data.id;
   }
 
-  async login(name: string) {
-    const data = await this.post<LoginResponse>(`${SERVER_HOST}/login`, {
-      name
-    });
+  async login(loginData: LoginRequest) {
+    const data = await this.post<LoginResponse>(
+      `${SERVER_HOST}/login`,
+      loginData
+    );
 
-    return data.token;
+    return data;
   }
 }

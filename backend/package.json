@@ -46,6 +46,7 @@
     "express": "^4.17.1",
     "extended-snowflake": "^2.1.0",
     "helmet": "^3.20.0",
+    "otplib": "^11.0.1",
     "sqlite3": "^4.1.0",
     "typescript": "^3.5.3"
   }

@@ -85,7 +85,7 @@ Some of these things are important, some are not.
 - [x] Users
 - [ ] Delete user
 - [ ] Download user data
-- [ ] Login via [TOTP code](https://www.npmjs.com/package/otplib) (single user)
+- [x] Login via [TOTP code](https://www.npmjs.com/package/otplib) (single user)
 - [ ] Login via WebAuthn
 - [ ] Public ~~tag~~ links (not based on tags)
 - [ ] Groups

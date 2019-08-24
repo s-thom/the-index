@@ -26,6 +26,7 @@ export default function LoginUserForm({ onSubmit }: LoginUserFormProps) {
         className="LoginUserForm-name-input"
         id="LoginUserForm-user"
         name="LoginUserForm-user"
+        placeholder="Name"
         value={name}
         onChange={onInputChange}
         onKeyPress={onInputKeyPress}
