@@ -116,10 +116,22 @@ export default class Requester {
     return data.link;
   }
 
-  async searchByTag(tags: string[]) {
-    const data = await this.post<SearchResponse>(`${SERVER_HOST}/search`, {
+  async searchByTag(tags: string[], before?: Date, after?: Date) {
+    const reqData: { tags: string[]; before?: string; after?: string } = {
       tags
-    });
+    };
+
+    if (before) {
+      reqData.before = before.toISOString();
+    }
+    if (after) {
+      reqData.after = after.toISOString();
+    }
+
+    const data = await this.post<SearchResponse>(
+      `${SERVER_HOST}/search`,
+      reqData
+    );
 
     return data.links;
   }

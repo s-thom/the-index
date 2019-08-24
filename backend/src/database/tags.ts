@@ -167,12 +167,33 @@ export function addTagsToLink(linkId: string, tagIds: string[]) {
 
 export function searchLinkIdsByTags(
   tags: string[],
-  userId: string
+  userId: string,
+  dateRange: {
+    before?: Date;
+    after?: Date;
+  }
 ): Promise<string[]> {
   return run<string[]>(db => {
     return new Promise((res, rej) => {
       // SQLite doesn't support binding for lists, so have to build the entire query string ourselves
       const paramString = tags.map(() => "?").join(", ");
+
+      let dateQuery = "";
+      const dateParams: string[] = [];
+      if (dateRange.before && dateRange.after) {
+        dateQuery =
+          " AND datetime(l.inserted_dts) <= datetime(?) AND datetime(l.inserted_dts) >= datetime(?)";
+        dateParams.push(
+          dateRange.before.toISOString(),
+          dateRange.after.toISOString()
+        );
+      } else if (dateRange.before) {
+        dateQuery = " AND datetime(l.inserted_dts) <= datetime(?)";
+        dateParams.push(dateRange.before.toISOString());
+      } else if (dateRange.after) {
+        dateQuery = " AND datetime(l.inserted_dts) >= datetime(?)";
+        dateParams.push(dateRange.after.toISOString());
+      }
 
       const statement = db.prepare(
         `SELECT DISTINCT(link_id)
@@ -181,7 +202,7 @@ FROM tags t
   JOIN links l ON lt.link_id = l.id
 WHERE
   t.tag_name IN (${paramString}) AND
-  l.user_id = ?
+  l.user_id = ?${dateQuery}
 GROUP BY link_id
 ORDER BY
   COUNT(tag_id) DESC,
@@ -190,19 +211,24 @@ ORDER BY
 
       // Generally using .all or .getAll is discouraged, but I think the result set size will be
       // low enough to not matter for performance
-      statement.all(...tags, userId, (err?: Error, rows?: LinkIdRow[]) => {
-        if (err) {
-          rej(err);
-          return;
-        }
+      statement.all(
+        ...tags,
+        userId,
+        ...dateParams,
+        (err?: Error, rows?: LinkIdRow[]) => {
+          if (err) {
+            rej(err);
+            return;
+          }
 
-        if (!rows) {
-          res([]);
-          return;
-        }
+          if (!rows) {
+            res([]);
+            return;
+          }
 
-        res(rows.map(row => row.link_id));
-      });
+          res(rows.map(row => row.link_id));
+        }
+      );
 
       statement.finalize();
     });

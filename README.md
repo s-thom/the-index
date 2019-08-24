@@ -71,14 +71,14 @@ You'll want to put a reverse proxy in front for HTTPS. Block directly incoming c
 
 ## TODO
 
-Some of these things are important, some are not.
+Some of these things are important, some are not. I'll create some projects in GitHub to try and organise all of these.
 
 - [x] Basic prototype
 - [x] Remove title
 - [x] Add new link
 - [ ] Paginated APIs
 - [ ] Version check
-- [ ] Date selection
+- [x] Date selection
 - [x] Promises for Express
 - [x] Router
 - [x] Suspense
@@ -87,6 +87,7 @@ Some of these things are important, some are not.
 - [ ] Download user data
 - [x] Login via [TOTP code](https://www.npmjs.com/package/otplib) (single user)
 - [ ] Login via WebAuthn
+- [ ] Edit tags on existing links
 - [ ] Public ~~tag~~ links (not based on tags)
 - [ ] Groups
 - [ ] Group visibility

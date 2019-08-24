@@ -5,7 +5,7 @@ jest.mock("../database/users");
 
 test("searchLinksByTagsFn returns successfully", async () => {
   expect.assertions(1);
-  const link = await searchLinksByTagsFn(["example"], "user");
+  const link = await searchLinksByTagsFn(["example"], "user", {});
   expect(link).toEqual([
     {
       id: "1",

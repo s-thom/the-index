@@ -5,6 +5,8 @@ import StatusError, { CODES } from "../util/StatusError";
 
 interface SearchLinksByTagsRequest {
   tags: string[];
+  before?: string;
+  after?: string;
 }
 
 interface SearchLinksByTagsResponse {
@@ -19,7 +21,19 @@ export const searchLinksByTags = wrapPromiseRoute<
     throw new StatusError(CODES.UNAUTHORIZED, "Not logged in");
   }
 
-  const links = await searchLinksByTagsFn(body.tags, token.userId);
+  const range: {
+    before?: Date;
+    after?: Date;
+  } = {};
+
+  if (body.before) {
+    range.before = new Date(body.before);
+  }
+  if (body.after) {
+    range.after = new Date(body.after);
+  }
+
+  const links = await searchLinksByTagsFn(body.tags, token.userId, range);
 
   return {
     links
