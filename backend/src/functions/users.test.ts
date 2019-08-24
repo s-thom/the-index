@@ -1,4 +1,10 @@
-import { getUserByIdFn, addNewUserFn } from "./users";
+import {
+  getUserByIdFn,
+  addNewUserFn,
+  userHasAuthentication,
+  verifyUserTotpCode,
+  resetUserTotpCode
+} from "./users";
 jest.mock("../database/users");
 
 test("getUserByIdFn throws when the user", async () => {
@@ -38,5 +44,27 @@ test("addNewUserFn returns the data if valid", async () => {
     id: "1",
     name: "example-user",
     created: expect.anything()
+  });
+});
+
+test("userHasAuthentication returns the data if valid", async () => {
+  expect.assertions(1);
+  const hasAuth = await userHasAuthentication("user", "totp");
+  expect(hasAuth).toEqual(true);
+});
+
+test("verifyUserTotpCode returns false if the data is invalid", async () => {
+  expect.assertions(1);
+  const validity = await verifyUserTotpCode("user", "123456");
+  expect(validity).toEqual(false);
+});
+
+test("resetUserTotpCode returns data if valid", async () => {
+  expect.assertions(1);
+  const auth = await resetUserTotpCode("user");
+  expect(auth).toEqual({
+    userId: "user",
+    method: "totp",
+    secret: expect.anything()
   });
 });

@@ -64,7 +64,7 @@ export async function addNewUserFn(name: string) {
 }
 
 export async function userHasAuthentication(userId: string, method: string) {
-  const auth = await getUserAuthByMethod(userId, "totp");
+  const auth = await getUserAuthByMethod(userId, method);
   return auth !== null;
 }
 
