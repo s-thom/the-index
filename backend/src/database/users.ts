@@ -7,6 +7,12 @@ interface UserRow {
   created_dts: string;
 }
 
+interface UserAuthRow {
+  user_id: string;
+  auth_method: string;
+  auth_secret: string;
+}
+
 export function insertUser(name: string) {
   return run<User | null>(db => {
     return new Promise((res, rej) => {
