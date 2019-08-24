@@ -79,10 +79,10 @@ Some of these things are important, some are not.
 - [ ] Paginated APIs
 - [ ] Version check
 - [ ] Date selection
-- [ ] Promises for Express
+- [x] Promises for Express
 - [x] Router
 - [x] Suspense
-- [ ] Users
+- [x] Users
 - [ ] Delete user
 - [ ] Download user data
 - [ ] Login via [TOTP code](https://www.npmjs.com/package/otplib) (single user)
