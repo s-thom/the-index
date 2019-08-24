@@ -1,4 +1,12 @@
-import { getUserById, insertUser, getUserByName } from "../database/users";
+import otplib from "otplib";
+import {
+  getUserById,
+  insertUser,
+  getUserByName,
+  getUserAuthByMethod,
+  removeUserAuthByMethod,
+  setUserAuth
+} from "../database/users";
 import { isValidIdentifier } from "../util/validation";
 
 export interface User {
@@ -53,4 +61,33 @@ export async function addNewUserFn(name: string) {
   const user = insertUser(name);
 
   return user;
+}
+
+export async function userHasAuthentication(userId: string, method: string) {
+  const auth = await getUserAuthByMethod(userId, "totp");
+  return auth !== null;
+}
+
+export async function verifyUserTotpCode(userId: string, code: string) {
+  const auth = await getUserAuthByMethod(userId, "totp");
+
+  if (auth === null) {
+    throw new Error("Unable to get secret");
+  }
+
+  return otplib.authenticator.check(code, auth.secret);
+}
+
+export async function resetUserTotpCode(userId: string) {
+  await removeUserAuthByMethod(userId, "totp");
+
+  const secret = otplib.authenticator.generateSecret();
+
+  const auth = await setUserAuth(userId, "totp", secret);
+
+  if (!auth) {
+    throw new Error("Unable to reset authentication");
+  }
+
+  return auth;
 }
