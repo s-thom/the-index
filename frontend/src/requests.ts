@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
-import { LinkDetail } from "./types";
+import { LinkDetail, DecodedToken } from "./types";
 
 const SERVER_HOST = process.env.REACT_APP_SERVER_PATH;
 
@@ -13,6 +13,11 @@ interface SearchResponse {
 
 interface NewLinkResponse {
   id: string;
+}
+
+interface LoginResponse {
+  token: string;
+  content: DecodedToken;
 }
 
 export default class Requester {
@@ -36,8 +41,10 @@ export default class Requester {
   private getConfig() {
     const headers: { [x: string]: string } = {};
     if (this.token) {
+      console.log("adding bearer");
       headers.Authorization = `Bearer ${this.token}`;
     }
+    console.log("headers:", headers);
 
     return {
       withCredentials: true,
@@ -98,5 +105,13 @@ export default class Requester {
     });
 
     return data.id;
+  }
+
+  async login(name: string) {
+    const data = await this.post<LoginResponse>(`${SERVER_HOST}/login`, {
+      name
+    });
+
+    return data.token;
   }
 }

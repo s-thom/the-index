@@ -8,3 +8,7 @@ export interface Link {
 export interface LinkDetail extends Link {
   tags: string[];
 }
+
+export interface DecodedToken {
+  userId: string;
+}

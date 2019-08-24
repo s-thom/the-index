@@ -7,6 +7,7 @@ const SearchPage = React.lazy(() => import("../SearchPage"));
 const NotFoundPage = React.lazy(() => import("../NotFoundPage"));
 const NewLinkPage = React.lazy(() => import("../NewLinkPage"));
 const LinkDetailPage = React.lazy(() => import("../LinkDetailPage"));
+const LoginPage = React.lazy(() => import("../LoginPage"));
 
 interface BodyAreaProps {}
 
@@ -15,6 +16,7 @@ export default function BodyArea(props: BodyAreaProps) {
     <div className="BodyArea">
       <Suspense fallback={<LoadingPage />}>
         <Router primary={true}>
+          <LoginPage path="login" />
           <LoadingPage path="loading" />
           <SearchPage path="search" />
           <NewLinkPage path="new" />
