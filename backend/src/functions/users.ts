@@ -1,4 +1,4 @@
-import otplib from "otplib";
+import * as otplib from "otplib";
 import {
   getUserById,
   insertUser,

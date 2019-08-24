@@ -1,4 +1,4 @@
-import otplib from "otplib";
+import * as otplib from "otplib";
 import { DecodedToken, generateJwt } from "../util/auth";
 import {
   getUserByNameFn,
