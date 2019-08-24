@@ -188,7 +188,7 @@ export function searchLinkIdsByTags(
           dateRange.after.toISOString()
         );
       } else if (dateRange.before) {
-        dateQuery = " AND datetime(l.inserted_dts) >= datetime(?)";
+        dateQuery = " AND datetime(l.inserted_dts) <= datetime(?)";
         dateParams.push(dateRange.before.toISOString());
       } else if (dateRange.after) {
         dateQuery = " AND datetime(l.inserted_dts) >= datetime(?)";
