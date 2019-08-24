@@ -2,14 +2,38 @@ import { DecodedToken, generateJwt } from "../util/auth";
 import { getUserByNameFn } from "../functions/users";
 import { wrapPromiseRoute } from "../util/request";
 
-interface LoginRequest {
+interface LoginBlankRequest {
   name: string;
 }
 
-interface LoginResponse {
+interface LoginTotpRequest {
+  name: string;
+  challenge: "TOTP";
+  response: string;
+}
+
+type LoginRequest = LoginBlankRequest | LoginTotpRequest;
+
+interface LoginSuccessResponse {
   token: string;
   content: DecodedToken;
 }
+
+interface LoginTotpSetupResponse {
+  requires: "setup";
+  code: string;
+  url: string;
+}
+
+interface LoginChallengeResponse {
+  requires: "challenge";
+  totp: true;
+}
+
+type LoginResponse =
+  | LoginSuccessResponse
+  | LoginTotpSetupResponse
+  | LoginChallengeResponse;
 
 export const loginRoute = wrapPromiseRoute<LoginRequest, LoginResponse>(
   async (body, params, token) => {
