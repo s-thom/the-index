@@ -1,5 +1,6 @@
 import React from "react";
 import { Formik, FormikActions, Form, Field, FieldArray } from "formik";
+import urlRegex from "url-regex";
 import "./index.css";
 import TextButton from "../TextButton";
 
@@ -13,6 +14,8 @@ interface NewLinkFormValues {
   tags: string[];
   tag_input: string;
 }
+
+const URL_REGEX = urlRegex({ strict: true, exact: true });
 
 export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
   function onFormSubmit(
@@ -41,7 +44,7 @@ export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
               className="NewLinkForm-url-input"
               placeholder="Enter URL"
               aria-label="Enter URL"
-              pattern="^https?:\/\/(?:\w+\.)*\w+(?::\d{1,5})?(?:\/.*)?$"
+              pattern={URL_REGEX.source}
               required
             />
             <TextButton type="submit" disabled={disabled}>

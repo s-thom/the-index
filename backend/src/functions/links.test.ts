@@ -45,7 +45,7 @@ test("addNewLinkFn throws when the link insertion fails", async () => {
     await addNewLinkFn("fail link", [], "user");
     throw new Error("No error was thrown");
   } catch (e) {
-    expect(e).toEqual(new Error("Unable to save"));
+    expect(e).toEqual(new Error("Invalid URL"));
   }
 });
 
