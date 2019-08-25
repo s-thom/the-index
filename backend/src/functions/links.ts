@@ -1,3 +1,4 @@
+import urlRegex from "url-regex";
 import { getLinkById, insertLink } from "../database/links";
 import {
   getOrInsertTags,
@@ -23,6 +24,8 @@ export interface LinkDetail {
     name: string;
   };
 }
+
+const URL_REGEX = urlRegex({ strict: false, exact: true });
 
 export async function getLinkByIdFn(id: string, userId: string) {
   if (typeof id !== "string") {
@@ -82,6 +85,9 @@ export async function addNewLinkFn(
   userId: string
 ) {
   if (typeof url !== "string") {
+    throw new Error("Invalid URL");
+  }
+  if (!URL_REGEX.test(url)) {
     throw new Error("Invalid URL");
   }
   if (!Array.isArray(tags)) {
