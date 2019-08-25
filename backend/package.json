@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node build/index.js",
-    "dev": "nodemon --inspect=5858 src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "dev:inspect": "nodemon --inspect=5858 src/index.ts",
     "test": "dotenv -- jest",
     "migrate": "dotenv -- flyway -locations=filesystem:./sql migrate"
   },
@@ -48,6 +49,7 @@
     "helmet": "^3.20.0",
     "otplib": "^11.0.1",
     "sqlite3": "^4.1.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "url-regex": "^5.0.0"
   }
 }
