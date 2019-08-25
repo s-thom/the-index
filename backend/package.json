@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node build/index.js",
-    "dev": "nodemon --inspect=5858 src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "dev:inspect": "nodemon --inspect=5858 src/index.ts",
     "test": "dotenv -- jest",
     "migrate": "dotenv -- flyway -locations=filesystem:./sql migrate"
   },
