@@ -1,0 +1,22 @@
+.TextButton {
+  background: transparent;
+  border: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  vertical-align: baseline;
+  outline: 0;
+  font-size: 1em;
+}
+
+.TextButton:not(:disabled) {
+  cursor: pointer;
+}
+
+.TextButton:not(:disabled):hover {
+  text-decoration: underline;
+}
+
+.TextButton:disabled {
+  opacity: 0.8;
+}
