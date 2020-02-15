@@ -16,7 +16,9 @@ export const getMostCommonTagsRoute = wrapPromiseRoute<
     throw new StatusError(CODES.UNAUTHORIZED, "Not logged in");
   }
 
-  const tags = await getMostCommonTagsForUserFn(token.userId);
+  const excludeTags = params.excludeTags ? params.excludeTags.split(",") : [];
+
+  const tags = await getMostCommonTagsForUserFn(token.userId, excludeTags);
 
   return {
     tags

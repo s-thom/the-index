@@ -158,8 +158,12 @@ export default class Requester {
     return data.id;
   }
 
-  async getCommonTags() {
-    const data = await this.get<MostCommonTagsResponse>(`${SERVER_HOST}/tags`);
+  async getCommonTags(excludeTags: string[]) {
+    const tagsParam = excludeTags.join(",");
+
+    const data = await this.get<MostCommonTagsResponse>(
+      `${SERVER_HOST}/tags${tagsParam ? `?excludeTags=${tagsParam}` : ""}`
+    );
 
     return data.tags;
   }
