@@ -33,6 +33,7 @@ export function wrapPromiseRoute<T = any, U = any>(
 
       const newJwt = await newJwtPromise;
       if (newJwt) {
+        res.setHeader("Access-Control-Expose-Headers", "X-New-Token");
         res.setHeader("X-New-Token", newJwt);
       }
 
