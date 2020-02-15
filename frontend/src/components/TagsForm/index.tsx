@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import "./index.css";
+import { useAsync } from "react-use";
+import { useRequester } from "../../hooks/requests";
 import { deduplicate } from "../../util/array";
 import TextButton from "../TextButton";
+import "./index.css";
 
 interface TagsFormProps {
   tags: string[];
@@ -11,8 +13,21 @@ interface TagsFormProps {
 export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
   const [inputVal, setInputVal] = useState("");
 
+  const requester = useRequester();
+  const { value: commonTags } = useAsync(async () => {
+    return requester.getCommonTags();
+  }, [requester]);
+
   function addInputAsTag() {
     tags.push(inputVal);
+    const deduped = deduplicate(tags);
+    if (onTagsChange) {
+      onTagsChange(deduped);
+    }
+  }
+
+  function addTag(tag: string) {
+    tags.push(tag);
     const deduped = deduplicate(tags);
     if (onTagsChange) {
       onTagsChange(deduped);
@@ -64,6 +79,25 @@ export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
           </li>
         ))}
       </ul>
+      {commonTags && (
+        <ul className="TagsForm-common-tags">
+          {commonTags.map(tag => (
+            <li className="TagsForm-tag" key={tag}>
+              <TextButton
+                type="button"
+                onClick={() => {
+                  addTag(tag);
+                }}
+                title="Add"
+                aria-label={`Add ${tag}`}
+              >
+                +
+              </TextButton>{" "}
+              {tag}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

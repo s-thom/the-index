@@ -5,6 +5,7 @@ import cors, { CorsOptions } from "cors";
 import { getLinkByIdRoute, addNewLinkRoute } from "./routes/links";
 import { searchLinksByTags } from "./routes/search";
 import { loginRoute } from "./routes/auth";
+import { getMostCommonTagsRoute } from "./routes/tags";
 import { checkTokenMiddleware } from "./util/auth";
 
 const CORS_ALLOWED = process.env.CORS_ALLOWED;
@@ -32,6 +33,8 @@ app.get("/links/:id", getLinkByIdRoute);
 app.post("/links", addNewLinkRoute);
 
 app.post("/search", searchLinksByTags);
+
+app.get("/tags", getMostCommonTagsRoute);
 
 app.post("/login", loginRoute);
 
