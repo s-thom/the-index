@@ -7,8 +7,9 @@ export interface Tag {
 }
 
 export async function getMostCommonTagsForUserFn(
-  userId: string
+  userId: string,
+  excludeTags: string[]
 ): Promise<string[]> {
-  const tags = await getMostCommonTagsForUser(userId);
+  const tags = await getMostCommonTagsForUser(userId, excludeTags);
   return tags.map(t => t.name);
 }

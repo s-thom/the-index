@@ -67,6 +67,7 @@ export default class Requester {
   }
 
   setToken(token: string | null) {
+    this.token = token;
     this.setTokenFn(token);
   }
 
@@ -102,6 +103,10 @@ export default class Requester {
       .get<T>(path, this.getConfig())
       .catch(err => this.errorHandler(err));
 
+    if (response.headers["x-new-token"]) {
+      this.setToken(response.headers["x-new-token"]);
+    }
+
     return response.data;
   }
 
@@ -109,6 +114,10 @@ export default class Requester {
     const response = await axios
       .post<T>(path, data, this.getConfig())
       .catch(err => this.errorHandler(err));
+
+    if (response.headers["x-new-token"]) {
+      this.setToken(response.headers["x-new-token"]);
+    }
 
     return response.data;
   }
@@ -149,8 +158,12 @@ export default class Requester {
     return data.id;
   }
 
-  async getCommonTags() {
-    const data = await this.get<MostCommonTagsResponse>(`${SERVER_HOST}/tags`);
+  async getCommonTags(excludeTags: string[]) {
+    const tagsParam = excludeTags.join(",");
+
+    const data = await this.get<MostCommonTagsResponse>(
+      `${SERVER_HOST}/tags${tagsParam ? `?excludeTags=${tagsParam}` : ""}`
+    );
 
     return data.tags;
   }

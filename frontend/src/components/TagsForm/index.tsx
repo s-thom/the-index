@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAsync } from "react-use";
 import { useRequester } from "../../hooks/requests";
 import { deduplicate } from "../../util/array";
@@ -14,9 +14,15 @@ export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
   const [inputVal, setInputVal] = useState("");
 
   const requester = useRequester();
-  const { value: commonTags } = useAsync(async () => {
-    return requester.getCommonTags();
-  }, [requester]);
+  const { value } = useAsync(async () => {
+    return requester.getCommonTags(tags);
+  }, [requester, tags]);
+  const [commonTags, setCommonTags] = useState(value);
+  useEffect(() => {
+    if (value) {
+      setCommonTags(value);
+    }
+  }, [value]);
 
   function addInputAsTag() {
     tags.push(inputVal);
