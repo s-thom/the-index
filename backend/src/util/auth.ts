@@ -55,7 +55,7 @@ export async function generateJwt(token: DecodedToken) {
     jwt.sign(
       token,
       JWT_SECRET as string,
-      { algorithm: "HS256", expiresIn: "30d" },
+      { algorithm: "HS256", expiresIn: "5d" },
       (err, jwtToken) => {
         if (err) {
           rej(err);
