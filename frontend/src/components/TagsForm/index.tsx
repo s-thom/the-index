@@ -15,8 +15,8 @@ export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
 
   const requester = useRequester();
   const { value: commonTags } = useAsync(async () => {
-    return requester.getCommonTags();
-  }, [requester]);
+    return requester.getCommonTags(tags);
+  }, [requester, tags]);
 
   function addInputAsTag() {
     tags.push(inputVal);

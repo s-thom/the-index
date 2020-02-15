@@ -33,7 +33,7 @@ export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
 
   const requester = useRequester();
   const { value: commonTags } = useAsync(async () => {
-    return requester.getCommonTags();
+    return requester.getCommonTags([]);
   }, [requester]);
 
   const initialValues: NewLinkFormValues = { url: "", tags: [], tag_input: "" };
