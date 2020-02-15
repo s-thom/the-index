@@ -88,29 +88,30 @@ export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
                       }
                     }}
                   />
+                  {commonTags && (
+                    <ul className="NewLinkForm-common-tags">
+                      {commonTags.map(tag => (
+                        <li className="SearchForm-common-tag" key={tag}>
+                          <TextButton
+                            type="button"
+                            onClick={() => {
+                              const alreadyExists =
+                                values.tags.indexOf(tag) > -1;
+                              if (!alreadyExists) {
+                                push(tag);
+                              }
+                            }}
+                            title="Add"
+                            aria-label={`Add ${tag}`}
+                          >
+                            +
+                          </TextButton>{" "}
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                {commonTags && (
-                  <ul className="NewLinkForm-common-tags">
-                    {commonTags.map(tag => (
-                      <li className="SearchForm-tag" key={tag}>
-                        <TextButton
-                          type="button"
-                          onClick={() => {
-                            const alreadyExists = values.tags.indexOf(tag) > -1;
-                            if (!alreadyExists) {
-                              push(tag);
-                            }
-                          }}
-                          title="Add"
-                          aria-label={`Add ${tag}`}
-                        >
-                          +
-                        </TextButton>{" "}
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                )}
                 <ul className="NewLinkForm-tags">
                   {values.tags.map((tag, index) => (
                     <li className="SearchForm-tag" key={tag}>
