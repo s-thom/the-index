@@ -8,7 +8,7 @@ interface MostCommonTagsResponse {
   tags: string[];
 }
 
-export const searchLinksByTags = wrapPromiseRoute<
+export const getMostCommonTagsRoute = wrapPromiseRoute<
   MostCommonTagsRequest,
   MostCommonTagsResponse
 >(async (body, params, token) => {
