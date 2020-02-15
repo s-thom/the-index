@@ -10,5 +10,5 @@ export async function getMostCommonTagsForUserFn(
   userId: string
 ): Promise<string[]> {
   const tags = await getMostCommonTagsForUser(userId);
-  return tags.map(t => t.id);
+  return tags.map(t => t.name);
 }
