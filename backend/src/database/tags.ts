@@ -48,15 +48,21 @@ ORDER BY t.tag_name`
 
 export async function getMostCommonTagsForUser(
   userId: string,
+  excludeTags: string[],
   limit = 10
 ): Promise<Tag[]> {
   return run<Tag[]>(db => {
     return new Promise((res, rej) => {
+      const nameFilterSection = excludeTags
+        .map(t => "t.tag_name != ?")
+        .join(" AND ");
+
       const statement = db.prepare(`
 SELECT t.*
 FROM tags t
     JOIN link_tags lt ON lt.tag_id = t.id
-WHERE t.user_id = ?
+WHERE
+    t.user_id = ? ${nameFilterSection && `AND ${nameFilterSection}`}
 GROUP BY t.id
 ORDER BY count(lt.link_id) DESC, tag_name
 LIMIT ?
@@ -64,24 +70,29 @@ LIMIT ?
 
       // Generally using .all or .getAll is discouraged, but I think the result set size will be
       // low enough to not matter for performance
-      statement.all(userId, limit, (err?: Error, rows?: TagRow[]) => {
-        if (err) {
-          rej(err);
-          return;
-        }
+      statement.all(
+        userId,
+        ...excludeTags,
+        limit,
+        (err?: Error, rows?: TagRow[]) => {
+          if (err) {
+            rej(err);
+            return;
+          }
 
-        if (!rows) {
-          res([]);
-          return;
-        }
+          if (!rows) {
+            res([]);
+            return;
+          }
 
-        const tags = rows.map(row => ({
-          id: row.id,
-          name: row.tag_name,
-          userId: row.user_id
-        }));
-        res(tags);
-      });
+          const tags = rows.map(row => ({
+            id: row.id,
+            name: row.tag_name,
+            userId: row.user_id
+          }));
+          res(tags);
+        }
+      );
 
       statement.finalize();
     });
