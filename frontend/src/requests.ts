@@ -15,6 +15,10 @@ interface NewLinkResponse {
   id: string;
 }
 
+interface MostCommonTagsResponse {
+  tags: string[];
+}
+
 interface LoginBlankRequest {
   name: string;
 }
@@ -143,6 +147,12 @@ export default class Requester {
     });
 
     return data.id;
+  }
+
+  async getCommonTags() {
+    const data = await this.get<MostCommonTagsResponse>(`${SERVER_HOST}/tags`);
+
+    return data.tags;
   }
 
   async login(loginData: LoginRequest) {

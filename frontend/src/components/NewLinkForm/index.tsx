@@ -1,8 +1,10 @@
 import React from "react";
+import { useAsync } from "react-use";
 import { Formik, FormikActions, Form, Field, FieldArray } from "formik";
 import urlRegex from "url-regex";
 import "./index.css";
 import TextButton from "../TextButton";
+import { useRequester } from "../../hooks/requests";
 
 interface NewLinkFormProps {
   onSubmit?: (url: string, tags: string[]) => void;
@@ -28,6 +30,11 @@ export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
 
     actions.setSubmitting(false);
   }
+
+  const requester = useRequester();
+  const { value: commonTags } = useAsync(async () => {
+    return requester.getCommonTags();
+  }, [requester]);
 
   const initialValues: NewLinkFormValues = { url: "", tags: [], tag_input: "" };
 
@@ -82,6 +89,28 @@ export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
                     }}
                   />
                 </div>
+                {commonTags && (
+                  <ul className="NewLinkForm-common-tags">
+                    {commonTags.map(tag => (
+                      <li className="SearchForm-tag" key={tag}>
+                        <TextButton
+                          type="button"
+                          onClick={() => {
+                            const alreadyExists = values.tags.indexOf(tag) > -1;
+                            if (!alreadyExists) {
+                              push(tag);
+                            }
+                          }}
+                          title="Add"
+                          aria-label={`Add ${tag}`}
+                        >
+                          +
+                        </TextButton>{" "}
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <ul className="NewLinkForm-tags">
                   {values.tags.map((tag, index) => (
                     <li className="SearchForm-tag" key={tag}>
