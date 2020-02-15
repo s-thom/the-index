@@ -71,7 +71,7 @@ export async function getLinkDetailByIdFn(
     id: link.id,
     url: link.url,
     inserted: link.inserted,
-    tags: tagsInfo.map(tag => tag.name),
+    tags: (tagsInfo || []).map(tag => tag.name),
     user: {
       id: userInfo.id,
       name: userInfo.name

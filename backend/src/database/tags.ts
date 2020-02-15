@@ -46,6 +46,48 @@ ORDER BY t.tag_name`
   });
 }
 
+export async function getMostCommonTagsForUser(
+  userId: string,
+  limit = 10
+): Promise<Tag[]> {
+  return run<Tag[]>(db => {
+    return new Promise((res, rej) => {
+      const statement = db.prepare(`
+SELECT t.*
+FROM tags t
+    JOIN link_tags lt ON lt.tag_id = t.id
+WHERE t.user_id = ?
+GROUP BY t.id
+ORDER BY count(lt.link_id) DESC, tag_name
+LIMIT ?
+      `);
+
+      // Generally using .all or .getAll is discouraged, but I think the result set size will be
+      // low enough to not matter for performance
+      statement.all(userId, limit, (err?: Error, rows?: TagRow[]) => {
+        if (err) {
+          rej(err);
+          return;
+        }
+
+        if (!rows) {
+          res([]);
+          return;
+        }
+
+        const tags = rows.map(row => ({
+          id: row.id,
+          name: row.tag_name,
+          userId: row.user_id
+        }));
+        res(tags);
+      });
+
+      statement.finalize();
+    });
+  });
+}
+
 export function insertTag(tagName: string, userId: string) {
   return run<Tag | null>(db => {
     return new Promise((res, rej) => {

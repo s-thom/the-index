@@ -24,13 +24,19 @@
 .NewLinkForm-tag-input-container {
   margin-bottom: 0.5em;
   display: flex;
+  flex-direction: column;
 }
 
-.NewLinkForm-tags {
+.NewLinkForm-tags,
+.NewLinkForm-common-tags {
   display: block;
   padding: 0;
   margin: 0;
   list-style: none;
+}
+
+.NewLinkForm-common-tags {
+  margin-top: 1em;
 }
 
 .SearchForm-tag {
