@@ -23,7 +23,5 @@
       "open": true
     }
   ],
-  "terminals.autorun": true,
-  "prettier.eslintIntegration": true,
-  "prettier.tslintIntegration": true
+  "terminals.autorun": true
 }
