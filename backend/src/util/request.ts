@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { DecodedToken, AuthorisedRequest } from "./auth";
+import { AuthorisedRequest, DecodedToken, generateJwt } from "./auth";
 
 export interface Params {
   [key: string]: string | undefined;
@@ -17,12 +17,26 @@ export function wrapPromiseRoute<T = any, U = any>(
       // Overwrite query parameters with path parameters for safety
       const params: Params = Object.assign({}, req.query, req.params);
 
-      const responseData = await routeFn(
-        req.body,
-        params,
-        (req as AuthorisedRequest).token
-      );
+      const token: DecodedToken | undefined = (req as AuthorisedRequest).token;
 
+      const dataPromise = routeFn(req.body, params, token);
+      const newJwtPromise = Promise.resolve()
+        .then(() => {
+          if (token) {
+            const newTokenPayload: DecodedToken = {
+              userId: token.userId
+            };
+            return generateJwt(newTokenPayload);
+          }
+        })
+        .catch(() => undefined);
+
+      const newJwt = await newJwtPromise;
+      if (newJwt) {
+        res.setHeader("X-New-Token", newJwt);
+      }
+
+      const responseData = await dataPromise;
       res.json(responseData);
     } catch (err) {
       let statusCode = 500;
