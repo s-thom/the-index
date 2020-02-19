@@ -16,7 +16,7 @@ export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
   const requester = useRequester();
   const { value } = useAsync(async () => {
     return requester.getCommonTags(tags);
-  }, [requester, tags]);
+  }, [requester, ...tags]);
   const [commonTags, setCommonTags] = useState(value);
   useEffect(() => {
     if (value) {
