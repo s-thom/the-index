@@ -2,24 +2,24 @@
   "terminals.terminals": [
     {
       "name": "Backend Dev Server",
-      "cwd": "./backend",
+      "cwd": "./packages/backend",
       "commands": ["npm run dev"],
       "open": true
     },
     {
       "name": "React Dev Server",
-      "cwd": "./frontend",
+      "cwd": "./packages/frontend",
       "commands": ["npm start"],
       "open": true
     },
     {
       "name": "Backend",
-      "cwd": "./backend",
+      "cwd": "./packages/backend",
       "open": true
     },
     {
       "name": "Frontend",
-      "cwd": "./frontend",
+      "cwd": "./packages/frontend",
       "open": true
     }
   ],

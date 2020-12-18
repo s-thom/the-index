@@ -22,7 +22,8 @@ jobs:
         env:
           CI: "true"
         run: |
-          cd frontend
           npm ci
+          npx lerna bootstrap
+          cd packages/frontend
           npm run build --if-present
           npm test
