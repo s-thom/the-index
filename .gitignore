@@ -3,3 +3,8 @@ build/
 .vscode/chrome/
 .env
 *.sqlite
+
+lerna-debug.log
+npm-debug.log
+
+.eslintcache
