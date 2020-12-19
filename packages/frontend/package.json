@@ -22,5 +22,8 @@
   },
   "bugs": {
     "url": "https://github.com/s-thom/the-index/issues"
+  },
+  "dependencies": {
+    "typescript": "^4.1.3"
   }
 }
