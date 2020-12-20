@@ -138,5 +138,5 @@ jobs:
           FLYWAY_PASSWORD: ${{ secrets.FLYWAY_PASSWORD }}
         run: |
           npm ci
-          lerna bootstrap
+          npx lerna bootstrap
           npx lerna run --scope backend migrate
