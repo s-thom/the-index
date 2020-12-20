@@ -1,6 +1,7 @@
 node_modules/
 build/
 .vscode/chrome/
+coverage
 .env
 *.sqlite
 
