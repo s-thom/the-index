@@ -1,0 +1,24 @@
+{
+  "name": "openapi",
+  "version": "2.0.0",
+  "private": true,
+  "description": "OpenAPI specification for the-index",
+  "author": "Stuart Thomson <me@sthom.kiwi>",
+  "homepage": "https://github.com/s-thom/the-index/tree/master/packages/openapi#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-thom/the-index.git"
+  },
+  "scripts": {
+    "start": "openapi preview-docs",
+    "build": "openapi bundle -o build/the-index",
+    "test": "openapi lint"
+  },
+  "bugs": {
+    "url": "https://github.com/s-thom/the-index/issues"
+  },
+  "dependencies": {
+    "@redocly/openapi-cli": "^1.0.0-beta.25"
+  }
+}

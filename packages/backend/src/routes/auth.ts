@@ -1,46 +1,23 @@
 import * as otplib from 'otplib';
+import {
+  PostLoginChallengeResponse,
+  PostLoginRequest as PostLoginEmptyRequest,
+  PostLoginSetupResponse,
+  PostLoginSuccessResponse,
+  PostLoginTOTPRequest,
+} from '../api-types';
+import { getUserByNameFn, resetUserTotpCode, userHasAuthentication, verifyUserTotpCode } from '../functions/users';
 import { DecodedToken, generateJwt } from '../util/auth';
-import { getUserByNameFn, userHasAuthentication, resetUserTotpCode, verifyUserTotpCode } from '../functions/users';
 import { wrapPromiseRoute } from '../util/request';
 
-interface LoginBlankRequest {
-  name: string;
+export type PostLoginRequest = PostLoginEmptyRequest | PostLoginTOTPRequest;
+export type PostLoginResponse = PostLoginSuccessResponse | PostLoginSetupResponse | PostLoginChallengeResponse;
+
+function isValidTotpChallenge(body: PostLoginRequest): body is PostLoginTOTPRequest {
+  return 'challenge' in body && 'response' in body;
 }
 
-interface LoginTotpRequest {
-  name: string;
-  challenge: 'TOTP';
-  response: string;
-}
-
-type LoginRequest = LoginBlankRequest | LoginTotpRequest;
-
-export interface LoginSuccessResponse {
-  token: string;
-  content: DecodedToken;
-}
-
-export interface LoginTotpSetupResponse {
-  requires: 'setup';
-  code: string;
-  url: string;
-}
-
-export interface LoginChallengeResponse {
-  requires: 'challenge';
-  totp: true;
-}
-
-export type LoginResponse = LoginSuccessResponse | LoginTotpSetupResponse | LoginChallengeResponse;
-
-function isValidTotpChallenge(body: LoginRequest): body is LoginTotpRequest {
-  if (typeof (body as LoginTotpRequest).challenge === 'string') {
-    return (body as LoginTotpRequest).challenge === 'TOTP';
-  }
-  return false;
-}
-
-export const loginRoute = wrapPromiseRoute<LoginRequest, LoginResponse>(async (body) => {
+export const loginRoute = wrapPromiseRoute<PostLoginRequest, PostLoginResponse>(async (body) => {
   const { name } = body;
 
   const user = await getUserByNameFn(name);

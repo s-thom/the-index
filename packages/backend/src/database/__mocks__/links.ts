@@ -1,4 +1,9 @@
-import { Link } from '../../functions/links';
+interface Link {
+  id: string;
+  url: string;
+  inserted: Date;
+  userId: string;
+}
 
 export async function insertLink(url: string, userId: string): Promise<Link | null> {
   switch (url) {

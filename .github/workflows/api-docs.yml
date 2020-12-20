@@ -1,0 +1,54 @@
+name: OpenAPI # Based on GitHub template
+on:
+  push:
+    paths:
+      - packages/openapi/**
+  pull_request:
+    branches:
+      - master
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, run audit
+        env:
+          CI: 'true'
+        run: |
+          npm ci
+          npx lerna exec --scope openapi -- npm audit --audit-level=moderate
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, test
+        env:
+          CI: 'true'
+        run: |
+          npm ci
+          npx lerna bootstrap
+          npx lerna run --scope openapi test

@@ -1,0 +1,20 @@
+type: object
+description: Setup required response
+required:
+  - requires
+  - code
+  - url
+properties:
+  requires:
+    type: string
+    description: A code referring to why the user was not authorised
+    enum:
+      - setup
+  code:
+    type: string
+    description: The secret code for TOTP authentication
+    example: AAAA
+  url:
+    type: string
+    description: A URL that can be used to import the TOTP secret into an authenticator app
+    example: otpauth://totp/stuart?secret=AAAA&issuer=the-index

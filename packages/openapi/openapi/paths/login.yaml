@@ -1,0 +1,27 @@
+post:
+  operationId: postLogin
+  summary: Log in
+  description: |
+    Log in to the-index
+  tags:
+    - Auth
+  requestBody:
+    description: Link information
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - $ref: '../components/requestBodies/PostLoginRequest.yaml'
+            - $ref: '../components/requestBodies/PostLoginTOTPRequest.yaml'
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../components/responses/PostLoginSuccessResponse.yaml'
+              - $ref: '../components/responses/PostLoginChallengeResponse.yaml'
+              - $ref: '../components/responses/PostLoginSetupResponse.yaml'
+    '403':
+      description: Forbidden

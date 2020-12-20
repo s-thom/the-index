@@ -1,7 +1,7 @@
 import { RouteComponentProps } from '@reach/router';
 import React, { useEffect, useState } from 'react';
+import { LinkDetail } from '../../api-types';
 import { useRequester } from '../../hooks/requests';
-import { LinkDetail } from '../../types';
 import { getParamAsArray, getParamAsString } from '../../util/getParam';
 import LinkItem from '../LinkItem';
 import SearchForm from '../SearchForm';

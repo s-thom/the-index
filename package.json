@@ -5,7 +5,8 @@
   "description": "A personal index",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "lerna run test",
+    "generate-types": "lerna run --scope openapi build && lerna run --scope *end generate-types && lerna run --scope *end format"
   },
   "repository": {
     "type": "git",
