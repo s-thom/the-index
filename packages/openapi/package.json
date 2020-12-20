@@ -1,0 +1,19 @@
+{
+  "name": "openapi",
+  "version": "2.0.0",
+  "private": true,
+  "description": "OpenAPI specification for the-index",
+  "author": "Stuart Thomson <me@sthom.kiwi>",
+  "homepage": "https://github.com/s-thom/the-index/tree/master/packages/openapi#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-thom/the-index.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/s-thom/the-index/issues"
+  }
+}
