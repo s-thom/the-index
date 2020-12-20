@@ -2,7 +2,7 @@ name: Frontend # Based on GitHub template
 on:
   push:
     paths:
-      - packages/frontend
+      - packages/frontend/**
   pull_request:
     branches:
       - master
