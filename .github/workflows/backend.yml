@@ -1,54 +1,142 @@
 name: Backend # Based on GitHub template
 on:
   push:
-    branches:
-      - master
+    paths:
+      - packages/backend/**
   pull_request:
     branches:
       - master
 jobs:
-  backend:
+  audit:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm install, build, and test
+      - name: npm install, run audit
         env:
-          CI: "true"
-          DB_PATH: database.sqlite
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
+          CI: 'true'
         run: |
           npm ci
-          lerna bootstrap
-          cd packages/backend
-          npm run build --if-present
-          npm test
-  database:
+          npx lerna exec --scope backend -- npm audit --audit-level=moderate
+  lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
     steps:
       - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, lint
+        env:
+          CI: 'true'
+        run: |
+          npm ci
+          npx lerna bootstrap
+          npx lerna run --scope backend lint
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    needs:
+      - lint
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, test
+        env:
+          CI: 'true'
+        run: |
+          npm ci
+          npx lerna bootstrap
+          npx lerna run --scope backend test
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    needs:
+      - test
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, build
+        env:
+          CI: 'true'
+        run: |
+          npm ci
+          npx lerna bootstrap
+          npx lerna run --scope backend build
+  database-migration:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install, run migration
         env:
-          CI: "true"
+          CI: 'true'
           FLYWAY_URL: jdbc:sqlite:database.sqlite
           FLYWAY_USER: ${{ secrets.FLYWAY_USER }}
           FLYWAY_PASSWORD: ${{ secrets.FLYWAY_PASSWORD }}
         run: |
           npm ci
           lerna bootstrap
-          cd packages/backend
-          npm run migrate
+          npx lerna run --scope backend migrate
