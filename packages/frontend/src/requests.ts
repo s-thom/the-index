@@ -1,53 +1,20 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
-import { LinkDetail, DecodedToken } from './types';
+import {
+  GetLinksIdResponse,
+  GetTagsResponse,
+  PostLinksResponse,
+  PostSearchResponse,
+  PostLoginSuccessResponse,
+  PostLoginSetupResponse,
+  PostLoginChallengeResponse,
+  PostLoginRequest as PostLoginEmptyRequest,
+  PostLoginTOTPRequest,
+} from './api-types';
 
 const SERVER_HOST = process.env.REACT_APP_SERVER_PATH;
 
-interface LinkDetailResponse {
-  link: LinkDetail;
-}
-
-interface SearchResponse {
-  links: LinkDetail[];
-}
-
-interface NewLinkResponse {
-  id: string;
-}
-
-interface MostCommonTagsResponse {
-  tags: string[];
-}
-
-interface LoginBlankRequest {
-  name: string;
-}
-
-interface LoginTotpRequest {
-  name: string;
-  challenge: 'TOTP';
-  response: string;
-}
-
-type LoginRequest = LoginBlankRequest | LoginTotpRequest;
-
-export interface LoginSuccessResponse {
-  token: string;
-  content: DecodedToken;
-}
-
-export interface LoginTotpSetupResponse {
-  requires: 'setup';
-  code: string;
-  url: string;
-}
-
-export interface LoginChallengeResponse {
-  requires: 'challenge';
-  totp: true;
-}
-
-export type LoginResponse = LoginSuccessResponse | LoginTotpSetupResponse | LoginChallengeResponse;
+export type PostLoginRequest = PostLoginEmptyRequest | PostLoginTOTPRequest;
+export type PostLoginResponse = PostLoginSuccessResponse | PostLoginSetupResponse | PostLoginChallengeResponse;
 
 export default class Requester {
   private token: string | null = null;
@@ -116,7 +83,7 @@ export default class Requester {
   }
 
   async getLinkById(id: string) {
-    const data = await this.get<LinkDetailResponse>(`${SERVER_HOST}/links/${id}`);
+    const data = await this.get<GetLinksIdResponse>(`${SERVER_HOST}/links/${id}`);
     return data.link;
   }
 
@@ -132,13 +99,13 @@ export default class Requester {
       reqData.after = after.toISOString();
     }
 
-    const data = await this.post<SearchResponse>(`${SERVER_HOST}/search`, reqData);
+    const data = await this.post<PostSearchResponse>(`${SERVER_HOST}/search`, reqData);
 
     return data.links;
   }
 
   async addNewLink(url: string, tags: string[]) {
-    const data = await this.post<NewLinkResponse>(`${SERVER_HOST}/links`, {
+    const data = await this.post<PostLinksResponse>(`${SERVER_HOST}/links`, {
       url,
       tags,
     });
@@ -149,15 +116,13 @@ export default class Requester {
   async getCommonTags(excludeTags: string[]) {
     const tagsParam = excludeTags.join(',');
 
-    const data = await this.get<MostCommonTagsResponse>(
-      `${SERVER_HOST}/tags${tagsParam ? `?excludeTags=${tagsParam}` : ''}`,
-    );
+    const data = await this.get<GetTagsResponse>(`${SERVER_HOST}/tags${tagsParam ? `?excludeTags=${tagsParam}` : ''}`);
 
     return data.tags;
   }
 
-  async login(loginData: LoginRequest) {
-    const data = await this.post<LoginResponse>(`${SERVER_HOST}/login`, loginData);
+  async login(loginData: PostLoginRequest) {
+    const data = await this.post<PostLoginResponse>(`${SERVER_HOST}/login`, loginData);
 
     return data;
   }
