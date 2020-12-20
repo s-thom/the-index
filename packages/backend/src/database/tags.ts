@@ -1,5 +1,5 @@
-import { run, generateID } from "./db";
-import { Tag } from "../functions/tags";
+import { run, generateID } from './db';
+import { Tag } from '../functions/tags';
 
 interface TagRow {
   id: string;
@@ -12,12 +12,12 @@ interface LinkIdRow {
 }
 
 export async function getAllTags(): Promise<Tag[]> {
-  return run<Tag[]>(db => {
+  return run<Tag[]>((db) => {
     return new Promise((res, rej) => {
       const statement = db.prepare(
         `SELECT *
 FROM tags
-ORDER BY t.tag_name`
+ORDER BY t.tag_name`,
       );
 
       // Generally using .all or .getAll is discouraged, but I think the result set size will be
@@ -33,10 +33,10 @@ ORDER BY t.tag_name`
           return;
         }
 
-        const tags = rows.map(row => ({
+        const tags = rows.map((row) => ({
           id: row.id,
           name: row.tag_name,
-          userId: row.user_id
+          userId: row.user_id,
         }));
         res(tags);
       });
@@ -46,16 +46,10 @@ ORDER BY t.tag_name`
   });
 }
 
-export async function getMostCommonTagsForUser(
-  userId: string,
-  excludeTags: string[],
-  limit = 10
-): Promise<Tag[]> {
-  return run<Tag[]>(db => {
+export async function getMostCommonTagsForUser(userId: string, excludeTags: string[], limit = 10): Promise<Tag[]> {
+  return run<Tag[]>((db) => {
     return new Promise((res, rej) => {
-      const nameFilterSection = excludeTags
-        .map(t => "t.tag_name != ?")
-        .join(" AND ");
+      const nameFilterSection = excludeTags.map(() => 't.tag_name != ?').join(' AND ');
 
       const statement = db.prepare(`
 SELECT t.*
@@ -70,29 +64,24 @@ LIMIT ?
 
       // Generally using .all or .getAll is discouraged, but I think the result set size will be
       // low enough to not matter for performance
-      statement.all(
-        userId,
-        ...excludeTags,
-        limit,
-        (err?: Error, rows?: TagRow[]) => {
-          if (err) {
-            rej(err);
-            return;
-          }
-
-          if (!rows) {
-            res([]);
-            return;
-          }
-
-          const tags = rows.map(row => ({
-            id: row.id,
-            name: row.tag_name,
-            userId: row.user_id
-          }));
-          res(tags);
+      statement.all(userId, ...excludeTags, limit, (err?: Error, rows?: TagRow[]) => {
+        if (err) {
+          rej(err);
+          return;
         }
-      );
+
+        if (!rows) {
+          res([]);
+          return;
+        }
+
+        const tags = rows.map((row) => ({
+          id: row.id,
+          name: row.tag_name,
+          userId: row.user_id,
+        }));
+        res(tags);
+      });
 
       statement.finalize();
     });
@@ -100,17 +89,15 @@ LIMIT ?
 }
 
 export function insertTag(tagName: string, userId: string) {
-  return run<Tag | null>(db => {
+  return run<Tag | null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare(
-        "INSERT INTO tags (id, tag_name, user_id) VALUES (?, ?, ?)"
-      );
+      const statement = db.prepare('INSERT INTO tags (id, tag_name, user_id) VALUES (?, ?, ?)');
       const newId = generateID();
 
       const tag: Tag = {
         id: newId,
         name: tagName,
-        userId
+        userId,
       };
 
       statement.run(newId, tagName, userId, (err?: Error) => {
@@ -128,14 +115,12 @@ export function insertTag(tagName: string, userId: string) {
 }
 
 export function getOrInsertTags(tags: string[], userId: string) {
-  return run<Map<string, Tag>>(db => {
+  return run<Map<string, Tag>>((db) => {
     return new Promise((res, rej) => {
       // SQLite doesn't support binding for lists, so have to build the entire query string ourselves
-      const paramString = tags.map(() => "?").join(", ");
+      const paramString = tags.map(() => '?').join(', ');
 
-      const statement = db.prepare(
-        `SELECT * FROM tags WHERE tag_name IN (${paramString}) AND user_id = ?`
-      );
+      const statement = db.prepare(`SELECT * FROM tags WHERE tag_name IN (${paramString}) AND user_id = ?`);
 
       // Generally using .all or .getAll is discouraged, but I think the result set size will be
       // low enough to not matter for performance
@@ -159,14 +144,12 @@ export function getOrInsertTags(tags: string[], userId: string) {
         // If performance *really* gets tight, then this could be switched
         // to a single reduce call. But if we're getting to that stage then
         // we may as well abandon functional programming altogether
-        const insertPromises = tags
-          .filter(name => !nameExistsMap.has(name))
-          .map(name => insertTag(name, userId));
+        const insertPromises = tags.filter((name) => !nameExistsMap.has(name)).map((name) => insertTag(name, userId));
 
-        Promise.all(insertPromises).then(insertResults => {
+        Promise.all(insertPromises).then((insertResults) => {
           let failedInserts = 0;
 
-          insertResults.forEach(result => {
+          insertResults.forEach((result) => {
             if (result) {
               tagMap.set(result.id, result);
             } else {
@@ -175,9 +158,7 @@ export function getOrInsertTags(tags: string[], userId: string) {
           });
 
           if (failedInserts) {
-            console.warn(
-              `[getOrInsertTag] ${failedInserts} tags failed to insert`
-            );
+            console.warn(`[getOrInsertTag] ${failedInserts} tags failed to insert`);
           }
 
           res(tagMap);
@@ -190,30 +171,32 @@ export function getOrInsertTags(tags: string[], userId: string) {
 }
 
 export function addTagsToLink(linkId: string, tagIds: string[]) {
-  return run<void>(db => {
+  return run<void>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare("INSERT INTO link_tags VALUES (?, ?)");
+      try {
+        const statement = db.prepare('INSERT INTO link_tags VALUES (?, ?)');
 
-      const failedTags = [];
+        const failedTags = [];
 
-      tagIds.forEach(tagId => {
-        statement.run(linkId, tagId, (err?: Error) => {
-          // If the insert failed, make a note of it
-          if (err) {
-            failedTags.push(tagId);
-          }
+        tagIds.forEach((tagId) => {
+          statement.run(linkId, tagId, (err?: Error) => {
+            // If the insert failed, make a note of it
+            if (err) {
+              failedTags.push(tagId);
+            }
+          });
         });
-      });
 
-      if (failedTags.length) {
-        console.warn(
-          `[addTagsToLink] ${failedTags.length} tag-links failed to insert`
-        );
+        if (failedTags.length) {
+          console.warn(`[addTagsToLink] ${failedTags.length} tag-links failed to insert`);
+        }
+
+        statement.finalize();
+
+        res();
+      } catch (err) {
+        rej(err);
       }
-
-      statement.finalize();
-
-      res();
     });
   });
 }
@@ -224,27 +207,23 @@ export function searchLinkIdsByTags(
   dateRange: {
     before?: Date;
     after?: Date;
-  }
+  },
 ): Promise<string[]> {
-  return run<string[]>(db => {
+  return run<string[]>((db) => {
     return new Promise((res, rej) => {
       // SQLite doesn't support binding for lists, so have to build the entire query string ourselves
-      const paramString = tags.map(() => "?").join(", ");
+      const paramString = tags.map(() => '?').join(', ');
 
-      let dateQuery = "";
+      let dateQuery = '';
       const dateParams: string[] = [];
       if (dateRange.before && dateRange.after) {
-        dateQuery =
-          " AND datetime(l.inserted_dts) <= datetime(?) AND datetime(l.inserted_dts) >= datetime(?)";
-        dateParams.push(
-          dateRange.before.toISOString(),
-          dateRange.after.toISOString()
-        );
+        dateQuery = ' AND datetime(l.inserted_dts) <= datetime(?) AND datetime(l.inserted_dts) >= datetime(?)';
+        dateParams.push(dateRange.before.toISOString(), dateRange.after.toISOString());
       } else if (dateRange.before) {
-        dateQuery = " AND datetime(l.inserted_dts) <= datetime(?)";
+        dateQuery = ' AND datetime(l.inserted_dts) <= datetime(?)';
         dateParams.push(dateRange.before.toISOString());
       } else if (dateRange.after) {
-        dateQuery = " AND datetime(l.inserted_dts) >= datetime(?)";
+        dateQuery = ' AND datetime(l.inserted_dts) >= datetime(?)';
         dateParams.push(dateRange.after.toISOString());
       }
 
@@ -259,40 +238,32 @@ WHERE
 GROUP BY link_id
 ORDER BY
   COUNT(tag_id) DESC,
-  link_id DESC`
+  link_id DESC`,
       );
 
       // Generally using .all or .getAll is discouraged, but I think the result set size will be
       // low enough to not matter for performance
-      statement.all(
-        ...tags,
-        userId,
-        ...dateParams,
-        (err?: Error, rows?: LinkIdRow[]) => {
-          if (err) {
-            rej(err);
-            return;
-          }
-
-          if (!rows) {
-            res([]);
-            return;
-          }
-
-          res(rows.map(row => row.link_id));
+      statement.all(...tags, userId, ...dateParams, (err?: Error, rows?: LinkIdRow[]) => {
+        if (err) {
+          rej(err);
+          return;
         }
-      );
+
+        if (!rows) {
+          res([]);
+          return;
+        }
+
+        res(rows.map((row) => row.link_id));
+      });
 
       statement.finalize();
     });
   });
 }
 
-export function getTagsForLinkId(
-  linkId: string,
-  userId: string
-): Promise<Tag[]> {
-  return run<Tag[]>(db => {
+export function getTagsForLinkId(linkId: string, userId: string): Promise<Tag[]> {
+  return run<Tag[]>((db) => {
     return new Promise((res, rej) => {
       const statement = db.prepare(
         `SELECT t.*
@@ -302,7 +273,7 @@ FROM link_tags lt
 WHERE
   link_id = ? AND
   l.user_id = ?
-ORDER BY t.tag_name`
+ORDER BY t.tag_name`,
       );
 
       // Generally using .all or .getAll is discouraged, but I think the result set size will be
@@ -318,10 +289,10 @@ ORDER BY t.tag_name`
           return;
         }
 
-        const tags = rows.map(row => ({
+        const tags = rows.map((row) => ({
           id: row.id,
           name: row.tag_name,
-          userId
+          userId,
         }));
         res(tags);
       });

@@ -1,12 +1,12 @@
-import sqlite3 from "sqlite3";
-import { ExtSnowflakeGenerator } from "extended-snowflake";
+import sqlite3 from 'sqlite3';
+import { ExtSnowflakeGenerator } from 'extended-snowflake';
 
-const DB_PATH = process.env.DB_PATH;
-const DB_USER = process.env.DB_USER;
-const DB_PASS = process.env.DB_PASS;
+const { DB_PATH } = process.env;
+const { DB_USER } = process.env;
+const { DB_PASS } = process.env;
 
 if (!(DB_PATH && DB_USER && DB_PASS)) {
-  throw new Error("One of the database environment variables is missing");
+  throw new Error('One of the database environment variables is missing');
 }
 
 const db = new sqlite3.Database(DB_PATH);

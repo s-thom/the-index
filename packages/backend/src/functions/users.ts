@@ -1,13 +1,13 @@
-import * as otplib from "otplib";
+import * as otplib from 'otplib';
 import {
   getUserById,
   insertUser,
   getUserByName,
   getUserAuthByMethod,
   removeUserAuthByMethod,
-  setUserAuth
-} from "../database/users";
-import { isValidIdentifier } from "../util/validation";
+  setUserAuth,
+} from '../database/users';
+import { isValidIdentifier } from '../util/validation';
 
 export interface User {
   id: string;
@@ -22,39 +22,39 @@ export interface UserAuth {
 }
 
 export async function getUserByIdFn(id: string) {
-  if (typeof id !== "string") {
-    throw new Error("Invalid ID");
+  if (typeof id !== 'string') {
+    throw new Error('Invalid ID');
   }
 
   const user = await getUserById(id);
 
   if (!user) {
-    throw new Error("Invalid ID");
+    throw new Error('Invalid ID');
   }
 
   return user;
 }
 
 export async function getUserByNameFn(name: string) {
-  if (typeof name !== "string") {
-    throw new Error("Invalid details");
+  if (typeof name !== 'string') {
+    throw new Error('Invalid details');
   }
 
   const user = await getUserByName(name);
 
   if (!user) {
-    throw new Error("Invalid details");
+    throw new Error('Invalid details');
   }
 
   return user;
 }
 
 export async function addNewUserFn(name: string) {
-  if (typeof name !== "string") {
-    throw new Error("Invalid name");
+  if (typeof name !== 'string') {
+    throw new Error('Invalid name');
   }
   if (!isValidIdentifier(name)) {
-    throw new Error("Invalid name");
+    throw new Error('Invalid name');
   }
 
   // Insert new user
@@ -69,24 +69,24 @@ export async function userHasAuthentication(userId: string, method: string) {
 }
 
 export async function verifyUserTotpCode(userId: string, code: string) {
-  const auth = await getUserAuthByMethod(userId, "totp");
+  const auth = await getUserAuthByMethod(userId, 'totp');
 
   if (auth === null) {
-    throw new Error("Unable to get secret");
+    throw new Error('Unable to get secret');
   }
 
   return otplib.authenticator.check(code, auth.secret);
 }
 
 export async function resetUserTotpCode(userId: string) {
-  await removeUserAuthByMethod(userId, "totp");
+  await removeUserAuthByMethod(userId, 'totp');
 
   const secret = otplib.authenticator.generateSecret();
 
-  const auth = await setUserAuth(userId, "totp", secret);
+  const auth = await setUserAuth(userId, 'totp', secret);
 
   if (!auth) {
-    throw new Error("Unable to reset authentication");
+    throw new Error('Unable to reset authentication');
   }
 
   return auth;

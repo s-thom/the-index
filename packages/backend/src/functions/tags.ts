@@ -1,4 +1,4 @@
-import { getMostCommonTagsForUser } from "../database/tags";
+import { getMostCommonTagsForUser } from '../database/tags';
 
 export interface Tag {
   id: string;
@@ -6,10 +6,7 @@ export interface Tag {
   userId: string;
 }
 
-export async function getMostCommonTagsForUserFn(
-  userId: string,
-  excludeTags: string[]
-): Promise<string[]> {
+export async function getMostCommonTagsForUserFn(userId: string, excludeTags: string[]): Promise<string[]> {
   const tags = await getMostCommonTagsForUser(userId, excludeTags);
-  return tags.map(t => t.name);
+  return tags.map((t) => t.name);
 }

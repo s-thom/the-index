@@ -11,10 +11,10 @@
     "url": "git+https://github.com/s-thom/the-index.git"
   },
   "scripts": {
-    "start": "echo \"TODO:\" && exit 1",
+    "start": "nodemon src/index.ts",
     "build": "tsc",
-    "test": "jest --watchAll=false --coverage",
-    "test:watch": "jest --watchAll --coverage",
+    "test": "dotenv -- jest --watchAll=false --coverage",
+    "test:watch": "dotenv -- jest --watchAll --coverage",
     "lint": "npm run lint:tsc && npm run lint:eslint",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",

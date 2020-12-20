@@ -1,5 +1,5 @@
-import { run, generateID } from "./db";
-import { Link } from "../functions/links";
+import { run, generateID } from './db';
+import { Link } from '../functions/links';
 
 interface LinkRow {
   id: string;
@@ -9,11 +9,9 @@ interface LinkRow {
 }
 
 export function insertLink(url: string, userId: string) {
-  return run<Link | null>(db => {
+  return run<Link | null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare(
-        "INSERT INTO links (id, url_path, inserted_dts, user_id) VALUES (?, ?, ?, ?)"
-      );
+      const statement = db.prepare('INSERT INTO links (id, url_path, inserted_dts, user_id) VALUES (?, ?, ?, ?)');
       const newId = generateID();
       const insertionDate = new Date();
 
@@ -21,23 +19,17 @@ export function insertLink(url: string, userId: string) {
         id: newId,
         url,
         inserted: insertionDate,
-        userId
+        userId,
       };
 
-      statement.run(
-        newId,
-        url,
-        insertionDate.toISOString(),
-        userId,
-        (err?: Error) => {
-          if (err) {
-            rej(err);
-            return;
-          }
-
-          res(link);
+      statement.run(newId, url, insertionDate.toISOString(), userId, (err?: Error) => {
+        if (err) {
+          rej(err);
+          return;
         }
-      );
+
+        res(link);
+      });
 
       statement.finalize();
     });
@@ -45,11 +37,9 @@ export function insertLink(url: string, userId: string) {
 }
 
 export function getLinkById(id: string, userId: string) {
-  return run<Link | null>(db => {
+  return run<Link | null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare(
-        "SELECT * FROM links WHERE id = ? AND user_id = ?"
-      );
+      const statement = db.prepare('SELECT * FROM links WHERE id = ? AND user_id = ?');
 
       statement.get(id, userId, (err?: Error, row?: LinkRow) => {
         if (err) {
@@ -66,7 +56,7 @@ export function getLinkById(id: string, userId: string) {
           id: row.id,
           url: row.url_path,
           inserted: new Date(row.inserted_dts),
-          userId: row.user_id
+          userId: row.user_id,
         };
         res(link);
       });

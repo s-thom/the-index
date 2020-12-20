@@ -1,11 +1,7 @@
-import urlRegex from "url-regex-safe";
-import { getLinkById, insertLink } from "../database/links";
-import {
-  getOrInsertTags,
-  addTagsToLink,
-  getTagsForLinkId
-} from "../database/tags";
-import { getUserById } from "../database/users";
+import urlRegex from 'url-regex-safe';
+import { getLinkById, insertLink } from '../database/links';
+import { getOrInsertTags, addTagsToLink, getTagsForLinkId } from '../database/tags';
+import { getUserById } from '../database/users';
 
 export interface Link {
   id: string;
@@ -28,70 +24,60 @@ export interface LinkDetail {
 const URL_REGEX = urlRegex({ strict: false, exact: true });
 
 export async function getLinkByIdFn(id: string, userId: string) {
-  if (typeof id !== "string") {
-    throw new Error("Invalid ID");
+  if (typeof id !== 'string') {
+    throw new Error('Invalid ID');
   }
 
   const link = await getLinkById(id, userId);
 
   if (!link) {
-    throw new Error("Invalid ID");
+    throw new Error('Invalid ID');
   }
 
   return link;
 }
 
-export async function getLinkDetailByIdFn(
-  id: string,
-  userId: string
-): Promise<LinkDetail> {
-  if (typeof id !== "string") {
-    throw new Error("Invalid ID");
+export async function getLinkDetailByIdFn(id: string, userId: string): Promise<LinkDetail> {
+  if (typeof id !== 'string') {
+    throw new Error('Invalid ID');
   }
 
   const link = await getLinkById(id, userId);
 
   if (!link) {
-    throw new Error("Invalid ID");
+    throw new Error('Invalid ID');
   }
 
   const tagsInfoPromise = getTagsForLinkId(id, userId);
   const userInfoPromise = getUserById(userId);
 
-  const [tagsInfo, userInfo] = await Promise.all([
-    tagsInfoPromise,
-    userInfoPromise
-  ]);
+  const [tagsInfo, userInfo] = await Promise.all([tagsInfoPromise, userInfoPromise]);
 
   if (!userInfo) {
-    throw new Error("Unable to get user info");
+    throw new Error('Unable to get user info');
   }
 
   return {
     id: link.id,
     url: link.url,
     inserted: link.inserted,
-    tags: (tagsInfo || []).map(tag => tag.name),
+    tags: (tagsInfo || []).map((tag) => tag.name),
     user: {
       id: userInfo.id,
-      name: userInfo.name
-    }
+      name: userInfo.name,
+    },
   };
 }
 
-export async function addNewLinkFn(
-  url: string,
-  tags: string[],
-  userId: string
-) {
-  if (typeof url !== "string") {
-    throw new Error("Invalid URL");
+export async function addNewLinkFn(url: string, tags: string[], userId: string) {
+  if (typeof url !== 'string') {
+    throw new Error('Invalid URL');
   }
   if (!URL_REGEX.test(url)) {
-    throw new Error("Invalid URL");
+    throw new Error('Invalid URL');
   }
   if (!Array.isArray(tags)) {
-    throw new Error("Invalid tags");
+    throw new Error('Invalid tags');
   }
 
   // Add/fetch tags
@@ -103,7 +89,7 @@ export async function addNewLinkFn(
   // Wait for both to complete, they can be done async
   const [tagValues, link] = await Promise.all([tagsPromise, linkPromise]);
   if (!(tagValues && link)) {
-    throw new Error("Unable to save");
+    throw new Error('Unable to save');
   }
 
   // Insert link/tag entries

@@ -1,81 +1,82 @@
-import { User, UserAuth } from "../../functions/users";
+import { User, UserAuth } from '../../functions/users';
 
 export async function insertUser(name: string) {
   switch (name) {
-    case "example-user":
+    case 'example-user':
       return {
-        id: "1",
+        id: '1',
         name,
-        created: new Date()
+        created: new Date(),
       } as User;
-    case "null":
-      throw new Error("Unable to save");
+    case 'null':
+      throw new Error('Unable to save');
     default:
-      throw new Error("Unmocked value");
+      throw new Error('Unmocked value');
   }
 }
 
 export async function getUserById(id: string) {
   switch (id) {
-    case "user":
+    case 'user':
       return {
         id,
-        name: "example-user",
-        created: new Date()
+        name: 'example-user',
+        created: new Date(),
       } as User;
-    case "null":
+    case 'null':
       return null;
     default:
-      throw new Error("Unmocked value");
+      throw new Error('Unmocked value');
   }
 }
 
 export async function getUserByName(name: string) {
   switch (name) {
-    case "example-user":
+    case 'example-user':
       return {
-        id: "1",
+        id: '1',
         name,
-        created: new Date()
+        created: new Date(),
       } as User;
-    case "null":
+    case 'null':
       return null;
     default:
-      throw new Error("Unmocked value");
+      throw new Error('Unmocked value');
   }
 }
 
 export async function getUserAuthByMethod(userId: string, method: string) {
   switch (userId) {
-    case "user":
+    case 'user':
       return {
         userId,
         method,
-        secret: "secretive_secret"
+        secret: 'secretive_secret',
       } as UserAuth;
     default:
-      throw new Error("Unmocked value");
+      throw new Error('Unmocked value');
   }
 }
 
 export function setUserAuth(userId: string, method: string, secret: string) {
   switch (userId) {
-    case "user":
+    case 'user':
       return {
         userId,
         method,
-        secret
+        secret,
       } as UserAuth;
     default:
-      throw new Error("Unmocked value");
+      throw new Error('Unmocked value');
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function removeUserAuthByMethod(userId: string, method: string) {
   switch (userId) {
-    case "user":
+    case 'user':
       return null;
     default:
-      throw new Error("Unmocked value");
+      throw new Error('Unmocked value');
   }
 }

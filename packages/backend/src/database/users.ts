@@ -1,5 +1,5 @@
-import { run, generateID } from "./db";
-import { User, UserAuth } from "../functions/users";
+import { run, generateID } from './db';
+import { User, UserAuth } from '../functions/users';
 
 interface UserRow {
   id: string;
@@ -14,18 +14,16 @@ interface UserAuthRow {
 }
 
 export function insertUser(name: string) {
-  return run<User | null>(db => {
+  return run<User | null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare(
-        "INSERT INTO users (id, user_name, created_dts) VALUES (?, ?, ?)"
-      );
+      const statement = db.prepare('INSERT INTO users (id, user_name, created_dts) VALUES (?, ?, ?)');
       const newId = generateID();
       const createdDate = new Date();
 
       const user: User = {
         id: newId,
         name,
-        created: createdDate
+        created: createdDate,
       };
 
       statement.run(newId, name, createdDate.toISOString(), (err?: Error) => {
@@ -43,9 +41,9 @@ export function insertUser(name: string) {
 }
 
 export function getUserById(id: string) {
-  return run<User | null>(db => {
+  return run<User | null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare("SELECT * FROM users WHERE id = ?");
+      const statement = db.prepare('SELECT * FROM users WHERE id = ?');
 
       statement.get(id, (err?: Error, row?: UserRow) => {
         if (err) {
@@ -61,7 +59,7 @@ export function getUserById(id: string) {
         const user: User = {
           id: row.id,
           name: row.user_name,
-          created: new Date(row.created_dts)
+          created: new Date(row.created_dts),
         };
         res(user);
       });
@@ -72,9 +70,9 @@ export function getUserById(id: string) {
 }
 
 export function getUserByName(name: string) {
-  return run<User | null>(db => {
+  return run<User | null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare("SELECT * FROM users WHERE user_name = ?");
+      const statement = db.prepare('SELECT * FROM users WHERE user_name = ?');
 
       statement.get(name, (err?: Error, row?: UserRow) => {
         if (err) {
@@ -90,7 +88,7 @@ export function getUserByName(name: string) {
         const user: User = {
           id: row.id,
           name: row.user_name,
-          created: new Date(row.created_dts)
+          created: new Date(row.created_dts),
         };
         res(user);
       });
@@ -101,11 +99,9 @@ export function getUserByName(name: string) {
 }
 
 export function getUserAuthByMethod(userId: string, method: string) {
-  return run<UserAuth | null>(db => {
+  return run<UserAuth | null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare(
-        "SELECT * FROM user_authentication WHERE user_id = ? AND auth_method = ?"
-      );
+      const statement = db.prepare('SELECT * FROM user_authentication WHERE user_id = ? AND auth_method = ?');
 
       statement.get(userId, method, (err?: Error, row?: UserAuthRow) => {
         if (err) {
@@ -121,7 +117,7 @@ export function getUserAuthByMethod(userId: string, method: string) {
         const authRow: UserAuth = {
           userId: row.user_id,
           method: row.auth_method,
-          secret: row.auth_secret
+          secret: row.auth_secret,
         };
         res(authRow);
       });
@@ -132,11 +128,9 @@ export function getUserAuthByMethod(userId: string, method: string) {
 }
 
 export function setUserAuth(userId: string, method: string, secret: string) {
-  return run<UserAuth | null>(db => {
+  return run<UserAuth | null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare(
-        "INSERT INTO user_authentication VALUES (?, ?, ?)"
-      );
+      const statement = db.prepare('INSERT INTO user_authentication VALUES (?, ?, ?)');
 
       statement.run(userId, method, secret, (err?: Error) => {
         if (err) {
@@ -147,7 +141,7 @@ export function setUserAuth(userId: string, method: string, secret: string) {
         res({
           userId,
           method,
-          secret
+          secret,
         });
       });
 
@@ -157,11 +151,9 @@ export function setUserAuth(userId: string, method: string, secret: string) {
 }
 
 export function removeUserAuthByMethod(userId: string, method: string) {
-  return run<null>(db => {
+  return run<null>((db) => {
     return new Promise((res, rej) => {
-      const statement = db.prepare(
-        "DELETE FROM user_authentication WHERE user_id = ? AND auth_method = ?"
-      );
+      const statement = db.prepare('DELETE FROM user_authentication WHERE user_id = ? AND auth_method = ?');
 
       statement.run(userId, method, (err?: Error) => {
         if (err) {
