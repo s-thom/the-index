@@ -13,6 +13,8 @@ externalDocs:
 servers:
   - url: 'https://the-index.sthom.kiwi/api'
 paths:
+  /login:
+    $ref: ./paths/login.yaml
   /tags:
     $ref: ./paths/tags.yaml
   /search:

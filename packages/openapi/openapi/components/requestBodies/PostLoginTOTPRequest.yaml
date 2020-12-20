@@ -1,0 +1,20 @@
+type: object
+description: Login request with a TOTP code
+required:
+  - name
+  - challenge
+  - response
+properties:
+  name:
+    type: string
+    description: The name of the user logging in
+    example: stuart
+  challenge:
+    type: string
+    description: The challenge issued
+    enum:
+      - TOTP
+  response:
+    type: string
+    description: The response to the challenge
+    example: '000000'
