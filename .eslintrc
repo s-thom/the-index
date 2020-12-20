@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "parserOptions": {
+    "project": ["./tsconfig.json", "./packages/*/tsconfig.json"]
+  },
+  "extends": [
+    "airbnb-typescript/base",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:jest/recommended",
+    "plugin:jest/style"
+  ],
+  "rules": {
+    "class-methods-use-this": "off",
+    "no-plusplus": "off",
+    "prettier/prettier": "warn",
+    "no-unreachable": "error",
+    "import/extensions": ["warn", "never"]
+  }
+}

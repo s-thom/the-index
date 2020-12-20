@@ -1,0 +1,12 @@
+{
+  "extends": ["../../.eslintrc"],
+  "parserOptions": { "project": "./tsconfig.json" },
+  "rules": {
+    "import/no-cycle": "warn"
+  },
+  "settings": {
+    "jest": {
+      "version": 26
+    }
+  }
+}
