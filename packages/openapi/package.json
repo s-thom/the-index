@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "openapi preview-docs",
-    "build": "openapi bundle -o dist",
+    "build": "openapi bundle -o build/the-index",
     "test": "openapi lint"
   },
   "bugs": {

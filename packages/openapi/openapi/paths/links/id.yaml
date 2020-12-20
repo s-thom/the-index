@@ -11,6 +11,7 @@ get:
     - name: id
       in: path
       description: The ID of the link
+      required: true
       schema:
         type: string
         description: The ID of the link
