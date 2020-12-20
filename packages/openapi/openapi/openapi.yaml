@@ -14,9 +14,13 @@ servers:
   - url: 'https://the-index.sthom.kiwi/api'
 paths:
   /tags:
-    $ref: paths/tags.yaml
+    $ref: ./paths/tags.yaml
   /search:
-    $ref: paths/search.yaml
+    $ref: ./paths/search.yaml
+  /links:
+    $ref: ./paths/links/index.yaml
+  /links/{id}:
+    $ref: ./paths/links/id.yaml
 components:
   securitySchemes:
     bearer:
