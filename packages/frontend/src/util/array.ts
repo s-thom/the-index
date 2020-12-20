@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+
 /**
  * Deduplicates values from an array
  * @param array Array to deduplicate

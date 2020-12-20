@@ -1,20 +1,16 @@
-import React, { ButtonHTMLAttributes } from "react";
-import "./index.css";
+import React, { ButtonHTMLAttributes } from 'react';
+import './index.css';
 
-export default function TextButton(props: ButtonHTMLAttributes<{}>) {
-  const propsClone = Object.assign({}, props);
-  delete propsClone.children;
-  delete propsClone.className;
-
-  const classes = ["TextButton"];
-  if (props.className) {
-    classes.push(props.className);
+export default function TextButton({ children, className, ...props }: ButtonHTMLAttributes<{}>) {
+  const classes = ['TextButton'];
+  if (className) {
+    classes.push(className);
   }
 
   return (
-    <button className={classes.join(" ")} {...propsClone}>
+    <button className={classes.join(' ')} type="button" {...props}>
       <span className="TextButton-brace">[</span>
-      {props.children}
+      {children}
       <span className="TextButton-brace">]</span>
     </button>
   );

@@ -1,12 +1,10 @@
-import React from "react";
-import "./index.css";
-import { Link } from "@reach/router";
-import TextButton from "../TextButton";
-import { useHasToken } from "../../hooks/token";
+import React from 'react';
+import './index.css';
+import { Link } from '@reach/router';
+import TextButton from '../TextButton';
+import { useHasToken } from '../../hooks/token';
 
-interface HeaderProps {}
-
-export default function Header(props: HeaderProps) {
+export default function Header() {
   const hasToken = useHasToken();
 
   return (

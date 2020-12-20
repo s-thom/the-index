@@ -1,9 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import SearchPage from ".";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import SearchPage from '.';
 
-it("renders without crashing", () => {
-  const div = document.createElement("div");
+it('renders without crashing', () => {
+  const div = document.createElement('div');
   ReactDOM.render(<SearchPage />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

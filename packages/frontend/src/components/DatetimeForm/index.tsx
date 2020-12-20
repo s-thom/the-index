@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import "./index.css";
+import React, { useState, useEffect } from 'react';
+import './index.css';
 
 interface DatetimeFormProps {
   date?: Date;
@@ -7,18 +7,14 @@ interface DatetimeFormProps {
   name?: string;
 }
 
-export default function DatetimeForm({
-  date,
-  name,
-  onDateChange
-}: DatetimeFormProps) {
-  const [dateValue, setDateValue] = useState("");
+export default function DatetimeForm({ date, name, onDateChange }: DatetimeFormProps) {
+  const [dateValue, setDateValue] = useState('');
   const [prefix] = useState(name || Math.floor(Math.random() * 100).toString());
 
   function onDateInputChange(event: React.FormEvent<HTMLInputElement>) {
-    const value = event.currentTarget.value;
+    const { value } = event.currentTarget;
     if (!value) {
-      setDateValue("");
+      setDateValue('');
       if (onDateChange) {
         onDateChange(undefined);
       }
@@ -26,13 +22,13 @@ export default function DatetimeForm({
 
     const match = value.match(/(\d{4})-(\d{2})-(\d{2})/);
     if (!match) {
-      console.warn("Bad value for date input", value);
+      console.warn('Bad value for date input', value);
       return;
     }
 
-    const year = parseInt(match[1]);
-    const month = parseInt(match[2]) - 1;
-    const day = parseInt(match[3]);
+    const year = parseInt(match[1]!, 10);
+    const month = parseInt(match[2]!, 10) - 1;
+    const day = parseInt(match[3]!, 10);
 
     setDateValue(value);
     if (onDateChange) {
@@ -44,17 +40,9 @@ export default function DatetimeForm({
     if (date) {
       // Set date and time values
       setDateValue(
-        date
-          .getFullYear()
+        `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1)
           .toString()
-          .padStart(4, "0") +
-          "-" +
-          (date.getMonth() + 1).toString().padStart(2, "0") +
-          "-" +
-          date
-            .getDate()
-            .toString()
-            .padStart(2, "0")
+          .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
       );
     }
   }, [date]);

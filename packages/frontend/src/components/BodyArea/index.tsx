@@ -1,21 +1,19 @@
-import React, { Suspense } from "react";
-import "./index.css";
-import { Router, Redirect } from "@reach/router";
-import LoadingPage from "../LoadingPage";
+import { Redirect, Router } from '@reach/router';
+import React, { Suspense } from 'react';
+import LoadingPage from '../LoadingPage';
+import './index.css';
 
-const SearchPage = React.lazy(() => import("../SearchPage"));
-const NotFoundPage = React.lazy(() => import("../NotFoundPage"));
-const NewLinkPage = React.lazy(() => import("../NewLinkPage"));
-const LinkDetailPage = React.lazy(() => import("../LinkDetailPage"));
-const LoginPage = React.lazy(() => import("../LoginPage"));
+const SearchPage = React.lazy(() => import('../SearchPage'));
+const NotFoundPage = React.lazy(() => import('../NotFoundPage'));
+const NewLinkPage = React.lazy(() => import('../NewLinkPage'));
+const LinkDetailPage = React.lazy(() => import('../LinkDetailPage'));
+const LoginPage = React.lazy(() => import('../LoginPage'));
 
-interface BodyAreaProps {}
-
-export default function BodyArea(props: BodyAreaProps) {
+export default function BodyArea() {
   return (
     <div className="BodyArea">
       <Suspense fallback={<LoadingPage />}>
-        <Router primary={true}>
+        <Router primary>
           <LoginPage path="login" />
           <LoadingPage path="loading" />
           <SearchPage path="search" />

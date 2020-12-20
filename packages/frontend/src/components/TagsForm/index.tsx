@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useAsync } from "react-use";
-import { useRequester } from "../../hooks/requests";
-import { deduplicate } from "../../util/array";
-import TextButton from "../TextButton";
-import "./index.css";
+import React, { useState, useEffect } from 'react';
+import { useAsync } from 'react-use';
+import { useRequester } from '../../hooks/requests';
+import { deduplicate } from '../../util/array';
+import TextButton from '../TextButton';
+import './index.css';
 
 interface TagsFormProps {
   tags: string[];
@@ -11,7 +11,7 @@ interface TagsFormProps {
 }
 
 export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
-  const [inputVal, setInputVal] = useState("");
+  const [inputVal, setInputVal] = useState('');
 
   const requester = useRequester();
   const { value } = useAsync(async () => {
@@ -41,7 +41,7 @@ export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
   }
 
   function removeTag(tag: string) {
-    const filtered = tags.filter(t => t !== tag);
+    const filtered = tags.filter((t) => t !== tag);
     if (onTagsChange) {
       onTagsChange(filtered);
     }
@@ -52,9 +52,9 @@ export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
   }
 
   function onInputKeyPress(event: React.KeyboardEvent) {
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === 'Enter' || event.key === ' ') {
       addInputAsTag();
-      setInputVal("");
+      setInputVal('');
     }
   }
 
@@ -72,22 +72,18 @@ export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
         />
       </div>
       <ul className="TagsForm-tag-list">
-        {tags.map(tag => (
+        {tags.map((tag) => (
           <li className="TagsForm-tag" key={tag}>
-            <TextButton
-              onClick={() => removeTag(tag)}
-              title="Remove"
-              aria-label={`Remove ${tag}`}
-            >
+            <TextButton onClick={() => removeTag(tag)} title="Remove" aria-label={`Remove ${tag}`}>
               -
-            </TextButton>{" "}
+            </TextButton>{' '}
             {tag}
           </li>
         ))}
       </ul>
       {commonTags && (
         <ul className="TagsForm-common-tags">
-          {commonTags.map(tag => (
+          {commonTags.map((tag) => (
             <li className="TagsForm-tag" key={tag}>
               <TextButton
                 type="button"
@@ -98,7 +94,7 @@ export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
                 aria-label={`Add ${tag}`}
               >
                 +
-              </TextButton>{" "}
+              </TextButton>{' '}
               {tag}
             </li>
           ))}

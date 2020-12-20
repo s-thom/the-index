@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
-import "./index.css";
-import { RouteComponentProps } from "@reach/router";
-import { StringLiteral } from "@babel/types";
-import { LinkDetail } from "../../types";
-import LinkItem from "../LinkItem";
-import { useRequester } from "../../hooks/requests";
+import React, { useState, useEffect } from 'react';
+import './index.css';
+import { RouteComponentProps } from '@reach/router';
+import { LinkDetail } from '../../types';
+import LinkItem from '../LinkItem';
+import { useRequester } from '../../hooks/requests';
 
 interface LinkDetailPagePath {
-  id: StringLiteral;
+  id: string;
 }
 
 interface LinkDetailPageProps extends RouteComponentProps<LinkDetailPagePath> {}
@@ -19,10 +18,10 @@ export default function LinkDetailPage({ id }: LinkDetailPageProps) {
 
   useEffect(() => {
     async function getDetail() {
-      const trueId = (id || "").toString();
+      const trueId = (id || '').toString();
       if (!trueId) {
         setDetail(undefined);
-        setError(new Error("No ID was passed"));
+        setError(new Error('No ID was passed'));
         return;
       }
       setDetail(undefined);
@@ -30,7 +29,9 @@ export default function LinkDetailPage({ id }: LinkDetailPageProps) {
       try {
         const link = await requester.getLinkById(trueId);
         setDetail(link);
-      } catch (err) {}
+      } catch (err) {
+        //
+      }
     }
 
     getDetail();
@@ -39,8 +40,7 @@ export default function LinkDetailPage({ id }: LinkDetailPageProps) {
   const errorSection = error && (
     <div className="LinkDetailPage-error">
       <p className="LinkDetailPage-error-text">
-        There was an error while creating you new link. There's not much you can
-        do, really.
+        There was an error while creating your new link. There&apos;s not much you can do, really.
       </p>
     </div>
   );

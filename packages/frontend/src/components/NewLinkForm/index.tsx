@@ -1,9 +1,9 @@
-import { Field, Form, Formik, FormikActions, FormikProps } from "formik";
-import React, { useCallback } from "react";
-import urlRegex from "url-regex";
-import TagsForm from "../TagsForm";
-import TextButton from "../TextButton";
-import "./index.css";
+import { Field, Form, Formik, FormikProps, FormikHelpers } from 'formik';
+import React, { useCallback } from 'react';
+import urlRegex from 'url-regex';
+import TagsForm from '../TagsForm';
+import TextButton from '../TextButton';
+import './index.css';
 
 interface NewLinkFormProps {
   onSubmit?: (url: string, tags: string[]) => void;
@@ -18,17 +18,12 @@ interface NewLinkFormValues {
 
 const URL_REGEX = urlRegex({ strict: true, exact: true });
 
-function NewLinkFormInner({
-  values,
-  setFieldValue,
-  isSubmitting,
-  isValid
-}: FormikProps<NewLinkFormValues>) {
+function NewLinkFormInner({ values, setFieldValue, isSubmitting, isValid }: FormikProps<NewLinkFormValues>) {
   const tagsChangeCallback = useCallback(
-    newTags => {
-      setFieldValue("tags", newTags);
+    (newTags) => {
+      setFieldValue('tags', newTags);
     },
-    [setFieldValue]
+    [setFieldValue],
   );
 
   return (
@@ -52,11 +47,8 @@ function NewLinkFormInner({
   );
 }
 
-export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
-  function onFormSubmit(
-    values: NewLinkFormValues,
-    actions: FormikActions<NewLinkFormValues>
-  ) {
+export default function NewLinkForm({ onSubmit }: NewLinkFormProps) {
+  function onFormSubmit(values: NewLinkFormValues, actions: FormikHelpers<NewLinkFormValues>) {
     if (onSubmit) {
       onSubmit(values.url, values.tags);
     }
@@ -64,13 +56,13 @@ export default function NewLinkForm({ onSubmit, disabled }: NewLinkFormProps) {
     actions.setSubmitting(false);
   }
 
-  const initialValues: NewLinkFormValues = { url: "", tags: [], tag_input: "" };
+  const initialValues: NewLinkFormValues = { url: '', tags: [], tag_input: '' };
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={onFormSubmit}
-      render={formikProps => <NewLinkFormInner {...formikProps} />}
+      render={(formikProps) => <NewLinkFormInner {...formikProps} />}
     />
   );
 }

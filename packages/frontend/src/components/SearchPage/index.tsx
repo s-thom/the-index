@@ -1,31 +1,30 @@
-import React, { useState, useEffect } from "react";
-import "./index.css";
-import { LinkDetail } from "../../types";
-import LinkItem from "../LinkItem";
-import { RouteComponentProps } from "@reach/router";
-import { getParamAsArray, getParamAsString } from "../../util/getParam";
-import SearchForm from "../SearchForm";
-import { useRequester } from "../../hooks/requests";
+import { RouteComponentProps } from '@reach/router';
+import React, { useEffect, useState } from 'react';
+import { useRequester } from '../../hooks/requests';
+import { LinkDetail } from '../../types';
+import { getParamAsArray, getParamAsString } from '../../util/getParam';
+import LinkItem from '../LinkItem';
+import SearchForm from '../SearchForm';
+import './index.css';
 
-interface SearchPageProps extends RouteComponentProps {}
-
-export default function SearchPage(props: SearchPageProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function SearchPage(props: RouteComponentProps) {
   const [links, setLinks] = useState<LinkDetail[]>([]);
   const requester = useRequester();
 
-  const tags = getParamAsArray("t");
-  const beforeString = getParamAsString("b");
-  const afterString = getParamAsString("a");
+  const tags = getParamAsArray('t');
+  const beforeString = getParamAsString('b');
+  const afterString = getParamAsString('a');
 
-  const tagsString = tags.join(",");
+  const tagsString = tags.join(',');
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const beforeDate = beforeString ? new Date(beforeString) : undefined;
     const afterDate = afterString ? new Date(afterString) : undefined;
 
     async function requestLinksByTags() {
-      const links = await requester.searchByTag(tags, beforeDate, afterDate);
-      setLinks(links);
+      const newLinks = await requester.searchByTag(tags, beforeDate, afterDate);
+      setLinks(newLinks);
     }
 
     requestLinksByTags();
@@ -38,7 +37,7 @@ export default function SearchPage(props: SearchPageProps) {
         <SearchForm />
       </div>
       <div className="SearchPage-link-list">
-        {links.map(link => (
+        {links.map((link) => (
           <LinkItem key={link.id} link={link} />
         ))}
       </div>

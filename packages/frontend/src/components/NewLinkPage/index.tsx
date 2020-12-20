@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import "./index.css";
-import { RouteComponentProps, navigate } from "@reach/router";
-import NewLinkForm from "../NewLinkForm";
-import TextButton from "../TextButton";
-import { useRequester } from "../../hooks/requests";
+import { navigate, RouteComponentProps } from '@reach/router';
+import React, { useState } from 'react';
+import { useRequester } from '../../hooks/requests';
+import NewLinkForm from '../NewLinkForm';
+import TextButton from '../TextButton';
+import './index.css';
 
-interface NewLinkPageProps extends RouteComponentProps {}
-
-export default function NewLinkPage(props: NewLinkPageProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function NewLinkPage(props: RouteComponentProps) {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<Error | undefined>(undefined);
   const requester = useRequester();
@@ -21,7 +20,7 @@ export default function NewLinkPage(props: NewLinkPageProps) {
 
       setSubmitting(false);
     } catch (err) {
-      console.error("[NewLinkPage submit]", err);
+      console.error('[NewLinkPage submit]', err);
       setSubmitError(err);
       setSubmitting(false);
     }
@@ -33,8 +32,7 @@ export default function NewLinkPage(props: NewLinkPageProps) {
       {submitError && (
         <div className="NewLinkPage-error">
           <p className="NewLinkPage-error-text">
-            There was an error while creating you new link. There's not much you
-            can do, really.
+            There was an error while creating your new link. There&apos;s not much you can do, really.
           </p>
           <TextButton type="button">Re-enable form</TextButton>
         </div>

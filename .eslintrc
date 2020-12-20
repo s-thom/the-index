@@ -1,6 +1,8 @@
 {
   "root": true,
-  "parserOptions": { "project": "./tsconfig.json" },
+  "parserOptions": {
+    "project": ["./tsconfig.json", "./packages/*/tsconfig.json"]
+  },
   "extends": [
     "airbnb-typescript/base",
     "plugin:prettier/recommended",
@@ -12,6 +14,7 @@
     "class-methods-use-this": "off",
     "no-plusplus": "off",
     "prettier/prettier": "warn",
-    "no-unreachable": "error"
+    "no-unreachable": "error",
+    "import/extensions": ["warn", "never"]
   }
 }

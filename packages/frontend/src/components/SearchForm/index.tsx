@@ -1,33 +1,27 @@
-import React from "react";
-import "./index.css";
-import {
-  getParamAsArray,
-  setParam,
-  getParamAsString
-} from "../../util/getParam";
-import TagsForm from "../TagsForm";
-import DatetimeForm from "../DatetimeForm";
+import React from 'react';
+import './index.css';
+import { getParamAsArray, setParam, getParamAsString } from '../../util/getParam';
+import TagsForm from '../TagsForm';
+import DatetimeForm from '../DatetimeForm';
 
-interface SearchFormProps {}
-
-export default function SearchForm(props: SearchFormProps) {
-  const tags = getParamAsArray("t");
-  const beforeString = getParamAsString("b");
-  const afterString = getParamAsString("a");
+export default function SearchForm() {
+  const tags = getParamAsArray('t');
+  const beforeString = getParamAsString('b');
+  const afterString = getParamAsString('a');
 
   const beforeDate = beforeString ? new Date(beforeString) : undefined;
   const afterDate = afterString ? new Date(afterString) : undefined;
 
   function onTagsChange(newTags: string[]) {
-    setParam("t", newTags);
+    setParam('t', newTags);
   }
 
   function onBeforeDateChange(newDate?: Date) {
-    setParam("b", newDate && newDate.toISOString());
+    setParam('b', newDate && newDate.toISOString());
   }
 
   function onAfterDateChange(newDate?: Date) {
-    setParam("a", newDate && newDate.toISOString());
+    setParam('a', newDate && newDate.toISOString());
   }
 
   return (

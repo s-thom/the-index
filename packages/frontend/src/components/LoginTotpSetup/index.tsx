@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import qr from "qrcode";
-import "./index.css";
+import React, { useEffect, useRef } from 'react';
+import qr from 'qrcode';
+import './index.css';
 
 interface LoginTotpSetupProps {
   code: string;

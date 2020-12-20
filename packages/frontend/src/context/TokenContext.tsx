@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState } from 'react';
 
 interface TokenContextValue {
   token: string | null;
@@ -7,8 +7,7 @@ interface TokenContextValue {
 
 const TokenContext = createContext<TokenContextValue>({
   token: null,
-  setToken: newToken =>
-    console.warn("Tried to set token context without provider", newToken)
+  setToken: (newToken) => console.warn('Tried to set token context without provider', newToken),
 });
 
 export default TokenContext;
@@ -17,12 +16,10 @@ interface TokenContextProviderProps {
   children: React.ReactNode;
 }
 
-const TOKEN_KEY = "token";
+const TOKEN_KEY = 'token';
 
-export function TokenContextProvider(props: TokenContextProviderProps) {
-  const [currentValue, setCurrentValue] = useState<string | null>(
-    localStorage.getItem(TOKEN_KEY)
-  );
+export function TokenContextProvider({ children }: TokenContextProviderProps) {
+  const [currentValue, setCurrentValue] = useState<string | null>(localStorage.getItem(TOKEN_KEY));
 
   function setToken(newValue: string | null) {
     if (newValue === null) {
@@ -34,9 +31,5 @@ export function TokenContextProvider(props: TokenContextProviderProps) {
     setCurrentValue(newValue);
   }
 
-  return (
-    <TokenContext.Provider value={{ token: currentValue, setToken }}>
-      {props.children}
-    </TokenContext.Provider>
-  );
+  return <TokenContext.Provider value={{ token: currentValue, setToken }}>{children}</TokenContext.Provider>;
 }

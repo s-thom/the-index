@@ -18,7 +18,14 @@
     "url": "git+https://github.com/s-thom/the-index.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "start": "echo \"TODO:\" && exit 1",
+    "build": "tsc",
+    "test": "jest --watchAll=false --coverage",
+    "test:watch": "jest --watchAll --coverage",
+    "lint": "npm run lint:tsc && npm run lint:eslint",
+    "lint:tsc": "tsc --noEmit",
+    "lint:eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+    "format": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
   },
   "bugs": {
     "url": "https://github.com/s-thom/the-index/issues"
