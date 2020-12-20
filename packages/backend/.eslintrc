@@ -1,4 +1,9 @@
 {
   "extends": ["../../.eslintrc"],
-  "parserOptions": { "project": "./tsconfig.json" }
+  "parserOptions": { "project": "./tsconfig.json" },
+  "settings": {
+    "jest": {
+      "version": 26
+    }
+  }
 }
