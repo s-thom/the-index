@@ -11,9 +11,14 @@
     "url": "git+https://github.com/s-thom/the-index.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "start": "openapi preview-docs",
+    "build": "openapi bundle -o dist",
+    "test": "openapi lint"
   },
   "bugs": {
     "url": "https://github.com/s-thom/the-index/issues"
+  },
+  "dependencies": {
+    "@redocly/openapi-cli": "^1.0.0-beta.25"
   }
 }
