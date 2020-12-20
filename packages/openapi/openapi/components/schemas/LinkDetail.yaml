@@ -1,0 +1,44 @@
+type: object
+description: A link stored in the-index
+required:
+  - id
+  - url
+  - tags
+  - inserted
+  - user
+properties:
+  id:
+    type: string
+    description: The ID of the link
+    example: A00025E91EEBF5400000
+  url:
+    type: string
+    description: The URL of the link
+    example: https://example.com
+  tags:
+    type: array
+    description: List of tags associated with the link
+    items:
+      type: string
+      description: A tag
+      example: example
+  inserted:
+    type: string
+    description: The date the link was added
+    format: date-time
+    example: '2020-01-01T00:00:00.000Z'
+  user:
+    type: object
+    description: The user that added the link
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: string
+        description: The ID of the user
+        example: A000241644191C800000
+      name:
+        type: string
+        description: The name of the user
+        example: stuart
