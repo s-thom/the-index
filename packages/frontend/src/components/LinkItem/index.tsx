@@ -1,6 +1,6 @@
 import React from 'react';
+import { LinkDetail } from '../../api-types';
 import './index.css';
-import { LinkDetail } from '../../types';
 
 interface LinkItemProps {
   link: LinkDetail;

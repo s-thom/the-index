@@ -8,10 +8,13 @@ it('renders without crashing', () => {
     <LinkItem
       link={{
         id: '1',
-        title: 'Example',
         url: 'https://example.com',
-        inserted: new Date(0),
+        inserted: '2020-01-01T00:00:00.000Z',
         tags: [],
+        user: {
+          id: '1',
+          name: 'Alice',
+        },
       }}
     />,
     div,

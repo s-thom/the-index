@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import './index.css';
 import { RouteComponentProps } from '@reach/router';
-import { LinkDetail } from '../../types';
-import LinkItem from '../LinkItem';
+import React, { useEffect, useState } from 'react';
+import { LinkDetail } from '../../api-types';
 import { useRequester } from '../../hooks/requests';
+import LinkItem from '../LinkItem';
+import './index.css';
 
 interface LinkDetailPagePath {
   id: string;

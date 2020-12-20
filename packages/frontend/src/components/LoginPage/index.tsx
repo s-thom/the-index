@@ -1,8 +1,8 @@
 import { RouteComponentProps } from '@reach/router';
 import React, { useState } from 'react';
+import { PostLoginSetupResponse } from '../../api-types';
 import { useRequester } from '../../hooks/requests';
 import { useToken } from '../../hooks/token';
-import { LoginTotpSetupResponse } from '../../requests';
 import LoginTotpForm from '../LoginTotpForm';
 import LoginTotpSetup from '../LoginTotpSetup';
 import LoginUserForm from '../LoginUserForm';
@@ -14,7 +14,7 @@ export default function LoginPage({ navigate }: RouteComponentProps) {
   const [showTotp, setShowTotp] = useState(false);
   const [name, setName] = useState('');
   const [totpCode, setTotpCode] = useState('');
-  const [totpSetup, setTotpSetup] = useState<LoginTotpSetupResponse>();
+  const [totpSetup, setTotpSetup] = useState<PostLoginSetupResponse>();
 
   async function submitLogin(username: string, method?: string, code?: string) {
     const requestData: any = {
