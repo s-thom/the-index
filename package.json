@@ -1,6 +1,7 @@
 {
   "name": "the-index",
   "version": "1.0.0",
+  "private": true,
   "description": "A personal index",
   "main": "index.js",
   "scripts": {

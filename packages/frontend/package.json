@@ -1,18 +1,11 @@
 {
   "name": "frontend",
   "version": "2.0.0",
+  "private": true,
   "description": "React frontend for the-index",
   "author": "Stuart Thomson <me@sthom.kiwi>",
   "homepage": "https://github.com/s-thom/the-index/tree/master/packages/frontend#readme",
   "license": "MIT",
-  "main": "lib/frontend.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/s-thom/the-index.git"
