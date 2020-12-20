@@ -1,6 +1,6 @@
 import { Field, Form, Formik, FormikProps, FormikHelpers } from 'formik';
 import React, { useCallback } from 'react';
-import urlRegex from 'url-regex';
+import urlRegex from 'url-regex-safe';
 import TagsForm from '../TagsForm';
 import TextButton from '../TextButton';
 import './index.css';

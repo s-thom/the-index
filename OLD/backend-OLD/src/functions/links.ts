@@ -1,4 +1,4 @@
-import urlRegex from "url-regex";
+import urlRegex from "url-regex-safe";
 import { getLinkById, insertLink } from "../database/links";
 import {
   getOrInsertTags,
