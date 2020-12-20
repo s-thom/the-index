@@ -1,5 +1,6 @@
-import { LinkDetail, getLinkDetailByIdFn } from './links';
+import { LinkDetail } from '../api-types';
 import { searchLinkIdsByTags } from '../database/tags';
+import { getLinkDetailByIdFn } from './links';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function searchLinksByTagsFn(

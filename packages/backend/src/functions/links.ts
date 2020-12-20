@@ -1,25 +1,8 @@
 import urlRegex from 'url-regex-safe';
+import { LinkDetail } from '../api-types';
 import { getLinkById, insertLink } from '../database/links';
 import { getOrInsertTags, addTagsToLink, getTagsForLinkId } from '../database/tags';
 import { getUserById } from '../database/users';
-
-export interface Link {
-  id: string;
-  url: string;
-  inserted: Date;
-  userId: string;
-}
-
-export interface LinkDetail {
-  id: string;
-  url: string;
-  inserted: Date;
-  tags: string[];
-  user: {
-    id: string;
-    name: string;
-  };
-}
 
 const URL_REGEX = urlRegex({ strict: false, exact: true });
 
@@ -60,7 +43,7 @@ export async function getLinkDetailByIdFn(id: string, userId: string): Promise<L
   return {
     id: link.id,
     url: link.url,
-    inserted: link.inserted,
+    inserted: new Date(link.inserted).toISOString(),
     tags: (tagsInfo || []).map((tag) => tag.name),
     user: {
       id: userInfo.id,

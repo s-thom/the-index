@@ -1,5 +1,11 @@
 import { run, generateID } from './db';
-import { Link } from '../functions/links';
+
+interface Link {
+  id: string;
+  url: string;
+  inserted: Date;
+  userId: string;
+}
 
 interface LinkRow {
   id: string;

@@ -1,20 +1,10 @@
+import { PostSearchRequestBody, PostSearchResponse } from '../api-types';
 import { searchLinksByTagsFn } from '../functions/search';
-import { LinkDetail } from '../functions/links';
 import { wrapPromiseRoute } from '../util/request';
 import StatusError, { CODES } from '../util/StatusError';
 
-interface SearchLinksByTagsRequest {
-  tags: string[];
-  before?: string;
-  after?: string;
-}
-
-interface SearchLinksByTagsResponse {
-  links: LinkDetail[];
-}
-
 // eslint-disable-next-line import/prefer-default-export
-export const searchLinksByTags = wrapPromiseRoute<SearchLinksByTagsRequest, SearchLinksByTagsResponse>(
+export const searchLinksByTags = wrapPromiseRoute<PostSearchRequestBody, PostSearchResponse>(
   async (body, params, token) => {
     if (!token) {
       throw new StatusError(CODES.UNAUTHORIZED, 'Not logged in');

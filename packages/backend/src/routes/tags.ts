@@ -1,15 +1,10 @@
-import { wrapPromiseRoute } from '../util/request';
+import { GetTagsQueryParams, GetTagsResponse } from '../api-types';
 import { getMostCommonTagsForUserFn } from '../functions/tags';
+import { wrapPromiseRoute } from '../util/request';
 import StatusError, { CODES } from '../util/StatusError';
 
-interface MostCommonTagsRequest {}
-
-interface MostCommonTagsResponse {
-  tags: string[];
-}
-
 // eslint-disable-next-line import/prefer-default-export
-export const getMostCommonTagsRoute = wrapPromiseRoute<MostCommonTagsRequest, MostCommonTagsResponse>(
+export const getMostCommonTagsRoute = wrapPromiseRoute<GetTagsQueryParams, GetTagsResponse>(
   async (body, params, token) => {
     if (!token) {
       throw new StatusError(CODES.UNAUTHORIZED, 'Not logged in');
