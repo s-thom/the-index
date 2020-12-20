@@ -7,6 +7,7 @@ interface TokenContextValue {
 
 const TokenContext = createContext<TokenContextValue>({
   token: null,
+  // eslint-disable-next-line no-console
   setToken: (newToken) => console.warn('Tried to set token context without provider', newToken),
 });
 

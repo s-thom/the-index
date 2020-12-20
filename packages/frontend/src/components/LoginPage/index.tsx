@@ -46,10 +46,7 @@ export default function LoginPage({ navigate }: RouteComponentProps) {
     if (response.requires === 'setup') {
       setTotpSetup(response);
       setShowTotp(true);
-      return;
     }
-
-    console.error('Unknown response', response);
   }
 
   async function onUserSubmit(username: string) {

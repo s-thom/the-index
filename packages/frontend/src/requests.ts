@@ -53,6 +53,7 @@ export default class Requester {
   private token: string | null = null;
 
   private setTokenFn: (newToken: string | null) => void = () => {
+    // eslint-disable-next-line no-console
     console.warn('Tried to set token in requester before hooks were run');
   };
 

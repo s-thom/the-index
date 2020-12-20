@@ -20,7 +20,6 @@ export default function NewLinkPage(props: RouteComponentProps) {
 
       setSubmitting(false);
     } catch (err) {
-      console.error('[NewLinkPage submit]', err);
       setSubmitError(err);
       setSubmitting(false);
     }
