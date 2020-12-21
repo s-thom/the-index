@@ -1,4 +1,3 @@
-import React from 'react';
 import './index.css';
 import { TokenContextProvider } from '../context/TokenContext';
 import Header from '../components/Header';

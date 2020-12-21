@@ -1,13 +1,13 @@
-import { Redirect, BrowserRouter, Route, Switch } from 'react-router-dom';
-import React, { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import LoadingPage from '../LoadingPage';
 import './index.css';
 
-const SearchPage = React.lazy(() => import('../SearchPage'));
-const NotFoundPage = React.lazy(() => import('../NotFoundPage'));
-const NewLinkPage = React.lazy(() => import('../NewLinkPage'));
-const LinkDetailPage = React.lazy(() => import('../LinkDetailPage'));
-const LoginPage = React.lazy(() => import('../LoginPage'));
+const SearchPage = lazy(() => import('../SearchPage'));
+const NotFoundPage = lazy(() => import('../NotFoundPage'));
+const NewLinkPage = lazy(() => import('../NewLinkPage'));
+const LinkDetailPage = lazy(() => import('../LinkDetailPage'));
+const LoginPage = lazy(() => import('../LoginPage'));
 
 export default function BodyArea() {
   return (

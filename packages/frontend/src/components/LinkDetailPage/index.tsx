@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { LinkDetail } from '../../api-types';
 import { useRequester } from '../../hooks/requests';

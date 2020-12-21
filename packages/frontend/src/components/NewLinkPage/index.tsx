@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRequester } from '../../hooks/requests';
 import NewLinkForm from '../NewLinkForm';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAsync } from 'react-use';
 import { useRequester } from '../../hooks/requests';
 import { deduplicate } from '../../util/array';

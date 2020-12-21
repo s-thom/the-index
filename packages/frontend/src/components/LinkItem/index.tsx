@@ -1,4 +1,3 @@
-import React from 'react';
 import { LinkDetail } from '../../api-types';
 import './index.css';
 

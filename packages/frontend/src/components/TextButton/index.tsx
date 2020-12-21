@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react';
 import './index.css';
 
 export default function TextButton({ children, className, ...props }: ButtonHTMLAttributes<{}>) {

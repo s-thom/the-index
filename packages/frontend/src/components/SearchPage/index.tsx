@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LinkDetail } from '../../api-types';
 import { useRequester } from '../../hooks/requests';
 import { getParamAsArray, getParamAsString } from '../../util/getParam';
