@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - packages/backend/**
+      - .github/workflows/backend.yml
   pull_request:
     branches:
       - master
@@ -115,6 +116,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
+        java-version: ['8']
     steps:
       - uses: actions/checkout@v1
       - name: Cache node modules
@@ -130,6 +132,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Use Java ${{ matrix.java-version }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java-version }}
       - name: npm install, run migration
         env:
           CI: 'true'
