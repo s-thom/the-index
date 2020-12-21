@@ -7,7 +7,7 @@ export interface AuthorizationContextValue {
   setToken: (token: string) => void;
 }
 
-const AuthorizationContext = createContext<AuthorizationContextValue>({
+export const AuthorizationContext = createContext<AuthorizationContextValue>({
   authorized: false,
   setToken: () => {},
 });
