@@ -129,7 +129,6 @@ export function postLogin(
     PostLoginRequest | PostLoginTOTPRequest,
     void
   >,
-  signal?: RequestInit['signal'],
 ) {
   return customMutate<
     PostLoginSuccessResponse | PostLoginChallengeResponse | PostLoginSetupResponse,
@@ -137,7 +136,7 @@ export function postLogin(
     void,
     PostLoginRequest | PostLoginTOTPRequest,
     void
-  >('POST', `/login`, props, signal);
+  >('POST', `/login`, props);
 }
 
 export interface GetTagsResponse {
@@ -160,11 +159,8 @@ export interface GetTagsQueryParams {
  * Gets a list of the most commonly used tags by the current user
  *
  */
-export function getTags(
-  props: CustomGetProps<GetTagsResponse, void, GetTagsQueryParams, void>,
-  signal?: RequestInit['signal'],
-) {
-  return customGet<GetTagsResponse, void, GetTagsQueryParams, void>(`/tags`, props, signal);
+export function getTags(props: CustomGetProps<GetTagsResponse, void, GetTagsQueryParams, void>) {
+  return customGet<GetTagsResponse, void, GetTagsQueryParams, void>(`/tags`, props);
 }
 
 export interface PostSearchResponse {
@@ -204,13 +200,11 @@ export interface PostSearchRequestBody {
  */
 export function postSearch(
   props: CustomMutateProps<PostSearchResponse, void, PostSearchQueryParams, PostSearchRequestBody, void>,
-  signal?: RequestInit['signal'],
 ) {
   return customMutate<PostSearchResponse, void, PostSearchQueryParams, PostSearchRequestBody, void>(
     'POST',
     `/search`,
     props,
-    signal,
   );
 }
 
@@ -238,11 +232,8 @@ export interface PostLinksRequestBody {
  * Adds a new link
  *
  */
-export function postLinks(
-  props: CustomMutateProps<PostLinksResponse, void, void, PostLinksRequestBody, void>,
-  signal?: RequestInit['signal'],
-) {
-  return customMutate<PostLinksResponse, void, void, PostLinksRequestBody, void>('POST', `/links`, props, signal);
+export function postLinks(props: CustomMutateProps<PostLinksResponse, void, void, PostLinksRequestBody, void>) {
+  return customMutate<PostLinksResponse, void, void, PostLinksRequestBody, void>('POST', `/links`, props);
 }
 
 export interface GetLinksIdResponse {
@@ -262,17 +253,14 @@ export interface GetLinksIdPathParams {
  * Gets the detail of a single link
  *
  */
-export function getLinksId(
-  {
-    id,
-    ...props
-  }: CustomGetProps<GetLinksIdResponse, void, void, GetLinksIdPathParams> & {
-    /**
-     * The ID of the link
-     */
-    id: string;
-  },
-  signal?: RequestInit['signal'],
-) {
-  return customGet<GetLinksIdResponse, void, void, GetLinksIdPathParams>(`/links/${id}`, props, signal);
+export function getLinksId({
+  id,
+  ...props
+}: CustomGetProps<GetLinksIdResponse, void, void, GetLinksIdPathParams> & {
+  /**
+   * The ID of the link
+   */
+  id: string;
+}) {
+  return customGet<GetLinksIdResponse, void, void, GetLinksIdPathParams>(`/links/${id}`, props);
 }

@@ -15,10 +15,9 @@ function generate({ componentName, verb, route, description, genericsTypes, para
     return `
 
 ${description}export function ${camel(componentName)} (
-  ${propsParameter}: ${propsType('Get')},
-  signal?: RequestInit["signal"]
+  ${propsParameter}: ${propsType('Get')}
 ) {
-  return customGet<${genericsTypes}>(\`${route}\`, props, signal);
+  return customGet<${genericsTypes}>(\`${route}\`, props);
 }
 
 `;
@@ -27,10 +26,9 @@ ${description}export function ${camel(componentName)} (
   return `
 
 ${description}export function ${camel(componentName)} (
-  ${propsParameter}: ${propsType('Mutate')},
-  signal?: RequestInit["signal"]
+  ${propsParameter}: ${propsType('Mutate')}
 ) {
-  return customMutate<${genericsTypes}>("${verb.toUpperCase()}", \`${route}\`, props, signal);
+  return customMutate<${genericsTypes}>("${verb.toUpperCase()}", \`${route}\`, props);
 }
 
 `;
