@@ -1,5 +1,5 @@
 import LinkItem from '..';
-import { cleanup, render, screen } from '../../../util/test-utils';
+import { cleanup, render, screen, getNodeText } from '../../../util/test-utils';
 
 afterEach(() => {
   cleanup();
@@ -22,6 +22,6 @@ describe('LinkItem', () => {
 
     const tags = screen.queryAllByRole('listitem');
     expect(tags).toHaveLength(2);
-    expect(tags.map((tag) => tag.textContent)).toEqual(['one', 'two']);
+    expect(tags.map((tag) => getNodeText(tag))).toEqual(['one', 'two']);
   });
 });
