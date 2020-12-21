@@ -35,7 +35,7 @@ export default function App() {
             </BodyArea>
           </BrowserRouter>
         </Suspense>
-        <ReactQueryDevtools />
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
       </QueryClientProvider>
     </div>
   );
