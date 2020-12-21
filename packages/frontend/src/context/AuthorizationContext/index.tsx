@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createContext, PropsWithChildren, ReactNode, useContext, useEffect, useState } from 'react';
-import { getTags } from '../api-types';
+import { getTags } from '../../api-types';
 
 export interface AuthorizationContextValue {
   authorized: boolean;
