@@ -1,14 +1,11 @@
-import { Suspense } from 'react';
+import { PropsWithChildren, Suspense } from 'react';
 import LoadingPage from '../LoadingPage';
-import LoggedInApp from '../LoggedInApp';
 import './index.css';
 
-export default function BodyArea() {
+export default function BodyArea({ children }: PropsWithChildren<{}>) {
   return (
     <div className="BodyArea">
-      <Suspense fallback={<LoadingPage />}>
-        <LoggedInApp />
-      </Suspense>
+      <Suspense fallback={<LoadingPage />}>{children}</Suspense>
     </div>
   );
 }

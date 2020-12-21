@@ -1,8 +1,12 @@
+import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import TextButton from '../TextButton';
 import './index.css';
 
-export default function Header() {
+interface HeaderProps {
+  navigation?: ReactNode;
+}
+
+export default function Header({ navigation }: HeaderProps) {
   return (
     <div className="Header">
       <div className="Header-heading-container">
@@ -10,14 +14,7 @@ export default function Header() {
           <h1 className="Header-heading">The Index</h1>
         </Link>
       </div>
-      <nav className="Header-nav">
-        <Link to="/search" className="Header-nav-link hide-link">
-          <TextButton>Search</TextButton>
-        </Link>
-        <Link to="/new" className="Header-nav-link hide-link">
-          <TextButton>New Link</TextButton>
-        </Link>
-      </nav>
+      {navigation && <nav className="Header-nav">{navigation}</nav>}
     </div>
   );
 }
