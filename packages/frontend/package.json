@@ -14,7 +14,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false --coverage",
-    "test:watch": "react-scripts test --coverage",
+    "test:watch": "react-scripts test --watchAll --coverage",
     "lint": "npm run lint:tsc && npm run lint:eslint",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
