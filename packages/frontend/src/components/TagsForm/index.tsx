@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
-import { useRequester } from '../../hooks/requests';
+import { getTags } from '../../api-types';
 import { deduplicate } from '../../util/array';
 import TextButton from '../TextButton';
 import './index.css';
@@ -13,10 +13,10 @@ interface TagsFormProps {
 export default function TagsForm({ tags, onTagsChange }: TagsFormProps) {
   const [inputVal, setInputVal] = useState('');
 
-  const requester = useRequester();
   const { value } = useAsync(async () => {
-    return requester.getCommonTags(tags);
-  }, [requester, ...tags]);
+    const response = await getTags({ queryParams: { excludeTags: tags } });
+    return response.tags;
+  }, [...tags]);
   const [commonTags, setCommonTags] = useState(value);
   useEffect(() => {
     if (value) {

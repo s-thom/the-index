@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LinkDetail } from '../../api-types';
-import { useRequester } from '../../hooks/requests';
+import { LinkDetail, postSearch } from '../../api-types';
 import { getParamAsArray, getParamAsString } from '../../util/getParam';
 import LinkItem from '../LinkItem';
 import SearchForm from '../SearchForm';
@@ -8,21 +7,18 @@ import './index.css';
 
 export default function SearchPage() {
   const [links, setLinks] = useState<LinkDetail[]>([]);
-  const requester = useRequester();
 
   const tags = getParamAsArray('t');
   const beforeString = getParamAsString('b');
   const afterString = getParamAsString('a');
 
   const tagsString = tags.join(',');
+  // TODO: Memoise tags array properly
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    const beforeDate = beforeString ? new Date(beforeString) : undefined;
-    const afterDate = afterString ? new Date(afterString) : undefined;
-
     async function requestLinksByTags() {
-      const newLinks = await requester.searchByTag(tags, beforeDate, afterDate);
-      setLinks(newLinks);
+      const response = await postSearch({ body: { tags, before: beforeString, after: afterString } });
+      setLinks(response.links);
     }
 
     requestLinksByTags();

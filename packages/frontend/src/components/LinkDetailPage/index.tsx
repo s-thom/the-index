@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { LinkDetail } from '../../api-types';
-import { useRequester } from '../../hooks/requests';
+import { getLinksId, LinkDetail } from '../../api-types';
 import LinkItem from '../LinkItem';
 import './index.css';
 
@@ -13,7 +12,6 @@ export default function LinkDetailPage() {
   const { id } = useParams<LinkDetailPagePath>();
   const [detail, setDetail] = useState<LinkDetail | undefined>();
   const [error, setError] = useState<Error | undefined>();
-  const requester = useRequester();
 
   useEffect(() => {
     async function getDetail() {
@@ -26,15 +24,15 @@ export default function LinkDetailPage() {
       setDetail(undefined);
 
       try {
-        const link = await requester.getLinkById(trueId);
-        setDetail(link);
+        const response = await getLinksId({ id: trueId });
+        setDetail(response.link);
       } catch (err) {
         //
       }
     }
 
     getDetail();
-  }, [id, requester]);
+  }, [id]);
 
   const errorSection = error && (
     <div className="LinkDetailPage-error">

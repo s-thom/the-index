@@ -4,7 +4,7 @@
   "private": true,
   "description": "React frontend for the-index",
   "author": "Stuart Thomson <me@sthom.kiwi>",
-  "homepage": "https://github.com/s-thom/the-index/tree/master/packages/frontend#readme",
+  "homepage": "https://the-index.sthom.kiwi/",
   "license": "MIT",
   "repository": {
     "type": "git",

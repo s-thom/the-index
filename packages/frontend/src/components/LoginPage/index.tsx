@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PostLoginSetupResponse } from '../../api-types';
-import { useRequester } from '../../hooks/requests';
-import { useToken } from '../../hooks/token';
+import { postLogin, PostLoginSetupResponse } from '../../api-types';
+import { useAuthorizationContext } from '../../context/AuthorizationContext';
+import { PostLoginRequest } from '../../requests';
 import LoginTotpForm from '../LoginTotpForm';
 import LoginTotpSetup from '../LoginTotpSetup';
 import LoginUserForm from '../LoginUserForm';
@@ -10,57 +10,57 @@ import './index.css';
 
 export default function LoginPage() {
   const history = useHistory();
-  const requester = useRequester();
-  const [, setToken] = useToken();
   const [showTotp, setShowTotp] = useState(false);
   const [name, setName] = useState('');
   const [totpCode, setTotpCode] = useState('');
   const [totpSetup, setTotpSetup] = useState<PostLoginSetupResponse>();
+  const { setToken } = useAuthorizationContext();
 
-  async function submitLogin(username: string, method?: string, code?: string) {
-    const requestData: any = {
-      name: username,
-    };
+  const submitLogin = useCallback(
+    async (username: string, method?: 'TOTP', code?: string) => {
+      const requestData: PostLoginRequest =
+        method && code ? { name: username, challenge: method, response: code } : { name: username };
 
-    if (method && code) {
-      requestData.challenge = method;
-      requestData.response = code;
-    }
+      const response = await postLogin({ body: requestData });
 
-    const response = await requester.login(requestData);
+      if ('token' in response) {
+        history.push('/search');
+        setToken(response.token);
+        return;
+      }
 
-    if ('token' in response) {
-      setToken(response.token);
+      if (response.requires === 'challenge' && (response as any).totp) {
+        setShowTotp(true);
+        return;
+      }
 
-      history.push('/');
+      if (response.requires === 'setup') {
+        setTotpSetup(response);
+        setShowTotp(true);
+      }
+    },
+    [history, setToken],
+  );
 
-      return;
-    }
+  const onUserSubmit = useCallback(
+    (username: string) => {
+      setName(username);
 
-    if (response.requires === 'challenge' && (response as any).totp) {
-      setShowTotp(true);
-      return;
-    }
+      submitLogin(username, totpCode ? 'TOTP' : undefined, totpCode);
+    },
+    [submitLogin, totpCode],
+  );
 
-    if (response.requires === 'setup') {
-      setTotpSetup(response);
-      setShowTotp(true);
-    }
-  }
+  const onTotpSubmit = useCallback(
+    (code: string) => {
+      setTotpCode(code);
 
-  async function onUserSubmit(username: string) {
-    setName(username);
-
-    submitLogin(username, totpCode ? 'TOTP' : undefined, totpCode);
-  }
-
-  async function onTotpSubmit(code: string) {
-    setTotpCode(code);
-
-    if (name) {
-      submitLogin(name, 'TOTP', code);
-    }
-  }
+      if (name) {
+        submitLogin(name, 'TOTP', code);
+      }
+    },
+    [name, submitLogin],
+  );
 
   return (
     <div className="LoginPage">

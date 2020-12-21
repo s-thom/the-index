@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRequester } from '../../hooks/requests';
+import { postLinks } from '../../api-types';
 import NewLinkForm from '../NewLinkForm';
 import TextButton from '../TextButton';
 import './index.css';
@@ -10,14 +10,13 @@ export default function NewLinkPage() {
   const history = useHistory();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<Error | undefined>(undefined);
-  const requester = useRequester();
 
   async function onFormSubmit(url: string, tags: string[]) {
     setSubmitting(true);
 
     try {
-      const newLinkId = await requester.addNewLink(url, tags);
-      history.push(`/links/${newLinkId}`);
+      const response = await postLinks({ body: { url, tags } });
+      history.push(`/links/${response.id}`);
 
       setSubmitting(false);
     } catch (err) {
