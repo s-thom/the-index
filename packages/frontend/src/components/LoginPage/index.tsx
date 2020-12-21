@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { postLogin, PostLoginSetupResponse } from '../../api-types';
+import { postLogin, PostLoginRequest, PostLoginSetupResponse, PostLoginTOTPRequest } from '../../api-types';
 import { useAuthorizationContext } from '../../context/AuthorizationContext';
-import { PostLoginRequest } from '../../requests';
 import LoginTotpForm from '../LoginTotpForm';
 import LoginTotpSetup from '../LoginTotpSetup';
 import LoginUserForm from '../LoginUserForm';
@@ -18,7 +17,7 @@ export default function LoginPage() {
 
   const submitLogin = useCallback(
     async (username: string, method?: 'TOTP', code?: string) => {
-      const requestData: PostLoginRequest =
+      const requestData: PostLoginRequest | PostLoginTOTPRequest =
         method && code ? { name: username, challenge: method, response: code } : { name: username };
 
       const response = await postLogin({ body: requestData });
