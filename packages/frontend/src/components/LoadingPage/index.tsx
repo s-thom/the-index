@@ -1,9 +1,6 @@
-import React from 'react';
 import './index.css';
-import { RouteComponentProps } from '@reach/router';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function LoadingPage(props: RouteComponentProps) {
+export default function LoadingPage() {
   return (
     <div className="LoadingPage">
       <div className="Loading">

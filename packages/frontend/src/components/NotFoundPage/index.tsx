@@ -1,9 +1,7 @@
-import { Link, RouteComponentProps } from '@reach/router';
-import React from 'react';
+import { Link } from 'react-router-dom';
 import './index.css';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function NotFoundPage(props: RouteComponentProps) {
+export default function NotFoundPage() {
   return (
     <div className="NotFoundPage">
       <h2 className="NotFoundPage-heading">Not Found</h2>

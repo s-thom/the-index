@@ -1,12 +1,13 @@
-import { navigate, RouteComponentProps } from '@reach/router';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useRequester } from '../../hooks/requests';
 import NewLinkForm from '../NewLinkForm';
 import TextButton from '../TextButton';
 import './index.css';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function NewLinkPage(props: RouteComponentProps) {
+export default function NewLinkPage() {
+  const history = useHistory();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<Error | undefined>(undefined);
   const requester = useRequester();
@@ -16,7 +17,7 @@ export default function NewLinkPage(props: RouteComponentProps) {
 
     try {
       const newLinkId = await requester.addNewLink(url, tags);
-      navigate(`/links/${newLinkId}`);
+      history.push(`/links/${newLinkId}`);
 
       setSubmitting(false);
     } catch (err) {

@@ -1,10 +1,15 @@
-import React from 'react';
-import './index.css';
-import { getParamAsArray, setParam, getParamAsString } from '../../util/getParam';
-import TagsForm from '../TagsForm';
+import queryString from 'query-string';
+import { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-use';
+import { getParamAsArray, getParamAsString } from '../../util/getParam';
 import DatetimeForm from '../DatetimeForm';
+import TagsForm from '../TagsForm';
+import './index.css';
 
 export default function SearchForm() {
+  const history = useHistory();
+  const location = useLocation();
   const tags = getParamAsArray('t');
   const beforeString = getParamAsString('b');
   const afterString = getParamAsString('a');
@@ -12,17 +17,42 @@ export default function SearchForm() {
   const beforeDate = beforeString ? new Date(beforeString) : undefined;
   const afterDate = afterString ? new Date(afterString) : undefined;
 
-  function onTagsChange(newTags: string[]) {
-    setParam('t', newTags);
-  }
+  const setParam = useCallback(
+    (key: string, value: string | string[] | null | undefined) => {
+      const currentQuery = queryString.parse(location.search ?? '', {
+        arrayFormat: 'comma',
+      });
 
-  function onBeforeDateChange(newDate?: Date) {
-    setParam('b', newDate && newDate.toISOString());
-  }
+      currentQuery[key] = value ?? null;
 
-  function onAfterDateChange(newDate?: Date) {
-    setParam('a', newDate && newDate.toISOString());
-  }
+      const query = queryString.stringify(currentQuery, {
+        arrayFormat: 'comma',
+      });
+      history.push(`?${query}`);
+    },
+    [history, location.search],
+  );
+
+  const onTagsChange = useCallback(
+    (newTags: string[]) => {
+      setParam('t', newTags);
+    },
+    [setParam],
+  );
+
+  const onBeforeDateChange = useCallback(
+    (newDate?: Date) => {
+      setParam('b', newDate && newDate.toISOString());
+    },
+    [setParam],
+  );
+
+  const onAfterDateChange = useCallback(
+    (newDate?: Date) => {
+      setParam('a', newDate && newDate.toISOString());
+    },
+    [setParam],
+  );
 
   return (
     <div className="SearchForm">

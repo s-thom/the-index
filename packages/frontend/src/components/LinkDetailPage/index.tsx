@@ -1,5 +1,5 @@
-import { RouteComponentProps } from '@reach/router';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { LinkDetail } from '../../api-types';
 import { useRequester } from '../../hooks/requests';
 import LinkItem from '../LinkItem';
@@ -9,9 +9,8 @@ interface LinkDetailPagePath {
   id: string;
 }
 
-interface LinkDetailPageProps extends RouteComponentProps<LinkDetailPagePath> {}
-
-export default function LinkDetailPage({ id }: LinkDetailPageProps) {
+export default function LinkDetailPage() {
+  const { id } = useParams<LinkDetailPagePath>();
   const [detail, setDetail] = useState<LinkDetail | undefined>();
   const [error, setError] = useState<Error | undefined>();
   const requester = useRequester();

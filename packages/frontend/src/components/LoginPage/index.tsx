@@ -1,5 +1,5 @@
-import { RouteComponentProps } from '@reach/router';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { PostLoginSetupResponse } from '../../api-types';
 import { useRequester } from '../../hooks/requests';
 import { useToken } from '../../hooks/token';
@@ -8,7 +8,8 @@ import LoginTotpSetup from '../LoginTotpSetup';
 import LoginUserForm from '../LoginUserForm';
 import './index.css';
 
-export default function LoginPage({ navigate }: RouteComponentProps) {
+export default function LoginPage() {
+  const history = useHistory();
   const requester = useRequester();
   const [, setToken] = useToken();
   const [showTotp, setShowTotp] = useState(false);
@@ -31,9 +32,7 @@ export default function LoginPage({ navigate }: RouteComponentProps) {
     if ('token' in response) {
       setToken(response.token);
 
-      if (navigate) {
-        navigate('/');
-      }
+      history.push('/');
 
       return;
     }

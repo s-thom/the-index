@@ -1,4 +1,4 @@
-import { Redirect, Router } from '@reach/router';
+import { Redirect, BrowserRouter, Route, Switch } from 'react-router-dom';
 import React, { Suspense } from 'react';
 import LoadingPage from '../LoadingPage';
 import './index.css';
@@ -13,15 +13,17 @@ export default function BodyArea() {
   return (
     <div className="BodyArea">
       <Suspense fallback={<LoadingPage />}>
-        <Router primary>
-          <LoginPage path="login" />
-          <LoadingPage path="loading" />
-          <SearchPage path="search" />
-          <NewLinkPage path="new" />
-          <LinkDetailPage path="links/:id" />
-          <Redirect from="/" to="search" noThrow />
-          <NotFoundPage default />
-        </Router>
+        <BrowserRouter>
+          <Switch>
+            <Route path="login" component={LoginPage} />
+            <Route path="loading" component={LoadingPage} />
+            <Route path="search" component={SearchPage} />
+            <Route path="new" component={NewLinkPage} />
+            <Route path="links/:id" component={LinkDetailPage} />
+            <Redirect from="/" to="search" />
+            <Route path="*" component={NotFoundPage} />
+          </Switch>
+        </BrowserRouter>
       </Suspense>
     </div>
   );

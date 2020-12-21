@@ -1,4 +1,3 @@
-import { RouteComponentProps } from '@reach/router';
 import React, { useEffect, useState } from 'react';
 import { LinkDetail } from '../../api-types';
 import { useRequester } from '../../hooks/requests';
@@ -7,8 +6,7 @@ import LinkItem from '../LinkItem';
 import SearchForm from '../SearchForm';
 import './index.css';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function SearchPage(props: RouteComponentProps) {
+export default function SearchPage() {
   const [links, setLinks] = useState<LinkDetail[]>([]);
   const requester = useRequester();
 

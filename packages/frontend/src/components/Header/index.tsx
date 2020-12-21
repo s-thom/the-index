@@ -1,6 +1,5 @@
-import React from 'react';
 import './index.css';
-import { Link } from '@reach/router';
+import { Link } from 'react-router-dom';
 import TextButton from '../TextButton';
 import { useHasToken } from '../../hooks/token';
 
