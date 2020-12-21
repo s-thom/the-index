@@ -1,11 +1,21 @@
 import { useCallback, useState } from 'react';
+import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
-import { postLogin, PostLoginRequest, PostLoginSetupResponse, PostLoginTOTPRequest } from '../../api-types';
+import {
+  postLogin,
+  PostLoginChallengeResponse,
+  PostLoginRequest,
+  PostLoginSetupResponse,
+  PostLoginSuccessResponse,
+  PostLoginTOTPRequest,
+} from '../../api-types';
 import { useAuthorizationContext } from '../../context/AuthorizationContext';
 import LoginTotpForm from '../LoginTotpForm';
 import LoginTotpSetup from '../LoginTotpSetup';
 import LoginUserForm from '../LoginUserForm';
 import './index.css';
+
+type LoginResponseCombined = PostLoginSetupResponse | PostLoginSuccessResponse | PostLoginChallengeResponse;
 
 export default function LoginPage() {
   const history = useHistory();
@@ -15,13 +25,8 @@ export default function LoginPage() {
   const [totpSetup, setTotpSetup] = useState<PostLoginSetupResponse>();
   const { setToken } = useAuthorizationContext();
 
-  const submitLogin = useCallback(
-    async (username: string, method?: 'TOTP', code?: string) => {
-      const requestData: PostLoginRequest | PostLoginTOTPRequest =
-        method && code ? { name: username, challenge: method, response: code } : { name: username };
-
-      const response = await postLogin({ body: requestData });
-
+  const loginResponseCallback = useCallback(
+    (response: LoginResponseCombined) => {
       if ('token' in response) {
         history.push('/search');
         setToken(response.token);
@@ -41,11 +46,27 @@ export default function LoginPage() {
     [history, setToken],
   );
 
+  const { mutate: submitLogin } = useMutation<
+    LoginResponseCombined,
+    void,
+    { method?: 'TOTP'; code?: string; username: string }
+  >(
+    ['login'],
+    async ({ method, code, username }) => {
+      const requestData: PostLoginRequest | PostLoginTOTPRequest =
+        method && code ? { name: username, challenge: method, response: code } : { name: username };
+
+      const response = await postLogin({ body: requestData });
+      return response;
+    },
+    { onSuccess: loginResponseCallback },
+  );
+
   const onUserSubmit = useCallback(
     (username: string) => {
       setName(username);
 
-      submitLogin(username, totpCode ? 'TOTP' : undefined, totpCode);
+      submitLogin({ username, method: totpCode ? 'TOTP' : undefined, code: totpCode });
     },
     [submitLogin, totpCode],
   );
@@ -55,7 +76,7 @@ export default function LoginPage() {
       setTotpCode(code);
 
       if (name) {
-        submitLogin(name, 'TOTP', code);
+        submitLogin({ username: name, method: 'TOTP', code });
       }
     },
     [name, submitLogin],

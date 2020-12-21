@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
-import { postLinks } from '../../api-types';
+import { postLinks, PostLinksRequestBody, PostLinksResponse } from '../../api-types';
 import NewLinkForm from '../NewLinkForm';
 import TextButton from '../TextButton';
 import './index.css';
@@ -11,19 +12,35 @@ export default function NewLinkPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<Error | undefined>(undefined);
 
-  async function onFormSubmit(url: string, tags: string[]) {
-    setSubmitting(true);
-
-    try {
-      const response = await postLinks({ body: { url, tags } });
+  const onSuccessCallback = useCallback(
+    (response: PostLinksResponse) => {
       history.push(`/links/${response.id}`);
+      setSubmitting(false);
+    },
+    [history],
+  );
+  const onErrorCallback = useCallback((error: unknown) => {
+    setSubmitError(error as any);
+    setSubmitting(false);
+  }, []);
 
-      setSubmitting(false);
-    } catch (err) {
-      setSubmitError(err);
-      setSubmitting(false);
-    }
-  }
+  const { mutate } = useMutation<PostLinksResponse, void, PostLinksRequestBody>(
+    ['links.create'],
+    async (body) => {
+      const response = await postLinks({ body });
+      return response;
+    },
+    {
+      onSuccess: onSuccessCallback,
+      onError: onErrorCallback,
+    },
+  );
+  const onFormSubmit = useCallback(
+    (url, tags) => {
+      mutate({ url, tags });
+    },
+    [mutate],
+  );
 
   return (
     <div className="NewLinkPage">

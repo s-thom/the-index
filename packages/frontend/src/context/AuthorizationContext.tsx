@@ -55,7 +55,7 @@ export default function AuthorizationRoot({ children, fallback }: PropsWithChild
   // Do a request to get the state on load
   useEffect(() => {
     axios.defaults.baseURL = process.env.REACT_APP_SERVER_PATH;
-    getTags({});
+    getTags({}).catch(() => {});
   }, []);
 
   return (
