@@ -14,7 +14,7 @@ export function customGet<ResponseType, ErrorType, QueryParamsType, PathParamsTy
 ): Promise<ResponseType> {
   let url = path;
   if (props.queryParams && Object.keys(props.queryParams).length) {
-    url += `?${qs.stringify(props.queryParams)}`;
+    url += `?${qs.stringify(props.queryParams as any)}`;
   }
   return fetch(url, {
     headers: {
@@ -41,7 +41,7 @@ export const customMutate = <ResponseType, ErrorType, QueryParamsType, BodyType,
     url += `/${props.body}`;
   }
   if (props.queryParams && Object.keys(props.queryParams).length) {
-    url += `?${qs.stringify(props.queryParams)}`;
+    url += `?${qs.stringify(props.queryParams as any)}`;
   }
   return fetch(url, {
     method,
