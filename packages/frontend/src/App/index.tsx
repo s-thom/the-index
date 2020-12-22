@@ -3,7 +3,7 @@ import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';
 import BodyArea from '../components/BodyArea';
-import LoadingPage from '../components/LoadingPage';
+import LoadingPage from '../pages/LoadingPage';
 import LoggedInApp from '../components/LoggedInApp';
 import LoggedOutApp from '../components/LoggedOutApp';
 import AuthorizationRoot from '../context/AuthorizationContext';

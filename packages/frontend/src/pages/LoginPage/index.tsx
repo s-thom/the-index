@@ -10,9 +10,9 @@ import {
   PostLoginTOTPRequest,
 } from '../../api-types';
 import { useAuthorizationContext } from '../../context/AuthorizationContext';
-import LoginTotpForm from '../LoginTotpForm';
-import LoginTotpSetup from '../LoginTotpSetup';
-import LoginUserForm from '../LoginUserForm';
+import LoginTotpForm from '../../components/LoginTotpForm';
+import LoginTotpSetup from '../../components/LoginTotpSetup';
+import LoginUserForm from '../../components/LoginUserForm';
 import './index.css';
 
 type LoginResponseCombined = PostLoginSetupResponse | PostLoginSuccessResponse | PostLoginChallengeResponse;

@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import { postLinks, PostLinksRequestBody, PostLinksResponse } from '../../api-types';
-import NewLinkForm from '../NewLinkForm';
-import TextButton from '../TextButton';
+import NewLinkForm from '../../components/NewLinkForm';
+import TextButton from '../../components/TextButton';
 import './index.css';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

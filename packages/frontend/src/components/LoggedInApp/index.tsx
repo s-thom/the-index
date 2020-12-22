@@ -3,10 +3,10 @@ import { Link, Route, Switch } from 'react-router-dom';
 import Header from '../Header';
 import TextButton from '../TextButton';
 
-const SearchPage = lazy(() => import('../SearchPage'));
-const NotFoundPage = lazy(() => import('../NotFoundPage'));
-const NewLinkPage = lazy(() => import('../NewLinkPage'));
-const LinkDetailPage = lazy(() => import('../LinkDetailPage'));
+const SearchPage = lazy(() => import('../../pages/SearchPage'));
+const NotFoundPage = lazy(() => import('../../pages/NotFoundPage'));
+const NewLinkPage = lazy(() => import('../../pages/NewLinkPage'));
+const LinkDetailPage = lazy(() => import('../../pages/LinkDetailPage'));
 
 export default function LoggedInApp() {
   return (

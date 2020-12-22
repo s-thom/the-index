@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getLinksId } from '../../api-types';
-import LinkItem from '../LinkItem';
+import LinkItem from '../../components/LinkItem';
 import './index.css';
 
 interface LinkDetailPagePath {
