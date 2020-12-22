@@ -1,13 +1,13 @@
 import { lazy } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
-import BlackLink from '../BlackLink';
-import Header from '../Header';
-import TextButton from '../TextButton';
+import BlackLink from '../components/BlackLink';
+import Header from '../components/Header';
+import TextButton from '../components/TextButton';
 
-const SearchPage = lazy(() => import('../../pages/SearchPage'));
-const NotFoundPage = lazy(() => import('../../pages/NotFoundPage'));
-const NewLinkPage = lazy(() => import('../../pages/NewLinkPage'));
-const LinkDetailPage = lazy(() => import('../../pages/LinkDetailPage'));
+const SearchPage = lazy(() => import('../pages/SearchPage'));
+const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
+const NewLinkPage = lazy(() => import('../pages/NewLinkPage'));
+const LinkDetailPage = lazy(() => import('../pages/LinkDetailPage'));
 
 export default function LoggedInApp() {
   return (

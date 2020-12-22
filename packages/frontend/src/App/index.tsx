@@ -3,9 +3,8 @@ import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import BodyArea from '../components/BodyArea';
-import LoggedInApp from '../components/LoggedInApp';
-import LoggedOutApp from '../components/LoggedOutApp';
+import LoggedInApp from './LoggedInApp';
+import LoggedOutApp from './LoggedOutApp';
 import AuthorizationRoot from '../context/AuthorizationContext';
 import LoadingPage from '../pages/LoadingPage';
 import GlobalStyle, { theme } from './styled';
@@ -28,17 +27,15 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <GlobalStyle />
-        <Suspense fallback={<LoadingPage />}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <Suspense fallback={<LoadingPage />}>
             <div>
-              <BodyArea>
-                <AuthorizationRoot fallback={<LoggedOutApp />}>
-                  <LoggedInApp />
-                </AuthorizationRoot>
-              </BodyArea>
+              <AuthorizationRoot fallback={<LoggedOutApp />}>
+                <LoggedInApp />
+              </AuthorizationRoot>
             </div>
-          </BrowserRouter>
-        </Suspense>
+          </Suspense>
+        </BrowserRouter>
         {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
       </QueryClientProvider>
     </ThemeProvider>
