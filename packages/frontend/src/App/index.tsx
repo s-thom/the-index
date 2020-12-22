@@ -7,7 +7,7 @@ import LoggedInApp from './LoggedInApp';
 import LoggedOutApp from './LoggedOutApp';
 import AuthorizationRoot from '../context/AuthorizationContext';
 import LoadingPage from '../pages/LoadingPage';
-import GlobalStyle, { theme } from './styled';
+import GlobalStyle, { AppBody, theme } from './styled';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,11 +29,11 @@ export default function App() {
         <GlobalStyle />
         <BrowserRouter>
           <Suspense fallback={<LoadingPage />}>
-            <div>
+            <AppBody>
               <AuthorizationRoot fallback={<LoggedOutApp />}>
                 <LoggedInApp />
               </AuthorizationRoot>
-            </div>
+            </AppBody>
           </Suspense>
         </BrowserRouter>
         {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}

@@ -1,63 +1,36 @@
-import queryString from 'query-string';
 import { useCallback } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { getParamAsArray, getParamAsString } from '../../util/getParam';
+import { useArrayParam, useStringParam } from '../../hooks/useParam';
 import DatetimeForm from '../DatetimeForm';
 import TagsForm from '../TagsForm';
 import './index.css';
 
 export default function SearchForm() {
-  const history = useHistory();
-  const location = useLocation();
-  const tags = getParamAsArray('t');
-  const beforeString = getParamAsString('b');
-  const afterString = getParamAsString('a');
+  const [tags, setTags] = useArrayParam('t');
+  const [beforeString, setBeforeString] = useStringParam('b');
+  const [afterString, setAfterString] = useStringParam('a');
 
   const beforeDate = beforeString ? new Date(beforeString) : undefined;
   const afterDate = afterString ? new Date(afterString) : undefined;
 
-  const setParam = useCallback(
-    (key: string, value: string | string[] | null | undefined) => {
-      const currentQuery = queryString.parse(location.search ?? '', {
-        arrayFormat: 'comma',
-      });
-
-      currentQuery[key] = value ?? null;
-
-      const query = queryString.stringify(currentQuery, {
-        arrayFormat: 'comma',
-      });
-      history.push(`?${query}`);
-    },
-    [history, location.search],
-  );
-
-  const onTagsChange = useCallback(
-    (newTags: string[]) => {
-      setParam('t', newTags);
-    },
-    [setParam],
-  );
-
   const onBeforeDateChange = useCallback(
     (newDate?: Date) => {
-      setParam('b', newDate && newDate.toISOString());
+      setBeforeString(newDate && newDate.toISOString());
     },
-    [setParam],
+    [setBeforeString],
   );
 
   const onAfterDateChange = useCallback(
     (newDate?: Date) => {
-      setParam('a', newDate && newDate.toISOString());
+      setAfterString(newDate && newDate.toISOString());
     },
-    [setParam],
+    [setAfterString],
   );
 
   return (
     <div className="SearchForm">
       <div className="SearchForm-tags">
         <h4 className="SearchForm-section-heading">Tags</h4>
-        <TagsForm tags={tags} onTagsChange={onTagsChange} />
+        <TagsForm tags={tags} onTagsChange={setTags} />
       </div>
       <div className="SearchForm-dates">
         <div className="SearchForm-dates-before">

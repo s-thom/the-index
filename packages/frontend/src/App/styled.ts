@@ -1,4 +1,4 @@
-import { createGlobalStyle, DefaultTheme } from 'styled-components';
+import styled, { createGlobalStyle, DefaultTheme } from 'styled-components';
 
 export const theme: DefaultTheme = {
   colors: {
@@ -7,6 +7,11 @@ export const theme: DefaultTheme = {
     error: '#f44336',
   },
 };
+
+export const AppBody = styled.div`
+  max-width: 70em;
+  margin: 0 auto;
+`;
 
 const GlobalStyle = createGlobalStyle`
 body {

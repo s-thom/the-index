@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { LinkDetail, postSearch } from '../../api-types';
-import { getParamAsArray, getParamAsString } from '../../util/getParam';
 import LinkItem from '../../components/LinkItem';
 import SearchForm from '../../components/SearchForm';
+import { useArrayParam, useStringParam } from '../../hooks/useParam';
 import './index.css';
 
 export default function SearchPage() {
   const [links, setLinks] = useState<LinkDetail[]>([]);
 
-  const tags = getParamAsArray('t');
-  const beforeString = getParamAsString('b');
-  const afterString = getParamAsString('a');
+  const [tags] = useArrayParam('t');
+  const [beforeString] = useStringParam('b');
+  const [afterString] = useStringParam('a');
 
   const tagsString = tags.join(',');
   // TODO: Memoise tags array properly
