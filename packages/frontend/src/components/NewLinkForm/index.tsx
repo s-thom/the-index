@@ -15,7 +15,7 @@ const FormUrlContainer = styled.div`
   font-size: 1.2em;
   margin-bottom: 0.5em;
 
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     flex-direction: row;
     align-items: center;
   }
@@ -26,7 +26,7 @@ const FormUrlInput = styled(Field)`
   font-size: 1em;
   margin-top: 0.5em;
 
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     flex-grow: 1;
     font-size: 1em;
     margin-top: 0;

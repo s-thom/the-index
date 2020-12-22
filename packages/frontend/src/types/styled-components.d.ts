@@ -8,5 +8,8 @@ declare module 'styled-components' {
       warning: string;
       error: string;
     };
+    breakpoints: {
+      tablet: string;
+    };
   }
 }

@@ -6,6 +6,9 @@ export const theme: DefaultTheme = {
     warning: '#ff9800',
     error: '#f44336',
   },
+  breakpoints: {
+    tablet: '768px',
+  },
 };
 
 const GlobalStyle = createGlobalStyle`

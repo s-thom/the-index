@@ -9,14 +9,14 @@ const StyledWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     flex-direction: row;
   }
 `;
 const StyledFormWrapper = styled.div`
   margin: 0.5em;
 
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
     width: 250px;
   }
 `;
