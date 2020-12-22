@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { useArrayParam, useStringParam } from '../../hooks/useParam';
 import DatetimeForm from '../DatetimeForm';
 import TagsForm from '../TagsForm';
-import './index.css';
 
 export default function SearchForm() {
   const [tags, setTags] = useArrayParam('t');
@@ -27,18 +26,18 @@ export default function SearchForm() {
   );
 
   return (
-    <div className="SearchForm">
-      <div className="SearchForm-tags">
-        <h4 className="SearchForm-section-heading">Tags</h4>
+    <div>
+      <div>
+        <h4>Tags</h4>
         <TagsForm tags={tags} onTagsChange={setTags} />
       </div>
-      <div className="SearchForm-dates">
-        <div className="SearchForm-dates-before">
-          <h4 className="SearchForm-section-heading">Before</h4>
+      <div>
+        <div>
+          <h4>Before</h4>
           <DatetimeForm date={beforeDate} onDateChange={onBeforeDateChange} />
         </div>
-        <div className="SearchForm-dates-after">
-          <h4 className="SearchForm-section-heading">After</h4>
+        <div>
+          <h4>After</h4>
           <DatetimeForm date={afterDate} onDateChange={onAfterDateChange} />
         </div>
       </div>

@@ -1,12 +1,23 @@
 import { useCallback, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import { postLinks, PostLinksRequestBody, PostLinksResponse } from '../../api-types';
 import NewLinkForm from '../../components/NewLinkForm';
 import TextButton from '../../components/TextButton';
-import './index.css';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledHeading = styled.h2`
+  text-align: center;
+`;
+
+const StyledErrorContainer = styled.div`
+  text-align: center;
+`;
+
+const StyledErrorText = styled.p`
+  color: ${({ theme }) => theme.colors.error};
+`;
+
 export default function NewLinkPage() {
   const history = useHistory();
   const [submitting, setSubmitting] = useState(false);
@@ -43,15 +54,15 @@ export default function NewLinkPage() {
   );
 
   return (
-    <div className="NewLinkPage">
-      <h2 className="NewLinkPage-heading">New Link</h2>
+    <div>
+      <StyledHeading>New Link</StyledHeading>
       {submitError && (
-        <div className="NewLinkPage-error">
-          <p className="NewLinkPage-error-text">
+        <StyledErrorContainer>
+          <StyledErrorText>
             There was an error while creating your new link. There&apos;s not much you can do, really.
-          </p>
+          </StyledErrorText>
           <TextButton type="button">Re-enable form</TextButton>
-        </div>
+        </StyledErrorContainer>
       )}
       <NewLinkForm onSubmit={onFormSubmit} disabled={submitting} />
     </div>

@@ -27,9 +27,9 @@ const ButtonBase = styled.button`
 export default function TextButton({ children, ...props }: ButtonHTMLAttributes<{}>) {
   return (
     <ButtonBase type="button" {...props}>
-      <span className="TextButton-brace">[</span>
+      <span>[</span>
       {children}
-      <span className="TextButton-brace">]</span>
+      <span>]</span>
     </ButtonBase>
   );
 }

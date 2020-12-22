@@ -1,14 +1,22 @@
-import './index.css';
+import styled from 'styled-components';
+
+const StyledWrapper = styled.div`
+  text-align: center;
+`;
+
+const StyledInner = styled.div`
+  font-size: 3.6em;
+`;
 
 export default function LoadingPage() {
   return (
-    <div className="LoadingPage">
-      <div className="Loading">
-        <span className="Loading-text">Loading</span>
-        <span className="Loading-dot">.</span>
-        <span className="Loading-dot">.</span>
-        <span className="Loading-dot">.</span>
-      </div>
-    </div>
+    <StyledWrapper>
+      <StyledInner>
+        <span>Loading</span>
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </StyledInner>
+    </StyledWrapper>
   );
 }

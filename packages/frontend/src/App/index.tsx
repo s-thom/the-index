@@ -2,12 +2,17 @@ import { Suspense } from 'react';
 import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
-import LoggedInApp from './LoggedInApp';
-import LoggedOutApp from './LoggedOutApp';
+import styled, { ThemeProvider } from 'styled-components';
 import AuthorizationRoot from '../context/AuthorizationContext';
 import LoadingPage from '../pages/LoadingPage';
-import GlobalStyle, { AppBody, theme } from './styled';
+import LoggedInApp from './LoggedInApp';
+import LoggedOutApp from './LoggedOutApp';
+import GlobalStyle, { theme } from './styled';
+
+const AppBody = styled.div`
+  max-width: 70em;
+  margin: 0 auto;
+`;
 
 const queryClient = new QueryClient({
   defaultOptions: {

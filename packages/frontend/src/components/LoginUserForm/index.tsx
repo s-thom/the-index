@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './index.css';
 
 interface LoginUserFormProps {
   onSubmit: (name: string) => void;
@@ -21,9 +20,8 @@ export default function LoginUserForm({ onSubmit }: LoginUserFormProps) {
   }
 
   return (
-    <div className="LoginUserForm">
+    <div>
       <input
-        className="LoginUserForm-name-input"
         id="LoginUserForm-user"
         name="LoginUserForm-user"
         placeholder="Name"

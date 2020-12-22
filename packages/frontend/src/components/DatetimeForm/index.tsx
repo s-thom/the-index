@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './index.css';
+import { PlainInput } from '../PlainComponents';
 
 interface DatetimeFormProps {
   date?: Date;
@@ -49,10 +49,9 @@ export default function DatetimeForm({ date, name, onDateChange }: DatetimeFormP
   }, [date]);
 
   return (
-    <div className="DatetimeForm">
-      <div className="DatetimeForm-input-container">
-        <input
-          className="DatetimeForm-input"
+    <div>
+      <div>
+        <PlainInput
           name={`${prefix}-date`}
           placeholder="Date"
           type="date"

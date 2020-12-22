@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './index.css';
 
 interface LoginTotpFormProps {
   onSubmit: (code: string) => void;
@@ -21,10 +20,9 @@ export default function LoginTotpForm({ onSubmit }: LoginTotpFormProps) {
   }
 
   return (
-    <div className="LoginTotpForm">
-      <h4 className="LoginTotpForm-heading">Enter a code from your authenticator app</h4>
+    <div>
+      <h4>Enter a code from your authenticator app</h4>
       <input
-        className="LoginTotpForm-code-input"
         id="LoginTotpForm-code"
         name="LoginTotpForm-code"
         placeholder="Code"

@@ -1,8 +1,16 @@
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { getLinksId } from '../../api-types';
 import LinkItem from '../../components/LinkItem';
-import './index.css';
+
+const StyledErrorContainer = styled.div`
+  text-align: center;
+`;
+
+const StyledErrorText = styled.p`
+  color: ${({ theme }) => theme.colors.error};
+`;
 
 interface LinkDetailPagePath {
   id: string;
@@ -17,21 +25,21 @@ export default function LinkDetailPage() {
   });
 
   const errorSection = error && (
-    <div className="LinkDetailPage-error">
-      <p className="LinkDetailPage-error-text">
+    <StyledErrorContainer>
+      <StyledErrorText>
         There was an error while creating your new link. There&apos;s not much you can do, really.
-      </p>
-    </div>
+      </StyledErrorText>
+    </StyledErrorContainer>
   );
 
   const detailSection = data && (
-    <div className="LinkDetailPage-link">
+    <div>
       <LinkItem link={data} />
     </div>
   );
 
   return (
-    <div className="LinkDetailPage">
+    <div>
       {errorSection}
       {detailSection}
     </div>

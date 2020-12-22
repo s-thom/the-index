@@ -1,6 +1,16 @@
 import { ReactNode } from 'react';
-import BlackLink from '../BlackLink';
-import './index.css';
+import styled from 'styled-components';
+import { PlainLink } from '../PlainComponents';
+
+const HeaderWrapper = styled.div`
+  text-align: center;
+  padding: 1em 0;
+`;
+
+const HeaderHeading = styled.h1`
+  font-size: 2.4em;
+  margin: 0;
+`;
 
 interface HeaderProps {
   navigation?: ReactNode;
@@ -8,13 +18,13 @@ interface HeaderProps {
 
 export default function Header({ navigation }: HeaderProps) {
   return (
-    <div className="Header">
-      <div className="Header-heading-container">
-        <BlackLink to="/">
-          <h1 className="Header-heading">The Index</h1>
-        </BlackLink>
+    <HeaderWrapper>
+      <div>
+        <PlainLink to="/">
+          <HeaderHeading>The Index</HeaderHeading>
+        </PlainLink>
       </div>
-      {navigation && <nav className="Header-nav">{navigation}</nav>}
-    </div>
+      {navigation && <nav>{navigation}</nav>}
+    </HeaderWrapper>
   );
 }

@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { getTags } from '../../api-types';
 import { noop } from '../../util/functions';
+import { PlainInput, PlainList } from '../PlainComponents';
 import TextButton from '../TextButton';
-import './index.css';
 
 interface TagsFormProps {
   tags: string[];
@@ -63,10 +63,9 @@ export default function TagsForm({ tags, onTagsChange = noop }: TagsFormProps) {
   );
 
   return (
-    <div className="TagsForm">
-      <div className="TagsForm-input-container">
-        <input
-          className="TagsForm-input"
+    <div>
+      <div>
+        <PlainInput
           id="add-tag"
           name="add-tag"
           placeholder="Add tag"
@@ -75,20 +74,20 @@ export default function TagsForm({ tags, onTagsChange = noop }: TagsFormProps) {
           onKeyPress={onInputKeyPress}
         />
       </div>
-      <ul className="TagsForm-tag-list">
+      <PlainList>
         {tags.map((tag) => (
-          <li className="TagsForm-tag" key={tag}>
+          <li key={tag}>
             <TextButton onClick={() => removeTag(tag)} title="Remove" aria-label={`Remove ${tag}`}>
               -
             </TextButton>{' '}
             {tag}
           </li>
         ))}
-      </ul>
+      </PlainList>
       {commonTags && (
-        <ul className="TagsForm-common-tags">
+        <PlainList>
           {commonTags.map((tag) => (
-            <li className="TagsForm-tag" key={tag}>
+            <li key={tag}>
               <TextButton
                 type="button"
                 onClick={() => {
@@ -102,7 +101,7 @@ export default function TagsForm({ tags, onTagsChange = noop }: TagsFormProps) {
               {tag}
             </li>
           ))}
-        </ul>
+        </PlainList>
       )}
     </div>
   );

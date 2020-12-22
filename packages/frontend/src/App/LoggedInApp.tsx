@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import BlackLink from '../components/BlackLink';
+import styled from 'styled-components';
+import { PlainLink } from '../components/PlainComponents';
 import Header from '../components/Header';
 import TextButton from '../components/TextButton';
 
@@ -9,18 +10,22 @@ const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const NewLinkPage = lazy(() => import('../pages/NewLinkPage'));
 const LinkDetailPage = lazy(() => import('../pages/LinkDetailPage'));
 
+const NavLink = styled(PlainLink)`
+  margin: 0 0.5em;
+`;
+
 export default function LoggedInApp() {
   return (
     <>
       <Header
         navigation={
           <>
-            <BlackLink to="/" className="Header-nav-link">
+            <NavLink to="/">
               <TextButton>Search</TextButton>
-            </BlackLink>
-            <BlackLink to="/new" className="Header-nav-link">
+            </NavLink>
+            <NavLink to="/new">
               <TextButton>New Link</TextButton>
-            </BlackLink>
+            </NavLink>
           </>
         }
       />

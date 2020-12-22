@@ -1,9 +1,38 @@
 import { Field, Form, Formik, FormikProps, FormikHelpers } from 'formik';
 import { useCallback } from 'react';
+import styled from 'styled-components';
 import urlRegex from 'url-regex-safe';
 import TagsForm from '../TagsForm';
 import TextButton from '../TextButton';
-import './index.css';
+
+const FormWrapper = styled(Form)`
+  margin: 0 0.5em;
+`;
+
+const FormUrlContainer = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+  }
+`;
+
+const FormUrlInput = styled(Field)`
+  flex-grow: 1;
+  font-size: 1em;
+  margin-top: 0.5em;
+
+  @media (min-width: 768px) {
+    flex-grow: 1;
+    font-size: 1em;
+    margin-top: 0;
+    margin-right: 0.5em;
+  }
+`;
 
 interface NewLinkFormProps {
   onSubmit?: (url: string, tags: string[]) => void;
@@ -27,12 +56,11 @@ function NewLinkFormInner({ values, setFieldValue, isSubmitting, isValid }: Form
   );
 
   return (
-    <Form className="NewLinkForm">
-      <div className="NewLinkForm-url-container">
-        <Field
+    <FormWrapper>
+      <FormUrlContainer>
+        <FormUrlInput
           type="text"
           name="url"
-          className="NewLinkForm-url-input"
           placeholder="Enter URL"
           aria-label="Enter URL"
           pattern={URL_REGEX.source}
@@ -41,9 +69,9 @@ function NewLinkFormInner({ values, setFieldValue, isSubmitting, isValid }: Form
         <TextButton type="submit" disabled={!isValid || isSubmitting}>
           Add
         </TextButton>
-      </div>
+      </FormUrlContainer>
       <TagsForm tags={values.tags} onTagsChange={tagsChangeCallback} />
-    </Form>
+    </FormWrapper>
   );
 }
 

@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useMutation } from 'react-query';
+import styled from 'styled-components';
 import {
   postLogin,
   PostLoginChallengeResponse,
@@ -12,9 +13,12 @@ import LoginTotpForm from '../../components/LoginTotpForm';
 import LoginTotpSetup from '../../components/LoginTotpSetup';
 import LoginUserForm from '../../components/LoginUserForm';
 import { useAuthorizationContext } from '../../context/AuthorizationContext';
-import './index.css';
 
 type LoginResponseCombined = PostLoginSetupResponse | PostLoginSuccessResponse | PostLoginChallengeResponse;
+
+const StyledWrapper = styled.div`
+  text-align: center;
+`;
 
 export default function LoginPage() {
   const [showTotp, setShowTotp] = useState(false);
@@ -80,11 +84,11 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="LoginPage">
-      <h2 className="LoginPage-heading">Login</h2>
+    <StyledWrapper>
+      <h2>Login</h2>
       <LoginUserForm onSubmit={onUserSubmit} />
       {showTotp && <LoginTotpForm onSubmit={onTotpSubmit} />}
       {totpSetup && <LoginTotpSetup code={totpSetup.code} url={totpSetup.url} />}
-    </div>
+    </StyledWrapper>
   );
 }
