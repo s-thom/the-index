@@ -7,6 +7,7 @@ declare module 'styled-components' {
       primary: string;
       warning: string;
       error: string;
+      outline: string;
     };
     breakpoints: {
       tablet: string;

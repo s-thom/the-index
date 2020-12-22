@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
+import { useQuery } from 'react-query';
+import { getTags } from '../../api-types';
 import { useArrayParam, useStringParam } from '../../hooks/useParam';
 import DatetimeForm from '../DatetimeForm';
-import TagsForm from '../TagsForm';
+import TagsInput from '../TagsInput';
 
 export default function SearchForm() {
   const [tags, setTags] = useArrayParam('t');
@@ -11,13 +13,28 @@ export default function SearchForm() {
   const beforeDate = beforeString ? new Date(beforeString) : undefined;
   const afterDate = afterString ? new Date(afterString) : undefined;
 
+  const { data: suggestedTags } = useQuery(
+    ['tags', tags],
+    async () => {
+      const response = await getTags({ queryParams: { excludeTags: tags } });
+      return response.tags;
+    },
+    { keepPreviousData: true },
+  );
+
+  const onTagsChange = useCallback(
+    (newTags: string[]) => {
+      const sorted = [...newTags].sort();
+      setTags(sorted);
+    },
+    [setTags],
+  );
   const onBeforeDateChange = useCallback(
     (newDate?: Date) => {
       setBeforeString(newDate && newDate.toISOString());
     },
     [setBeforeString],
   );
-
   const onAfterDateChange = useCallback(
     (newDate?: Date) => {
       setAfterString(newDate && newDate.toISOString());
@@ -26,10 +43,10 @@ export default function SearchForm() {
   );
 
   return (
-    <div>
+    <form>
       <div>
         <h4>Tags</h4>
-        <TagsForm tags={tags} onTagsChange={setTags} />
+        <TagsInput value={tags} onChange={onTagsChange} id="tags" name="tags" suggestions={suggestedTags} />
       </div>
       <div>
         <div>
@@ -41,6 +58,6 @@ export default function SearchForm() {
           <DatetimeForm date={afterDate} onDateChange={onAfterDateChange} />
         </div>
       </div>
-    </div>
+    </form>
   );
 }

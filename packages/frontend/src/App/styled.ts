@@ -5,6 +5,7 @@ export const theme: DefaultTheme = {
     primary: '#000000',
     warning: '#ff9800',
     error: '#f44336',
+    outline: '#767676',
   },
   breakpoints: {
     tablet: '768px',
@@ -12,6 +13,10 @@ export const theme: DefaultTheme = {
 };
 
 const GlobalStyle = createGlobalStyle`
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",

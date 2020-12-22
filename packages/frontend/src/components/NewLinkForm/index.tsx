@@ -1,8 +1,10 @@
-import { Field, Form, Formik, FormikProps, FormikHelpers } from 'formik';
+import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import { useCallback } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import urlRegex from 'url-regex-safe';
-import TagsForm from '../TagsForm';
+import { getTags } from '../../api-types';
+import TagsInput from '../TagsInput';
 import TextButton from '../TextButton';
 
 const FormWrapper = styled(Form)`
@@ -50,9 +52,19 @@ const URL_REGEX = urlRegex({ strict: true, exact: true });
 function NewLinkFormInner({ values, setFieldValue, isSubmitting, isValid }: FormikProps<NewLinkFormValues>) {
   const tagsChangeCallback = useCallback(
     (newTags) => {
-      setFieldValue('tags', newTags);
+      const sorted = [...newTags].sort();
+      setFieldValue('tags', sorted);
     },
     [setFieldValue],
+  );
+
+  const { data: suggestedTags } = useQuery(
+    ['tags', values.tags],
+    async () => {
+      const response = await getTags({ queryParams: { excludeTags: values.tags } });
+      return response.tags;
+    },
+    { keepPreviousData: true },
   );
 
   return (
@@ -70,7 +82,7 @@ function NewLinkFormInner({ values, setFieldValue, isSubmitting, isValid }: Form
           Add
         </TextButton>
       </FormUrlContainer>
-      <TagsForm tags={values.tags} onTagsChange={tagsChangeCallback} />
+      <TagsInput value={values.tags} onChange={tagsChangeCallback} id="tags" name="tags" suggestions={suggestedTags} />
     </FormWrapper>
   );
 }
