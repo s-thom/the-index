@@ -1,17 +1,13 @@
 import userEvent from '@testing-library/user-event';
 import LoginPage from '..';
-import { AuthorizationContext } from '../../../context/AuthorizationContext';
-import { cleanup, render, screen, waitFor } from '../../../util/test-utils';
 import * as mockedApi from '../../../api-types';
+import { AuthorizationContext } from '../../../context/AuthorizationContext';
+import { render, screen, waitFor } from '../../../util/test-utils';
 
 jest.mock('qrcode');
 jest.mock('../../../api-types');
 
 const { postLogin } = mockedApi as jest.Mocked<typeof mockedApi>;
-
-afterEach(() => {
-  cleanup();
-});
 
 describe('LoginPage', () => {
   it('should allow a user to log in', async () => {

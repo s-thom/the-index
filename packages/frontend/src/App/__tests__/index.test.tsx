@@ -1,9 +1,5 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from '..';
-
-afterEach(() => {
-  cleanup();
-});
 
 describe('App', () => {
   it('should render', () => {

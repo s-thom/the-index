@@ -1,9 +1,5 @@
 import BodyArea from '..';
-import { cleanup, render, screen } from '../../../util/test-utils';
-
-afterEach(() => {
-  cleanup();
-});
+import { render, screen } from '../../../util/test-utils';
 
 describe('BodyArea', () => {
   it('should render', () => {

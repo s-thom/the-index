@@ -1,9 +1,5 @@
 import LinkItem from '..';
-import { cleanup, render, screen, getNodeText } from '../../../util/test-utils';
-
-afterEach(() => {
-  cleanup();
-});
+import { getNodeText, render, screen } from '../../../util/test-utils';
 
 describe('LinkItem', () => {
   it('should render', () => {

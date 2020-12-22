@@ -1,9 +1,5 @@
-import { cleanup, render, screen } from '../../../util/test-utils';
 import Header from '..';
-
-afterEach(() => {
-  cleanup();
-});
+import { render, screen } from '../../../util/test-utils';
 
 describe('Header', () => {
   it('should render', () => {

@@ -1,9 +1,5 @@
 import LoadingPage from '..';
-import { cleanup, render } from '../../../util/test-utils';
-
-afterEach(() => {
-  cleanup();
-});
+import { render } from '../../../util/test-utils';
 
 describe('LoadingPage', () => {
   it('should render', () => {
