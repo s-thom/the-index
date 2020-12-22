@@ -69,7 +69,7 @@ describe('LoginPage', () => {
     expect(postLogin).toHaveBeenLastCalledWith({ body: { name: 'stuart' } });
 
     // Expect setup
-    expect(screen.queryByText('Set up your authenticator app')).toBeTruthy();
+    expect(screen.queryByText('Set up your authenticator app')).toBeInTheDocument();
 
     // Add TOTP code
     const totpInput = screen.getByPlaceholderText('Code');

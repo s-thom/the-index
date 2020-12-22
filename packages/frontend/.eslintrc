@@ -1,5 +1,11 @@
 {
-  "extends": ["airbnb-typescript", "airbnb/hooks", "../../.eslintrc"],
+  "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "../../.eslintrc",
+    "plugin:jest-dom/recommended",
+    "plugin:testing-library/react"
+  ],
   "parserOptions": { "project": "./tsconfig.json" },
   "rules": {
     "react/jsx-curly-newline": "off",
