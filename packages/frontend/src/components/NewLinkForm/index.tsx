@@ -1,13 +1,13 @@
-import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik';
-import { useCallback } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import urlRegex from 'url-regex-safe';
 import { getTags } from '../../api-types';
+import { noop } from '../../util/functions';
 import TagsInput from '../TagsInput';
 import TextButton from '../TextButton';
 
-const FormWrapper = styled(Form)`
+const FormWrapper = styled.form`
   margin: 0 0.5em;
 `;
 
@@ -23,7 +23,7 @@ const FormUrlContainer = styled.div`
   }
 `;
 
-const FormUrlInput = styled(Field)`
+const FormUrlInput = styled.input`
   flex-grow: 1;
   font-size: 1em;
   margin-top: 0.5em;
@@ -36,73 +36,68 @@ const FormUrlInput = styled(Field)`
   }
 `;
 
-interface NewLinkFormProps {
-  onSubmit?: (url: string, tags: string[]) => void;
-  disabled?: boolean;
-}
-
 interface NewLinkFormValues {
   url: string;
   tags: string[];
-  tag_input: string;
+}
+
+interface NewLinkFormProps {
+  onSubmit?: (url: string, tags: string[]) => void;
+  disabled?: boolean;
+  initialValues?: Partial<NewLinkFormValues>;
 }
 
 const URL_REGEX = urlRegex({ strict: true, exact: true });
 
-function NewLinkFormInner({ values, setFieldValue, isSubmitting, isValid }: FormikProps<NewLinkFormValues>) {
-  const tagsChangeCallback = useCallback(
-    (newTags) => {
-      const sorted = [...newTags].sort();
-      setFieldValue('tags', sorted);
-    },
-    [setFieldValue],
-  );
+const DEFAULT_VALUES: NewLinkFormValues = {
+  url: '',
+  tags: [],
+};
 
+export default function NewLinkForm({ onSubmit = noop, initialValues }: NewLinkFormProps) {
+  const { control, handleSubmit, formState, watch, register } = useForm<NewLinkFormValues>({
+    defaultValues: {
+      ...DEFAULT_VALUES,
+      ...initialValues,
+    },
+  });
+
+  const { isValid, isSubmitting } = formState;
+  function onFormSubmit(values: NewLinkFormValues) {
+    return onSubmit(values.url, values.tags);
+  }
+
+  const tagsValue = watch('tags');
   const { data: suggestedTags } = useQuery(
-    ['tags', values.tags],
+    ['tags', tagsValue],
     async () => {
-      const response = await getTags({ queryParams: { excludeTags: values.tags } });
+      const response = await getTags({ queryParams: { excludeTags: tagsValue } });
       return response.tags;
     },
     { keepPreviousData: true },
   );
 
   return (
-    <FormWrapper>
+    <FormWrapper onSubmit={handleSubmit(onFormSubmit)}>
       <FormUrlContainer>
         <FormUrlInput
           type="text"
           name="url"
           placeholder="Enter URL"
           aria-label="Enter URL"
-          pattern={URL_REGEX.source}
-          required
+          ref={register({ pattern: URL_REGEX, required: true })}
         />
         <TextButton type="submit" disabled={!isValid || isSubmitting}>
           Add
         </TextButton>
       </FormUrlContainer>
-      <TagsInput value={values.tags} onChange={tagsChangeCallback} id="tags" name="tags" suggestions={suggestedTags} />
+      <Controller
+        control={control}
+        name="tags"
+        render={(props) => (
+          <TagsInput value={props.value} onChange={props.onChange} id="tags" name="tags" suggestions={suggestedTags} />
+        )}
+      />
     </FormWrapper>
-  );
-}
-
-export default function NewLinkForm({ onSubmit }: NewLinkFormProps) {
-  function onFormSubmit(values: NewLinkFormValues, actions: FormikHelpers<NewLinkFormValues>) {
-    if (onSubmit) {
-      onSubmit(values.url, values.tags);
-    }
-
-    actions.setSubmitting(false);
-  }
-
-  const initialValues: NewLinkFormValues = { url: '', tags: [], tag_input: '' };
-
-  return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onFormSubmit}
-      render={(formikProps) => <NewLinkFormInner {...formikProps} />}
-    />
   );
 }
