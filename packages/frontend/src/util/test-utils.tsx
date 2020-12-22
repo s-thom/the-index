@@ -5,6 +5,8 @@ import { render } from '@testing-library/react';
 import { PropsWithChildren, useMemo } from 'react';
 import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { MemoryRouter } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { theme } from '../App/styled';
 
 function TestProviderWrapper({ children }: PropsWithChildren<{}>) {
   // Create a query client for each wrapper instance.
@@ -27,9 +29,11 @@ function TestProviderWrapper({ children }: PropsWithChildren<{}>) {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <MemoryRouter>{children}</MemoryRouter>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>{children}</MemoryRouter>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
@@ -39,6 +43,5 @@ const customRender = ((ui: any, options: any) =>
 // Re-export testing library
 // eslint-disable-next-line import/no-extraneous-dependencies
 export * from '@testing-library/react';
-
 // But override the render function
 export { customRender as render };

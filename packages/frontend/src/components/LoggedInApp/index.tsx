@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
+import BlackLink from '../BlackLink';
 import Header from '../Header';
 import TextButton from '../TextButton';
 
@@ -14,10 +15,10 @@ export default function LoggedInApp() {
       <Header
         navigation={
           <>
-            <Link to="/search" className="Header-nav-link hide-link">
+            <Link component={BlackLink} to="/search" className="Header-nav-link">
               <TextButton>Search</TextButton>
             </Link>
-            <Link to="/new" className="Header-nav-link hide-link">
+            <Link component={BlackLink} to="/new" className="Header-nav-link">
               <TextButton>New Link</TextButton>
             </Link>
           </>

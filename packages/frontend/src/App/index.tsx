@@ -2,12 +2,13 @@ import { Suspense } from 'react';
 import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 import BodyArea from '../components/BodyArea';
-import LoadingPage from '../pages/LoadingPage';
 import LoggedInApp from '../components/LoggedInApp';
 import LoggedOutApp from '../components/LoggedOutApp';
 import AuthorizationRoot from '../context/AuthorizationContext';
-import './index.css';
+import LoadingPage from '../pages/LoadingPage';
+import GlobalStyle, { theme } from './styled';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,19 +25,22 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
+        <GlobalStyle />
         <Suspense fallback={<LoadingPage />}>
           <BrowserRouter>
-            <BodyArea>
-              <AuthorizationRoot fallback={<LoggedOutApp />}>
-                <LoggedInApp />
-              </AuthorizationRoot>
-            </BodyArea>
+            <div>
+              <BodyArea>
+                <AuthorizationRoot fallback={<LoggedOutApp />}>
+                  <LoggedInApp />
+                </AuthorizationRoot>
+              </BodyArea>
+            </div>
           </BrowserRouter>
         </Suspense>
         {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
       </QueryClientProvider>
-    </div>
+    </ThemeProvider>
   );
 }
