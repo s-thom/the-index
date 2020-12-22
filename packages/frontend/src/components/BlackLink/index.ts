@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const BlackLink = styled.a`
+const BlackLink = styled(Link)`
   &,
   &:hover,
   &:active,

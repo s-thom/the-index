@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import BlackLink from '../components/BlackLink';
 import Header from '../components/Header';
 import TextButton from '../components/TextButton';
@@ -15,19 +15,19 @@ export default function LoggedInApp() {
       <Header
         navigation={
           <>
-            <Link component={BlackLink} to="/" className="Header-nav-link">
+            <BlackLink to="/" className="Header-nav-link">
               <TextButton>Search</TextButton>
-            </Link>
-            <Link component={BlackLink} to="/new" className="Header-nav-link">
+            </BlackLink>
+            <BlackLink to="/new" className="Header-nav-link">
               <TextButton>New Link</TextButton>
-            </Link>
+            </BlackLink>
           </>
         }
       />
       <Switch>
-        <Route path="/" component={SearchPage} />
-        <Route path="/new" component={NewLinkPage} />
-        <Route path="/links/:id" component={LinkDetailPage} />
+        <Route path="/" exact component={SearchPage} />
+        <Route path="/new" exact component={NewLinkPage} />
+        <Route path="/links/:id" exact component={LinkDetailPage} />
         <Route path="*" component={NotFoundPage} />
       </Switch>
     </>
