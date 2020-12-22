@@ -21,7 +21,7 @@ export default function Header({ navigation }: HeaderProps) {
     <HeaderWrapper>
       <div>
         <PlainLink to="/">
-          <HeaderHeading>The Index</HeaderHeading>
+          <HeaderHeading>the-index</HeaderHeading>
         </PlainLink>
       </div>
       {navigation && <nav>{navigation}</nav>}
