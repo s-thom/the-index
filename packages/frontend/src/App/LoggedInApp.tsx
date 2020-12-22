@@ -15,7 +15,7 @@ export default function LoggedInApp() {
       <Header
         navigation={
           <>
-            <Link component={BlackLink} to="/search" className="Header-nav-link">
+            <Link component={BlackLink} to="/" className="Header-nav-link">
               <TextButton>Search</TextButton>
             </Link>
             <Link component={BlackLink} to="/new" className="Header-nav-link">
@@ -25,7 +25,7 @@ export default function LoggedInApp() {
         }
       />
       <Switch>
-        <Route path="/search" component={SearchPage} />
+        <Route path="/" component={SearchPage} />
         <Route path="/new" component={NewLinkPage} />
         <Route path="/links/:id" component={LinkDetailPage} />
         <Route path="*" component={NotFoundPage} />

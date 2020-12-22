@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import { useMutation } from 'react-query';
-import { useHistory } from 'react-router-dom';
 import {
   postLogin,
   PostLoginChallengeResponse,
@@ -9,16 +8,15 @@ import {
   PostLoginSuccessResponse,
   PostLoginTOTPRequest,
 } from '../../api-types';
-import { useAuthorizationContext } from '../../context/AuthorizationContext';
 import LoginTotpForm from '../../components/LoginTotpForm';
 import LoginTotpSetup from '../../components/LoginTotpSetup';
 import LoginUserForm from '../../components/LoginUserForm';
+import { useAuthorizationContext } from '../../context/AuthorizationContext';
 import './index.css';
 
 type LoginResponseCombined = PostLoginSetupResponse | PostLoginSuccessResponse | PostLoginChallengeResponse;
 
 export default function LoginPage() {
-  const history = useHistory();
   const [showTotp, setShowTotp] = useState(false);
   const [name, setName] = useState('');
   const [totpCode, setTotpCode] = useState('');
@@ -28,7 +26,6 @@ export default function LoginPage() {
   const loginResponseCallback = useCallback(
     (response: LoginResponseCombined) => {
       if ('token' in response) {
-        history.push('/search');
         setToken(response.token);
         return;
       }
@@ -43,7 +40,7 @@ export default function LoginPage() {
         setShowTotp(true);
       }
     },
-    [history, setToken],
+    [setToken],
   );
 
   const { mutate: submitLogin } = useMutation<
