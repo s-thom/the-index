@@ -1,8 +1,8 @@
+import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import urlRegex from 'url-regex-safe';
-import { getTags } from '../../api-types';
+import useSuggestedTags from '../../hooks/useSuggestedTags';
 import { noop } from '../../util/functions';
 import TagsInput from '../TagsInput';
 import TextButton from '../TextButton';
@@ -63,19 +63,15 @@ export default function NewLinkForm({ onSubmit = noop, initialValues }: NewLinkF
   });
 
   const { isValid, isSubmitting } = formState;
-  function onFormSubmit(values: NewLinkFormValues) {
-    return onSubmit(values.url, values.tags);
-  }
+  const onFormSubmit = useCallback(
+    (values: NewLinkFormValues) => {
+      return onSubmit(values.url, values.tags);
+    },
+    [onSubmit],
+  );
 
   const tagsValue = watch('tags');
-  const { data: suggestedTags } = useQuery(
-    ['tags', tagsValue],
-    async () => {
-      const response = await getTags({ queryParams: { excludeTags: tagsValue } });
-      return response.tags;
-    },
-    { keepPreviousData: true },
-  );
+  const suggestedTags = useSuggestedTags(tagsValue);
 
   return (
     <FormWrapper onSubmit={handleSubmit(onFormSubmit)}>
@@ -95,7 +91,13 @@ export default function NewLinkForm({ onSubmit = noop, initialValues }: NewLinkF
         control={control}
         name="tags"
         render={(props) => (
-          <TagsInput value={props.value} onChange={props.onChange} id="tags" name="tags" suggestions={suggestedTags} />
+          <TagsInput
+            value={props.value}
+            onChange={(newTags) => props.onChange([...newTags].sort())}
+            id="tags"
+            name="tags"
+            suggestions={suggestedTags}
+          />
         )}
       />
     </FormWrapper>

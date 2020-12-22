@@ -1,61 +1,69 @@
-import { useCallback } from 'react';
-import { useQuery } from 'react-query';
-import { getTags } from '../../api-types';
-import { useArrayParam, useStringParam } from '../../hooks/useParam';
-import DatetimeForm from '../DatetimeForm';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import useDeepMemo from '../../hooks/useDeepMemo';
+import useSuggestedTags from '../../hooks/useSuggestedTags';
+import { noop } from '../../util/functions';
+import { PlainInput } from '../PlainComponents';
 import TagsInput from '../TagsInput';
 
-export default function SearchForm() {
-  const [tags, setTags] = useArrayParam('t');
-  const [beforeString, setBeforeString] = useStringParam('b');
-  const [afterString, setAfterString] = useStringParam('a');
+export interface SearchFormValues {
+  tags: string[];
+  before?: string;
+  after?: string;
+}
 
-  const beforeDate = beforeString ? new Date(beforeString) : undefined;
-  const afterDate = afterString ? new Date(afterString) : undefined;
+interface SearchFormProps {
+  initialValues?: Partial<SearchFormValues>;
+  onChange?: (values: SearchFormValues) => void;
+}
 
-  const { data: suggestedTags } = useQuery(
-    ['tags', tags],
-    async () => {
-      const response = await getTags({ queryParams: { excludeTags: tags } });
-      return response.tags;
-    },
-    { keepPreviousData: true },
-  );
+const DEFAULT_VALUES: SearchFormValues = {
+  tags: [],
+};
 
-  const onTagsChange = useCallback(
-    (newTags: string[]) => {
-      const sorted = [...newTags].sort();
-      setTags(sorted);
+export default function SearchForm({ initialValues, onChange = noop }: SearchFormProps) {
+  const { control, watch, register } = useForm<SearchFormValues>({
+    defaultValues: {
+      ...DEFAULT_VALUES,
+      ...initialValues,
     },
-    [setTags],
-  );
-  const onBeforeDateChange = useCallback(
-    (newDate?: Date) => {
-      setBeforeString(newDate && newDate.toISOString());
-    },
-    [setBeforeString],
-  );
-  const onAfterDateChange = useCallback(
-    (newDate?: Date) => {
-      setAfterString(newDate && newDate.toISOString());
-    },
-    [setAfterString],
-  );
+  });
+
+  const tagsValue = watch('tags');
+  const suggestedTags = useSuggestedTags(tagsValue);
+
+  const values = watch();
+  const memoisedValues = useDeepMemo(values);
+  useEffect(() => {
+    onChange(memoisedValues);
+  }, [onChange, memoisedValues]);
 
   return (
     <form>
       <div>
         <h4>Tags</h4>
-        <TagsInput value={tags} onChange={onTagsChange} id="tags" name="tags" suggestions={suggestedTags} />
+        <Controller
+          control={control}
+          name="tags"
+          render={(props) => (
+            <TagsInput
+              value={props.value}
+              onChange={(newTags) => props.onChange([...newTags].sort())}
+              id="tags"
+              name="tags"
+              suggestions={suggestedTags}
+            />
+          )}
+        />
       </div>
       <div>
         <div>
           <h4>Before</h4>
-          <DatetimeForm date={beforeDate} onDateChange={onBeforeDateChange} />
+          <PlainInput name="before" placeholder="Date" type="date" ref={register} />
         </div>
         <div>
           <h4>After</h4>
-          <DatetimeForm date={afterDate} onDateChange={onAfterDateChange} />
+          <PlainInput name="after" placeholder="Date" type="date" ref={register} />
         </div>
       </div>
     </form>

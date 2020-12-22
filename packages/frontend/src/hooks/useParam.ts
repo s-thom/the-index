@@ -3,6 +3,8 @@ import { useCallback, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import useDeepMemo from './useDeepMemo';
 
+type ParamValue = string | string[] | undefined;
+
 type ParamHookReturn<T> = [
   /**
    * The value of the parameter
@@ -15,73 +17,84 @@ type ParamHookReturn<T> = [
   setValue: (newValue: T | undefined) => void,
 ];
 
-export function useStringParam(key: string): ParamHookReturn<string> {
+export function useParams(): [params: Record<string, ParamValue>, setParams: (newParams: unknown) => void] {
   const { push } = useHistory();
   const { search } = useLocation();
 
+  const value = useMemo(() => {
+    const parsed = queryString.parse(search, {
+      arrayFormat: 'comma',
+    });
+
+    const normalised: Record<string, ParamValue> = {};
+    Object.keys(parsed).forEach((key) => {
+      normalised[key] = parsed[key] ?? undefined;
+    });
+    return normalised;
+  }, [search]);
+  const memoisedValue = useDeepMemo(value);
+
   const setValue = useCallback(
-    (newValue: string | undefined) => {
-      const currentQuery = queryString.parse(search, {
-        arrayFormat: 'comma',
-      });
-      currentQuery[key] = newValue ?? null;
-      const query = queryString.stringify(currentQuery, {
+    (newValue: unknown) => {
+      const query = queryString.stringify(newValue as any, {
         arrayFormat: 'comma',
       });
 
       push(`?${query}`);
     },
-    [key, push, search],
+    [push],
+  );
+
+  return [memoisedValue, setValue];
+}
+
+export function useStringParam(key: string): ParamHookReturn<string> {
+  const [params, setParams] = useParams();
+
+  const setValue = useCallback(
+    (newValue: string | undefined) => {
+      setParams({
+        ...params,
+        [key]: newValue,
+      });
+    },
+    [key, params, setParams],
   );
 
   const value = useMemo(() => {
-    const queryValue =
-      queryString.parse(search, {
-        arrayFormat: 'comma',
-      })[key] ?? '';
+    const queryValue = params[key] ?? '';
     if (Array.isArray(queryValue)) {
       return queryValue.join(',');
     }
     return queryValue;
-  }, [key, search]);
+  }, [key, params]);
 
   return [value, setValue];
 }
 
 export function useArrayParam(key: string): ParamHookReturn<string[]> {
-  const { push } = useHistory();
-  const { search } = useLocation();
+  const [params, setParams] = useParams();
 
   const setValue = useCallback(
     (newValue: string[] | undefined) => {
-      const currentQuery = queryString.parse(search, {
-        arrayFormat: 'comma',
+      setParams({
+        ...params,
+        [key]: newValue,
       });
-      currentQuery[key] = newValue ?? null;
-      const query = queryString.stringify(currentQuery, {
-        arrayFormat: 'comma',
-      });
-
-      push(`?${query}`);
     },
-    [key, push, search],
+    [key, params, setParams],
   );
 
   const value = useMemo(() => {
-    const queryValue =
-      queryString.parse(search, {
-        arrayFormat: 'comma',
-      })[key] ?? [];
+    const queryValue = params[key];
     if (Array.isArray(queryValue)) {
-      return queryValue.sort();
+      return queryValue;
     }
     if (typeof queryValue === 'string') {
       return [queryValue];
     }
     return [];
-  }, [key, search]);
+  }, [key, params]);
 
-  const memoisedValue = useDeepMemo(value);
-
-  return [memoisedValue, setValue];
+  return [value, setValue];
 }
