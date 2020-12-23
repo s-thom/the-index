@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // Adapted from https://github.com/contiamo/restful-react/blob/master/examples/fetchers.ts
 
 import axios, { AxiosResponse } from 'axios';

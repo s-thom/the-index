@@ -43,7 +43,6 @@ interface NewLinkFormValues {
 
 interface NewLinkFormProps {
   onSubmit?: (url: string, tags: string[]) => void;
-  disabled?: boolean;
   initialValues?: Partial<NewLinkFormValues>;
 }
 
@@ -60,6 +59,7 @@ export default function NewLinkForm({ onSubmit = noop, initialValues }: NewLinkF
       ...DEFAULT_VALUES,
       ...initialValues,
     },
+    mode: 'onChange',
   });
 
   const { isValid, isSubmitting } = formState;
