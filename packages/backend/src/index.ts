@@ -1,8 +1,10 @@
+import 'reflect-metadata';
 import './util/env';
-import app from './app';
+import Container from 'typedi';
+import IExpressServer from './infrastructure/ExpressServer/ExpressServer';
+import ExpressServerImpl from './infrastructure/ExpressServer/ExpressServerImpl';
 
-const SERVER_PORT = process.env.SERVER_PORT || '7000';
-const port = parseInt(SERVER_PORT, 10);
+const app = Container.get<IExpressServer>(ExpressServerImpl);
+app.start();
 
-app.listen(port, () => console.log(`Starting ExpressJS server on Port ${port}`));
 export default app;

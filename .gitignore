@@ -5,6 +5,8 @@ coverage
 .env
 *.sqlite
 
+ormconfig.*
+
 lerna-debug.log
 npm-debug.log
 
