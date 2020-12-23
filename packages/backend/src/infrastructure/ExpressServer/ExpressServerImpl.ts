@@ -38,7 +38,7 @@ export default class ExpressServerImpl implements IExpressServer {
     app.use(compression());
     app.use(expressRequestId());
     app.use(correlator());
-    app.use(expressPinoLogger({ logger: this.log }));
+    app.use(expressPinoLogger({ logger: this.log.pino }));
     app.use(urlencoded(this.config.urlEncoded));
     app.use(helmet());
 

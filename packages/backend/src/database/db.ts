@@ -1,5 +1,7 @@
 import sqlite3 from 'sqlite3';
-import { ExtSnowflakeGenerator } from 'extended-snowflake';
+import Container from 'typedi';
+import IIdentifierService from '../services/IdentifierService';
+import IdentifierServiceImpl from '../services/IdentifierServiceImpl';
 
 const { DB_PATH } = process.env;
 const { DB_USER } = process.env;
@@ -13,7 +15,7 @@ const db = new sqlite3.Database(DB_PATH);
 
 // TODO: Get some form of instance ID for if there's ever more than one of these running
 // Not really something to worry about now
-const idGenerator = new ExtSnowflakeGenerator(0);
+const idService = Container.get<IIdentifierService>(IdentifierServiceImpl);
 
 export default db;
 
@@ -30,5 +32,5 @@ export function run<T>(fn: (db: sqlite3.Database) => Promise<T>) {
 }
 
 export function generateID() {
-  return idGenerator.next();
+  return idService.next();
 }

@@ -1,26 +1,55 @@
+/* eslint-disable max-classes-per-file */
 import correlator from 'express-correlation-id';
-import pino, { Logger } from 'pino';
+import Pino, { Logger as PinoLogger } from 'pino';
 import { Inject, Service } from 'typedi';
 import IConfig from '../Config/Config';
 import ConfigImpl from '../Config/ConfigImpl';
-import ILogger from './Logger';
+import ILogger, { Logger } from './Logger';
+
+class PinoWrapper implements Logger {
+  constructor(readonly pino: PinoLogger) {}
+
+  fatal(message: string, mixin: object = {}) {
+    this.pino.fatal(mixin, message);
+  }
+
+  error(message: string, mixin: object = {}) {
+    this.pino.error(mixin, message);
+  }
+
+  warn(message: string, mixin: object = {}) {
+    this.pino.warn(mixin, message);
+  }
+
+  info(message: string, mixin: object = {}) {
+    this.pino.info(mixin, message);
+  }
+
+  debug(message: string, mixin: object = {}) {
+    this.pino.debug(mixin, message);
+  }
+
+  trace(message: string, mixin: object = {}) {
+    this.pino.trace(mixin, message);
+  }
+}
 
 @Service()
 export default class LoggerImpl implements ILogger {
-  private readonly logger: Logger;
+  private readonly logger: PinoLogger;
 
   constructor(@Inject(() => ConfigImpl) private readonly config: IConfig) {
-    this.logger = pino({
+    this.logger = Pino({
       ...config.logger,
       mixin: () => ({ correlationId: correlator.getId() }),
     });
   }
 
   get() {
-    return this.logger;
+    return new PinoWrapper(this.logger);
   }
 
   child(name: string) {
-    return this.get().child({ module: name });
+    return new PinoWrapper(this.logger.child({ module: name }));
   }
 }
