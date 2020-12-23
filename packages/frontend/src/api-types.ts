@@ -116,6 +116,42 @@ export interface LinkDetail {
 }
 
 /**
+ * An error
+ */
+export interface Error {
+  /**
+   * A unique identifier for this particular occurrence of the problem
+   */
+  id: string;
+  /**
+   * An application-specific error code
+   */
+  code?: string;
+  /**
+   * A human-readable explanation of the problem
+   */
+  detail?: string;
+  /**
+   * The HTTP status code applicable to the problem
+   */
+  status?: string;
+  /**
+   * An object containing additional information about the problem
+   */
+  meta?: { [key: string]: any };
+}
+
+/**
+ * Response for when problems occur in the application
+ */
+export interface ErrorResponseResponse {
+  /**
+   * List of errors
+   */
+  errors: Error[];
+}
+
+/**
  * Log in
  *
  * Log in to the-index
@@ -263,4 +299,122 @@ export function getLinksId({
   id: string;
 }) {
   return customGet<GetLinksIdResponse, void, void, GetLinksIdPathParams>(`/links/${id}`, props);
+}
+
+export interface GetV2LinksResponse {
+  /**
+   * The list of links
+   */
+  links: LinkDetail[];
+}
+
+export interface GetV2LinksQueryParams {
+  /**
+   * List of tags to include
+   */
+  tags?: string[];
+  /**
+   * The upper bound for the time a link was added
+   */
+  before?: string;
+  /**
+   * The lower bound for the time a link was added
+   */
+  after?: string;
+}
+
+/**
+ * Search links
+ *
+ * Searches for links matching the given parameters
+ *
+ */
+export function getV2Links(
+  props: CustomGetProps<GetV2LinksResponse, ErrorResponseResponse, GetV2LinksQueryParams, void>,
+) {
+  return customGet<GetV2LinksResponse, ErrorResponseResponse, GetV2LinksQueryParams, void>(`/v2/links`, props);
+}
+
+export interface PostV2LinksResponse {
+  link: LinkDetail;
+}
+
+export interface PostV2LinksRequestBody {
+  /**
+   * The link to be added
+   */
+  url: string;
+  /**
+   * List of tags to add to the link
+   */
+  tags: string[];
+}
+
+/**
+ * Add new link
+ *
+ * Adds a new link
+ *
+ */
+export function postV2Links(
+  props: CustomMutateProps<PostV2LinksResponse, ErrorResponseResponse, void, PostV2LinksRequestBody, void>,
+) {
+  return customMutate<PostV2LinksResponse, ErrorResponseResponse, void, PostV2LinksRequestBody, void>(
+    'POST',
+    `/v2/links`,
+    props,
+  );
+}
+
+export interface GetV2LinkIdResponse {
+  link: LinkDetail;
+}
+
+export interface GetV2LinkIdPathParams {
+  /**
+   * The ID of the link
+   */
+  id: string;
+}
+
+/**
+ * Get link detail
+ *
+ * Gets the detail of a single link
+ *
+ */
+export function getV2LinkId({
+  id,
+  ...props
+}: CustomGetProps<GetV2LinkIdResponse, ErrorResponseResponse, void, GetV2LinkIdPathParams> & {
+  /**
+   * The ID of the link
+   */
+  id: string;
+}) {
+  return customGet<GetV2LinkIdResponse, ErrorResponseResponse, void, GetV2LinkIdPathParams>(`/v2/links/${id}`, props);
+}
+
+export interface GetV2TagsResponse {
+  /**
+   * The list of tags
+   */
+  tags: string[];
+}
+
+export interface GetV2TagsQueryParams {
+  /**
+   * List of tags to exclude
+   */
+  exclude?: string[];
+}
+
+/**
+ * Get common tags
+ *
+ * Gets a list of the most commonly used tags by the current user
+ *
+ */
+export function getV2Tags(props: CustomGetProps<GetV2TagsResponse, ErrorResponseResponse, GetV2TagsQueryParams, void>) {
+  return customGet<GetV2TagsResponse, ErrorResponseResponse, GetV2TagsQueryParams, void>(`/v2/tags`, props);
 }

@@ -23,6 +23,12 @@ paths:
     $ref: ./paths/links/index.yaml
   /links/{id}:
     $ref: ./paths/links/id.yaml
+  /v2/links:
+    $ref: ./paths/v2/links/index.yaml
+  /v2/links/{id}:
+    $ref: ./paths/v2/links/{id}.yaml
+  /v2/tags:
+    $ref: ./paths/v2/tags.yaml
 components:
   securitySchemes:
     bearer:

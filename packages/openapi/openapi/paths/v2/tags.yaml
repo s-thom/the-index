@@ -1,0 +1,40 @@
+get:
+  operationId: getV2Tags
+  summary: Get common tags
+  description: |
+    Gets a list of the most commonly used tags by the current user
+  tags:
+    - Tags
+  security:
+    - bearer: []
+  parameters:
+    - name: exclude
+      in: query
+      description: List of tags to exclude
+      schema:
+        type: array
+        description: List of tags to exclude
+        items:
+          type: string
+          description: A tag
+          example: example
+        example: []
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - tags
+            properties:
+              tags:
+                type: array
+                description: The list of tags
+                items:
+                  type: string
+                  description: A tag
+                  example: example
+    '400':
+      $ref: ../../components/responses/ErrorResponse.yaml

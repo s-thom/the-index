@@ -114,6 +114,42 @@ export interface LinkDetail {
   };
 }
 
+/**
+ * An error
+ */
+export interface Error {
+  /**
+   * A unique identifier for this particular occurrence of the problem
+   */
+  id: string;
+  /**
+   * An application-specific error code
+   */
+  code?: string;
+  /**
+   * A human-readable explanation of the problem
+   */
+  detail?: string;
+  /**
+   * The HTTP status code applicable to the problem
+   */
+  status?: string;
+  /**
+   * An object containing additional information about the problem
+   */
+  meta?: { [key: string]: any };
+}
+
+/**
+ * Response for when problems occur in the application
+ */
+export interface ErrorResponseResponse {
+  /**
+   * List of errors
+   */
+  errors: Error[];
+}
+
 export interface GetTagsResponse {
   /**
    * The list of tags
@@ -184,4 +220,66 @@ export interface GetLinksIdPathParams {
    * The ID of the link
    */
   id: string;
+}
+
+export interface GetV2LinksResponse {
+  /**
+   * The list of links
+   */
+  links: LinkDetail[];
+}
+
+export interface GetV2LinksQueryParams {
+  /**
+   * List of tags to include
+   */
+  tags?: string[];
+  /**
+   * The upper bound for the time a link was added
+   */
+  before?: string;
+  /**
+   * The lower bound for the time a link was added
+   */
+  after?: string;
+}
+
+export interface PostV2LinksResponse {
+  link: LinkDetail;
+}
+
+export interface PostV2LinksRequestBody {
+  /**
+   * The link to be added
+   */
+  url: string;
+  /**
+   * List of tags to add to the link
+   */
+  tags: string[];
+}
+
+export interface GetV2LinkIdResponse {
+  link: LinkDetail;
+}
+
+export interface GetV2LinkIdPathParams {
+  /**
+   * The ID of the link
+   */
+  id: string;
+}
+
+export interface GetV2TagsResponse {
+  /**
+   * The list of tags
+   */
+  tags: string[];
+}
+
+export interface GetV2TagsQueryParams {
+  /**
+   * List of tags to exclude
+   */
+  exclude?: string[];
 }
