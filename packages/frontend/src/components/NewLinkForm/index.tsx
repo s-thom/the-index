@@ -1,68 +1,105 @@
-import { Field, Form, Formik, FormikProps, FormikHelpers } from 'formik';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import styled from 'styled-components';
 import urlRegex from 'url-regex-safe';
-import TagsForm from '../TagsForm';
+import useSuggestedTags from '../../hooks/useSuggestedTags';
+import { noop } from '../../util/functions';
+import TagsInput from '../TagsInput';
 import TextButton from '../TextButton';
-import './index.css';
 
-interface NewLinkFormProps {
-  onSubmit?: (url: string, tags: string[]) => void;
-  disabled?: boolean;
-}
+const FormWrapper = styled.form`
+  margin: 0 0.5em;
+`;
+
+const FormUrlContainer = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    flex-direction: row;
+    align-items: center;
+  }
+`;
+
+const FormUrlInput = styled.input`
+  flex-grow: 1;
+  font-size: 1em;
+  margin-top: 0.5em;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    flex-grow: 1;
+    font-size: 1em;
+    margin-top: 0;
+    margin-right: 0.5em;
+  }
+`;
 
 interface NewLinkFormValues {
   url: string;
   tags: string[];
-  tag_input: string;
+}
+
+interface NewLinkFormProps {
+  onSubmit?: (url: string, tags: string[]) => void;
+  initialValues?: Partial<NewLinkFormValues>;
 }
 
 const URL_REGEX = urlRegex({ strict: true, exact: true });
 
-function NewLinkFormInner({ values, setFieldValue, isSubmitting, isValid }: FormikProps<NewLinkFormValues>) {
-  const tagsChangeCallback = useCallback(
-    (newTags) => {
-      setFieldValue('tags', newTags);
+const DEFAULT_VALUES: NewLinkFormValues = {
+  url: '',
+  tags: [],
+};
+
+export default function NewLinkForm({ onSubmit = noop, initialValues }: NewLinkFormProps) {
+  const { control, handleSubmit, formState, watch, register } = useForm<NewLinkFormValues>({
+    defaultValues: {
+      ...DEFAULT_VALUES,
+      ...initialValues,
     },
-    [setFieldValue],
+    mode: 'onChange',
+  });
+
+  const { isValid, isSubmitting } = formState;
+  const onFormSubmit = useCallback(
+    (values: NewLinkFormValues) => {
+      return onSubmit(values.url, values.tags);
+    },
+    [onSubmit],
   );
 
+  const tagsValue = watch('tags');
+  const suggestedTags = useSuggestedTags(tagsValue);
+
   return (
-    <Form className="NewLinkForm">
-      <div className="NewLinkForm-url-container">
-        <Field
+    <FormWrapper onSubmit={handleSubmit(onFormSubmit)}>
+      <FormUrlContainer>
+        <FormUrlInput
           type="text"
           name="url"
-          className="NewLinkForm-url-input"
           placeholder="Enter URL"
           aria-label="Enter URL"
-          pattern={URL_REGEX.source}
-          required
+          ref={register({ pattern: URL_REGEX, required: true })}
         />
         <TextButton type="submit" disabled={!isValid || isSubmitting}>
           Add
         </TextButton>
-      </div>
-      <TagsForm tags={values.tags} onTagsChange={tagsChangeCallback} />
-    </Form>
-  );
-}
-
-export default function NewLinkForm({ onSubmit }: NewLinkFormProps) {
-  function onFormSubmit(values: NewLinkFormValues, actions: FormikHelpers<NewLinkFormValues>) {
-    if (onSubmit) {
-      onSubmit(values.url, values.tags);
-    }
-
-    actions.setSubmitting(false);
-  }
-
-  const initialValues: NewLinkFormValues = { url: '', tags: [], tag_input: '' };
-
-  return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onFormSubmit}
-      render={(formikProps) => <NewLinkFormInner {...formikProps} />}
-    />
+      </FormUrlContainer>
+      <Controller
+        control={control}
+        name="tags"
+        render={(props) => (
+          <TagsInput
+            value={props.value}
+            onChange={(newTags) => props.onChange([...newTags].sort())}
+            id="tags"
+            name="tags"
+            suggestions={suggestedTags}
+          />
+        )}
+      />
+    </FormWrapper>
   );
 }

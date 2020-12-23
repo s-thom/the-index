@@ -1,6 +1,29 @@
-import React from 'react';
+import styled from 'styled-components';
 import { LinkDetail } from '../../api-types';
-import './index.css';
+import { PlainList } from '../PlainComponents';
+
+const LinkItemWrapper = styled.div`
+  margin: 1em 0;
+`;
+
+const LinkItemHeader = styled.h2`
+  margin: 0;
+`;
+
+const LinkItemTagList = styled(PlainList)`
+  display: flex;
+  margin: 0;
+`;
+
+const LinkItemTag = styled.li`
+  &:not(:first-child) {
+    margin-left: 0.25em;
+  }
+
+  &:not(:last-child) {
+    margin-right: 0.25em;
+  }
+`;
 
 interface LinkItemProps {
   link: LinkDetail;
@@ -10,19 +33,17 @@ export default function LinkItem({ link }: LinkItemProps) {
   const { url, tags } = link;
 
   return (
-    <div className="LinkItem">
-      <h2 className="LinkItem-link-heading">
-        <a href={url} className="LinkItem-link" target="_blank" rel="noopener noreferrer">
+    <LinkItemWrapper>
+      <LinkItemHeader>
+        <a href={url} target="_blank" rel="noopener noreferrer">
           {url}
         </a>
-      </h2>
-      <ul className="LinkItems-tags-list">
+      </LinkItemHeader>
+      <LinkItemTagList>
         {tags.map((t) => (
-          <li className="LinkItems-tag" key={t}>
-            {t}
-          </li>
+          <LinkItemTag key={t}>{t}</LinkItemTag>
         ))}
-      </ul>
-    </div>
+      </LinkItemTagList>
+    </LinkItemWrapper>
   );
 }

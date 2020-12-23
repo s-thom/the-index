@@ -1,45 +1,71 @@
-import React from 'react';
-import './index.css';
-import { getParamAsArray, setParam, getParamAsString } from '../../util/getParam';
-import TagsForm from '../TagsForm';
-import DatetimeForm from '../DatetimeForm';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import useDeepMemo from '../../hooks/useDeepMemo';
+import useSuggestedTags from '../../hooks/useSuggestedTags';
+import { noop } from '../../util/functions';
+import { PlainInput } from '../PlainComponents';
+import TagsInput from '../TagsInput';
 
-export default function SearchForm() {
-  const tags = getParamAsArray('t');
-  const beforeString = getParamAsString('b');
-  const afterString = getParamAsString('a');
+export interface SearchFormValues {
+  tags: string[];
+  before?: string;
+  after?: string;
+}
 
-  const beforeDate = beforeString ? new Date(beforeString) : undefined;
-  const afterDate = afterString ? new Date(afterString) : undefined;
+interface SearchFormProps {
+  initialValues?: Partial<SearchFormValues>;
+  onChange?: (values: SearchFormValues) => void;
+}
 
-  function onTagsChange(newTags: string[]) {
-    setParam('t', newTags);
-  }
+const DEFAULT_VALUES: SearchFormValues = {
+  tags: [],
+};
 
-  function onBeforeDateChange(newDate?: Date) {
-    setParam('b', newDate && newDate.toISOString());
-  }
+export default function SearchForm({ initialValues, onChange = noop }: SearchFormProps) {
+  const { control, watch, register } = useForm<SearchFormValues>({
+    defaultValues: {
+      ...DEFAULT_VALUES,
+      ...initialValues,
+    },
+  });
 
-  function onAfterDateChange(newDate?: Date) {
-    setParam('a', newDate && newDate.toISOString());
-  }
+  const tagsValue = watch('tags');
+  const suggestedTags = useSuggestedTags(tagsValue);
+
+  const values = watch();
+  const memoisedValues = useDeepMemo(values);
+  useEffect(() => {
+    onChange(memoisedValues);
+  }, [onChange, memoisedValues]);
 
   return (
-    <div className="SearchForm">
-      <div className="SearchForm-tags">
-        <h4 className="SearchForm-section-heading">Tags</h4>
-        <TagsForm tags={tags} onTagsChange={onTagsChange} />
+    <form>
+      <div>
+        <h4>Tags</h4>
+        <Controller
+          control={control}
+          name="tags"
+          render={(props) => (
+            <TagsInput
+              value={props.value}
+              onChange={(newTags) => props.onChange([...newTags].sort())}
+              id="tags"
+              name="tags"
+              suggestions={suggestedTags}
+            />
+          )}
+        />
       </div>
-      <div className="SearchForm-dates">
-        <div className="SearchForm-dates-before">
-          <h4 className="SearchForm-section-heading">Before</h4>
-          <DatetimeForm date={beforeDate} onDateChange={onBeforeDateChange} />
+      <div>
+        <div>
+          <h4>Before</h4>
+          <PlainInput name="before" placeholder="Date" type="date" ref={register} />
         </div>
-        <div className="SearchForm-dates-after">
-          <h4 className="SearchForm-section-heading">After</h4>
-          <DatetimeForm date={afterDate} onDateChange={onAfterDateChange} />
+        <div>
+          <h4>After</h4>
+          <PlainInput name="after" placeholder="Date" type="date" ref={register} />
         </div>
       </div>
-    </div>
+    </form>
   );
 }

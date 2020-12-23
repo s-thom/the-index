@@ -1,5 +1,11 @@
 {
-  "extends": ["airbnb-typescript", "airbnb/hooks", "../../.eslintrc"],
+  "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "../../.eslintrc",
+    "plugin:jest-dom/recommended",
+    "plugin:testing-library/react"
+  ],
   "parserOptions": { "project": "./tsconfig.json" },
   "rules": {
     "react/jsx-curly-newline": "off",
@@ -9,7 +15,9 @@
     "react/jsx-wrap-multilines": "off",
     "react/no-unused-prop-types": "off",
     "react/prop-types": "off",
-    "react/require-default-props": "off"
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
+    "react/uses-react": "off"
   },
   "settings": {
     "jest": {

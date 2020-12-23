@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - packages/openapi/**
+      - .github/workflows/api-docs.yml
   pull_request:
     branches:
       - master

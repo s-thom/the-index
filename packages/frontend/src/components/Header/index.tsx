@@ -1,32 +1,30 @@
-import React from 'react';
-import './index.css';
-import { Link } from '@reach/router';
-import TextButton from '../TextButton';
-import { useHasToken } from '../../hooks/token';
+import { ReactNode } from 'react';
+import styled from 'styled-components';
+import { PlainLink } from '../PlainComponents';
 
-export default function Header() {
-  const hasToken = useHasToken();
+const HeaderWrapper = styled.div`
+  text-align: center;
+  padding: 1em 0;
+`;
 
+const HeaderHeading = styled.h1`
+  font-size: 2.4em;
+  margin: 0;
+`;
+
+interface HeaderProps {
+  navigation?: ReactNode;
+}
+
+export default function Header({ navigation }: HeaderProps) {
   return (
-    <div className="Header">
-      <div className="Header-heading-container">
-        <Link to="/" className="hide-link">
-          <h1 className="Header-heading">The Index</h1>
-        </Link>
+    <HeaderWrapper>
+      <div>
+        <PlainLink to="/">
+          <HeaderHeading>the-index</HeaderHeading>
+        </PlainLink>
       </div>
-      <nav className="Header-nav">
-        <Link to="/search" className="Header-nav-link hide-link">
-          <TextButton>Search</TextButton>
-        </Link>
-        <Link to="/new" className="Header-nav-link hide-link">
-          <TextButton>New Link</TextButton>
-        </Link>
-        {!hasToken && (
-          <Link to="/login" className="Header-nav-link hide-link">
-            <TextButton>Log in</TextButton>
-          </Link>
-        )}
-      </nav>
-    </div>
+      {navigation && <nav>{navigation}</nav>}
+    </HeaderWrapper>
   );
 }
