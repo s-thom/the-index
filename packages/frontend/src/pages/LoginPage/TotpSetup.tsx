@@ -1,12 +1,12 @@
-import { useEffect, useRef } from 'react';
 import qr from 'qrcode';
+import { useEffect, useRef } from 'react';
 
-interface LoginTotpSetupProps {
+interface TotpSetupProps {
   code: string;
   url: string;
 }
 
-export default function LoginTotpSetup({ code, url }: LoginTotpSetupProps) {
+export default function TotpSetup({ code, url }: TotpSetupProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

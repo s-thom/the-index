@@ -9,10 +9,9 @@ import {
   PostLoginSuccessResponse,
   PostLoginTOTPRequest,
 } from '../../api-types';
-import LoginTotpForm from '../../components/LoginTotpForm';
-import LoginTotpSetup from '../../components/LoginTotpSetup';
-import LoginUserForm from '../../components/LoginUserForm';
+import LoginForm, { LoginFormValues } from '../../components/LoginForm';
 import { useAuthorizationContext } from '../../context/AuthorizationContext';
+import TotpSetup from './TotpSetup';
 
 type LoginResponseCombined = PostLoginSetupResponse | PostLoginSuccessResponse | PostLoginChallengeResponse;
 
@@ -22,8 +21,6 @@ const StyledWrapper = styled.div`
 
 export default function LoginPage() {
   const [showTotp, setShowTotp] = useState(false);
-  const [name, setName] = useState('');
-  const [totpCode, setTotpCode] = useState('');
   const [totpSetup, setTotpSetup] = useState<PostLoginSetupResponse>();
   const { setToken } = useAuthorizationContext();
 
@@ -50,12 +47,12 @@ export default function LoginPage() {
   const { mutate: submitLogin } = useMutation<
     LoginResponseCombined,
     void,
-    { method?: 'TOTP'; code?: string; username: string }
+    { method?: 'TOTP'; code?: string; name: string }
   >(
     ['login'],
-    async ({ method, code, username }) => {
+    async ({ method, code, name }) => {
       const requestData: PostLoginRequest | PostLoginTOTPRequest =
-        method && code ? { name: username, challenge: method, response: code } : { name: username };
+        method && code ? { name, challenge: method, response: code } : { name };
 
       const response = await postLogin({ body: requestData });
       return response;
@@ -63,32 +60,26 @@ export default function LoginPage() {
     { onSuccess: loginResponseCallback },
   );
 
-  const onUserSubmit = useCallback(
-    (username: string) => {
-      setName(username);
-
-      submitLogin({ username, method: totpCode ? 'TOTP' : undefined, code: totpCode });
-    },
-    [submitLogin, totpCode],
-  );
-
-  const onTotpSubmit = useCallback(
-    (code: string) => {
-      setTotpCode(code);
-
-      if (name) {
-        submitLogin({ username: name, method: 'TOTP', code });
+  const onSubmit = useCallback(
+    (values: LoginFormValues) => {
+      if (values.response) {
+        submitLogin({
+          name: values.name,
+          method: 'TOTP',
+          code: values.response,
+        });
+      } else {
+        submitLogin({ name: values.name });
       }
     },
-    [name, submitLogin],
+    [submitLogin],
   );
 
   return (
     <StyledWrapper>
       <h2>Login</h2>
-      <LoginUserForm onSubmit={onUserSubmit} />
-      {showTotp && <LoginTotpForm onSubmit={onTotpSubmit} />}
-      {totpSetup && <LoginTotpSetup code={totpSetup.code} url={totpSetup.url} />}
+      <LoginForm onSubmit={onSubmit} challenge={showTotp ? 'totp' : undefined} />
+      {totpSetup && <TotpSetup code={totpSetup.code} url={totpSetup.url} />}
     </StyledWrapper>
   );
 }
