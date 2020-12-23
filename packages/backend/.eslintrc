@@ -2,7 +2,9 @@
   "extends": ["../../.eslintrc"],
   "parserOptions": { "project": "./tsconfig.json" },
   "rules": {
-    "import/no-cycle": "warn"
+    "import/no-cycle": "warn",
+    // This allows repositories to have the model and the service in one file
+    "max-classes-per-file": ["error", 2]
   },
   "settings": {
     "jest": {

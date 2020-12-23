@@ -1,10 +1,38 @@
 import { Inject, Service } from 'typedi';
-import { getRepository } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  getRepository,
+  Index,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import NotFoundError from '../../errors/NotFoundError';
 import ILogger, { Logger } from '../../infrastructure/Logger/Logger';
 import LoggerImpl from '../../infrastructure/Logger/LoggerImpl';
 import User from './User';
-import IUserRepository, { UserModel } from './UserRepository';
+import IUserRepository from './UserRepository';
+
+@Entity({ name: 'user' })
+export class UserModel {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column({ type: 'text', unique: true })
+  @Index({ unique: true })
+  name!: string;
+
+  @CreateDateColumn()
+  created!: Date;
+
+  @UpdateDateColumn()
+  updated?: Date;
+
+  @DeleteDateColumn()
+  deleted?: Date;
+}
 
 @Service()
 export default class UserRepositoryImpl implements IUserRepository {
