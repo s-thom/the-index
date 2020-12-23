@@ -4,18 +4,19 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  getRepository,
   Index,
   PrimaryGeneratedColumn,
+  Repository,
   UpdateDateColumn,
 } from 'typeorm';
+import { InjectRepository } from 'typeorm-typedi-extensions';
 import NotFoundError from '../../errors/NotFoundError';
 import ILogger, { Logger } from '../../infrastructure/Logger/Logger';
 import LoggerImpl from '../../infrastructure/Logger/LoggerImpl';
 import User from './User';
 import IUserRepository from './UserRepository';
 
-@Entity({ name: 'user' })
+@Entity({ name: 'users' })
 export class UserModel {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -38,13 +39,14 @@ export class UserModel {
 export default class UserRepositoryImpl implements IUserRepository {
   private readonly log: Logger;
 
-  private readonly repository = getRepository(UserModel);
-
-  constructor(@Inject(() => LoggerImpl) private readonly logger: ILogger) {
+  constructor(
+    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @InjectRepository(UserModel) private readonly repository: Repository<UserModel>,
+  ) {
     this.log = this.logger.child('UserRepository');
   }
 
-  private modelToDto(model: UserModel): User {
+  private async resolve(model: UserModel): Promise<User> {
     return new User(model);
   }
 
@@ -57,7 +59,7 @@ export default class UserRepositoryImpl implements IUserRepository {
     }
 
     this.log.trace('Found user by id', { id, name: model.name });
-    return this.modelToDto(model);
+    return this.resolve(model);
   }
 
   async findByName(name: string) {
@@ -69,6 +71,6 @@ export default class UserRepositoryImpl implements IUserRepository {
     }
 
     this.log.trace('Found user by name', { name, id: model.id });
-    return this.modelToDto(model);
+    return this.resolve(model);
   }
 }
