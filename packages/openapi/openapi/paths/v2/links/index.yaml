@@ -49,7 +49,7 @@ get:
                 type: array
                 description: The list of links
                 items:
-                  $ref: '../../../components/schemas/LinkDetail.yaml'
+                  $ref: '../../../components/schemas/Link.yaml'
     '400':
       $ref: ../../../components/responses/ErrorResponse.yaml
 post:
@@ -94,6 +94,6 @@ post:
               - link
             properties:
               link:
-                $ref: '../../../components/schemas/LinkDetail.yaml'
+                $ref: '../../../components/schemas/Link.yaml'
     '400':
       $ref: ../../../components/responses/ErrorResponse.yaml

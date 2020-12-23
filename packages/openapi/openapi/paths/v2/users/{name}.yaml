@@ -1,21 +1,21 @@
 get:
-  operationId: getV2LinkId
-  summary: Get link detail
+  operationId: getV2UserId
+  summary: Get user detail
   description: |
-    Gets the detail of a single link
+    Gets the detail of a single user
   tags:
-    - Links
+    - Users
   security:
     - bearer: []
   parameters:
-    - name: id
+    - name: name
       in: path
       required: true
-      description: The ID of the link
+      description: The name of the user, or the special string `me`
       schema:
         type: string
-        description: The ID of the link
-        example: A00025E91EEBF5400000
+        description: The name of the user, or the special string `me`
+        example: me
   responses:
     '200':
       description: Success
@@ -24,9 +24,9 @@ get:
           schema:
             type: object
             required:
-              - link
+              - user
             properties:
-              link:
-                $ref: '../../../components/schemas/Link.yaml'
+              user:
+                $ref: '../../../components/schemas/User.yaml'
     '400':
       $ref: ../../../components/responses/ErrorResponse.yaml

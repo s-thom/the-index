@@ -116,6 +116,39 @@ export interface LinkDetail {
 }
 
 /**
+ * A user
+ */
+export interface User {
+  /**
+   * The name of the user
+   */
+  name: string;
+}
+
+/**
+ * A link stored in the-index
+ */
+export interface Link {
+  /**
+   * The ID of the link
+   */
+  id: string;
+  /**
+   * The URL of the link
+   */
+  url: string;
+  /**
+   * List of tags associated with the link
+   */
+  tags: string[];
+  /**
+   * The date the link was added
+   */
+  inserted: string;
+  user: User;
+}
+
+/**
  * An error
  */
 export interface Error {
@@ -305,7 +338,7 @@ export interface GetV2LinksResponse {
   /**
    * The list of links
    */
-  links: LinkDetail[];
+  links: Link[];
 }
 
 export interface GetV2LinksQueryParams {
@@ -336,7 +369,7 @@ export function getV2Links(
 }
 
 export interface PostV2LinksResponse {
-  link: LinkDetail;
+  link: Link;
 }
 
 export interface PostV2LinksRequestBody {
@@ -367,7 +400,7 @@ export function postV2Links(
 }
 
 export interface GetV2LinkIdResponse {
-  link: LinkDetail;
+  link: Link;
 }
 
 export interface GetV2LinkIdPathParams {
@@ -417,4 +450,33 @@ export interface GetV2TagsQueryParams {
  */
 export function getV2Tags(props: CustomGetProps<GetV2TagsResponse, ErrorResponseResponse, GetV2TagsQueryParams, void>) {
   return customGet<GetV2TagsResponse, ErrorResponseResponse, GetV2TagsQueryParams, void>(`/v2/tags`, props);
+}
+
+export interface GetV2UserIdResponse {
+  user: User;
+}
+
+export interface GetV2UserIdPathParams {
+  /**
+   * The name of the user, or the special string `me`
+   */
+  name: string;
+}
+
+/**
+ * Get user detail
+ *
+ * Gets the detail of a single user
+ *
+ */
+export function getV2UserId({
+  name,
+  ...props
+}: CustomGetProps<GetV2UserIdResponse, ErrorResponseResponse, void, GetV2UserIdPathParams> & {
+  /**
+   * The name of the user, or the special string `me`
+   */
+  name: string;
+}) {
+  return customGet<GetV2UserIdResponse, ErrorResponseResponse, void, GetV2UserIdPathParams>(`/v2/users/${name}`, props);
 }

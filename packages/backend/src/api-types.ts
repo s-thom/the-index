@@ -115,6 +115,39 @@ export interface LinkDetail {
 }
 
 /**
+ * A user
+ */
+export interface User {
+  /**
+   * The name of the user
+   */
+  name: string;
+}
+
+/**
+ * A link stored in the-index
+ */
+export interface Link {
+  /**
+   * The ID of the link
+   */
+  id: string;
+  /**
+   * The URL of the link
+   */
+  url: string;
+  /**
+   * List of tags associated with the link
+   */
+  tags: string[];
+  /**
+   * The date the link was added
+   */
+  inserted: string;
+  user: User;
+}
+
+/**
  * An error
  */
 export interface Error {
@@ -226,7 +259,7 @@ export interface GetV2LinksResponse {
   /**
    * The list of links
    */
-  links: LinkDetail[];
+  links: Link[];
 }
 
 export interface GetV2LinksQueryParams {
@@ -245,7 +278,7 @@ export interface GetV2LinksQueryParams {
 }
 
 export interface PostV2LinksResponse {
-  link: LinkDetail;
+  link: Link;
 }
 
 export interface PostV2LinksRequestBody {
@@ -260,7 +293,7 @@ export interface PostV2LinksRequestBody {
 }
 
 export interface GetV2LinkIdResponse {
-  link: LinkDetail;
+  link: Link;
 }
 
 export interface GetV2LinkIdPathParams {
@@ -282,4 +315,15 @@ export interface GetV2TagsQueryParams {
    * List of tags to exclude
    */
   exclude?: string[];
+}
+
+export interface GetV2UserIdResponse {
+  user: User;
+}
+
+export interface GetV2UserIdPathParams {
+  /**
+   * The name of the user, or the special string `me`
+   */
+  name: string;
 }

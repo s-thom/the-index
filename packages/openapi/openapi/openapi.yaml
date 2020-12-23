@@ -29,6 +29,8 @@ paths:
     $ref: ./paths/v2/links/{id}.yaml
   /v2/tags:
     $ref: ./paths/v2/tags.yaml
+  /v2/users/{name}:
+    $ref: ./paths/v2/users/{name}.yaml
 components:
   securitySchemes:
     bearer:
