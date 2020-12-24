@@ -167,7 +167,7 @@ export interface Error {
   /**
    * The HTTP status code applicable to the problem
    */
-  status?: string;
+  status?: number;
   /**
    * An object containing additional information about the problem
    */

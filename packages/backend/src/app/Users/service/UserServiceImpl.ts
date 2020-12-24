@@ -1,8 +1,8 @@
 import { Inject, Service } from 'typedi';
-import ILogger, { Logger } from '../../infrastructure/Logger/Logger';
-import LoggerImpl from '../../infrastructure/Logger/LoggerImpl';
-import IUserRepository from './UserRepository';
-import UserRepositoryImpl from './UserRepositoryImpl';
+import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
+import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
+import IUserRepository from '../repository/UserRepository';
+import UserRepositoryImpl from '../repository/UserRepositoryImpl';
 import IUserService from './UserService';
 
 @Service()

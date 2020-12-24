@@ -1,12 +1,17 @@
 import 'reflect-metadata';
 import Container from 'typedi';
-import { useContainer } from 'typeorm';
 import IExpressServer from './infrastructure/ExpressServer/ExpressServer';
 import ExpressServerImpl from './infrastructure/ExpressServer/ExpressServerImpl';
+import ITypeOrmService from './infrastructure/TypeOrmService/TypeOrmService';
+import TypeOrmServiceImpl from './infrastructure/TypeOrmService/TypeOrmServiceImpl';
 import './util/env';
 
-useContainer(Container);
-const app = Container.get<IExpressServer>(ExpressServerImpl);
-app.start();
+async function startApp() {
+  const typeOrmService = Container.get<ITypeOrmService>(TypeOrmServiceImpl);
+  await typeOrmService.start();
 
-export default app;
+  const expressApp = Container.get<IExpressServer>(ExpressServerImpl);
+  await expressApp.start();
+}
+
+startApp().catch((error) => console.error(error));

@@ -13,10 +13,6 @@ if (!(DB_PATH && DB_USER && DB_PASS)) {
 
 const db = new sqlite3.Database(DB_PATH);
 
-// TODO: Get some form of instance ID for if there's ever more than one of these running
-// Not really something to worry about now
-const idService = Container.get<IIdentifierService>(IdentifierServiceImpl);
-
 export default db;
 
 export function run<T>(fn: (db: sqlite3.Database) => Promise<T>) {
@@ -32,5 +28,8 @@ export function run<T>(fn: (db: sqlite3.Database) => Promise<T>) {
 }
 
 export function generateID() {
+  // TODO: Get some form of instance ID for if there's ever more than one of these running
+  // Not really something to worry about now
+  const idService = Container.get<IIdentifierService>(IdentifierServiceImpl);
   return idService.next();
 }

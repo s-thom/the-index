@@ -1,9 +1,11 @@
-import { CorsOptions } from 'cors';
-import { LoggerOptions } from 'pino';
 import { OptionsJson as BodyParserOptions, OptionsUrlencoded as UrlEncodedOptions } from 'body-parser';
+import { CorsOptions } from 'cors';
+import { join } from 'path';
+import { LoggerOptions } from 'pino';
 import { Service } from 'typedi';
-import IConfig, { ExpressConfig } from './Config';
+import { ConnectionOptions } from 'typeorm';
 import '../../util/env';
+import IConfig, { ExpressConfig } from './Config';
 
 const DEFAULT_PORT = 7000;
 
@@ -31,5 +33,17 @@ export default class ConfigImpl implements IConfig {
 
   urlEncoded: UrlEncodedOptions = {
     extended: true,
+  };
+
+  typeOrm: ConnectionOptions = {
+    name: 'default',
+    type: 'sqlite',
+    database:
+      process.env.DATABASE_NAME ??
+      (() => {
+        throw new Error('No DATABASE_NAME provided');
+      })(),
+    entities: [join(__dirname, '/../../**/*.entity.{ts,js}')],
+    synchronize: !process.env.DATABASE_SYNCHRONIZE?.match(/false/i),
   };
 }

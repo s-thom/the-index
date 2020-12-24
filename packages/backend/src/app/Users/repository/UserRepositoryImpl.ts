@@ -1,49 +1,26 @@
 import { Inject, Service } from 'typedi';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  PrimaryGeneratedColumn,
-  Repository,
-  UpdateDateColumn,
-} from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
-import NotFoundError from '../../errors/NotFoundError';
-import ILogger, { Logger } from '../../infrastructure/Logger/Logger';
-import LoggerImpl from '../../infrastructure/Logger/LoggerImpl';
-import User from './User';
+import { Repository } from 'typeorm';
+import NotFoundError from '../../../errors/NotFoundError';
+import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
+import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
+import ITypeOrmService from '../../../infrastructure/TypeOrmService/TypeOrmService';
+import TypeOrmServiceImpl from '../../../infrastructure/TypeOrmService/TypeOrmServiceImpl';
+import User from '../User';
+import UserModel from './UserModel.entity';
 import IUserRepository from './UserRepository';
-
-@Entity({ name: 'users' })
-export class UserModel {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column({ type: 'text', unique: true })
-  @Index({ unique: true })
-  name!: string;
-
-  @CreateDateColumn()
-  created!: Date;
-
-  @UpdateDateColumn()
-  updated?: Date;
-
-  @DeleteDateColumn()
-  deleted?: Date;
-}
 
 @Service()
 export default class UserRepositoryImpl implements IUserRepository {
   private readonly log: Logger;
 
+  private readonly repository: Repository<UserModel>;
+
   constructor(
     @Inject(() => LoggerImpl) private readonly logger: ILogger,
-    @InjectRepository(UserModel) private readonly repository: Repository<UserModel>,
+    @Inject(() => TypeOrmServiceImpl) private readonly typeOrm: ITypeOrmService,
   ) {
     this.log = this.logger.child('UserRepository');
+    this.repository = typeOrm.getRepository(UserModel);
   }
 
   private async resolve(model: UserModel): Promise<User> {

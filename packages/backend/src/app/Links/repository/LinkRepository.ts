@@ -1,5 +1,5 @@
-import User from '../Users/User';
-import Link from './Link';
+import User from '../../Users/User';
+import Link from '../Link';
 
 export default interface ILinkRepository {
   insert(user: User, link: Omit<Link, 'id' | 'created' | 'deleted' | 'updated' | 'user'>): Promise<Link>;

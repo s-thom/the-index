@@ -1,64 +1,27 @@
 import { Inject, Service } from 'typedi';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  Repository,
-  UpdateDateColumn,
-} from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
-import NotFoundError from '../../errors/NotFoundError';
-import ILogger, { Logger } from '../../infrastructure/Logger/Logger';
-import LoggerImpl from '../../infrastructure/Logger/LoggerImpl';
-import Tag from '../Tags/Tag';
-import User from '../Users/User';
-import Link from './Link';
+import { Repository } from 'typeorm';
+import NotFoundError from '../../../errors/NotFoundError';
+import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
+import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
+import ITypeOrmService from '../../../infrastructure/TypeOrmService/TypeOrmService';
+import TypeOrmServiceImpl from '../../../infrastructure/TypeOrmService/TypeOrmServiceImpl';
+import User from '../../Users/User';
+import Link from '../Link';
+import LinkModel from './LinkModel.entity';
 import ILinkRepository from './LinkRepository';
-
-@Entity({ name: 'links' })
-export class LinkModel {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column({ type: 'text', unique: true })
-  @Index({ unique: true })
-  reference!: string;
-
-  @Column({ type: 'text' })
-  url!: string;
-
-  @ManyToMany(() => Tag, { cascade: true })
-  @JoinTable()
-  tags!: Tag[];
-
-  @ManyToOne(() => User)
-  user!: User;
-
-  @CreateDateColumn()
-  created!: Date;
-
-  @UpdateDateColumn()
-  updated?: Date;
-
-  @DeleteDateColumn()
-  deleted?: Date;
-}
 
 @Service()
 export default class LinkRepositoryImpl implements ILinkRepository {
   private readonly log: Logger;
 
+  private readonly repository: Repository<LinkModel>;
+
   constructor(
     @Inject(() => LoggerImpl) private readonly logger: ILogger,
-    @InjectRepository(LinkModel) private readonly repository: Repository<LinkModel>,
+    @Inject(() => TypeOrmServiceImpl) private readonly typeOrm: ITypeOrmService,
   ) {
     this.log = this.logger.child('LinkRepository');
+    this.repository = typeOrm.getRepository(LinkModel);
   }
 
   private async resolve(model: LinkModel): Promise<Link> {
