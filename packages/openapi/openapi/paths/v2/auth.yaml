@@ -1,0 +1,82 @@
+post:
+  operationId: postV2Auth
+  summary: Log in
+  description: |
+    Logs a user in
+  tags:
+    - Links
+  requestBody:
+    description: Link information
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Login parameters
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              description: The name of the user
+              example: stuart
+            code:
+              type: string
+              description: The TOTP code entered by the user
+              example: '000000'
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - user
+            properties:
+              user:
+                $ref: '../../components/schemas/User.yaml'
+    '400':
+      description: Setup required
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - auth
+            properties:
+              auth:
+                type: object
+                description: Parameters for the user to set up their authentication
+                required:
+                  - method
+                  - code
+                properties:
+                  method:
+                    type: string
+                    description: The method the user will need to set up
+                    enum:
+                      - totp
+                  code:
+                    type: string
+                    description: The TOTP secret code
+    '401':
+      $ref: ../../components/responses/ErrorResponse.yaml
+delete:
+  operationId: deleteV2Auth
+  summary: Log out
+  description: |
+    Logs the current user out
+  tags:
+    - Auth
+    - Users
+  security:
+    - cookie: []
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+    '400':
+      $ref: ../../components/responses/ErrorResponse.yaml

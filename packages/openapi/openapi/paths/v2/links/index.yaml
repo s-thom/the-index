@@ -6,7 +6,7 @@ get:
   tags:
     - Links
   security:
-    - bearer: []
+    - cookie: []
   parameters:
     - name: tags
       in: query
@@ -60,7 +60,7 @@ post:
   tags:
     - Links
   security:
-    - bearer: []
+    - cookie: []
   requestBody:
     description: Link information
     content:

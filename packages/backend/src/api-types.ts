@@ -125,29 +125,6 @@ export interface User {
 }
 
 /**
- * A link stored in the-index
- */
-export interface Link {
-  /**
-   * The ID of the link
-   */
-  id: string;
-  /**
-   * The URL of the link
-   */
-  url: string;
-  /**
-   * List of tags associated with the link
-   */
-  tags: string[];
-  /**
-   * The date the link was added
-   */
-  inserted: string;
-  user: User;
-}
-
-/**
  * An error
  */
 export interface Error {
@@ -171,6 +148,29 @@ export interface Error {
    * An object containing additional information about the problem
    */
   meta?: { [key: string]: any };
+}
+
+/**
+ * A link stored in the-index
+ */
+export interface Link {
+  /**
+   * The ID of the link
+   */
+  id: string;
+  /**
+   * The URL of the link
+   */
+  url: string;
+  /**
+   * List of tags associated with the link
+   */
+  tags: string[];
+  /**
+   * The date the link was added
+   */
+  inserted: string;
+  user: User;
 }
 
 /**
@@ -253,6 +253,25 @@ export interface GetLinksIdPathParams {
    * The ID of the link
    */
   id: string;
+}
+
+export interface PostV2AuthResponse {
+  user: User;
+}
+
+export interface PostV2AuthRequestBody {
+  /**
+   * The name of the user
+   */
+  name: string;
+  /**
+   * The TOTP code entered by the user
+   */
+  code?: string;
+}
+
+export interface DeleteV2AuthResponse {
+  [key: string]: any;
 }
 
 export interface GetV2LinksResponse {

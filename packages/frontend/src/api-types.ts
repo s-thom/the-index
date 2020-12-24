@@ -126,29 +126,6 @@ export interface User {
 }
 
 /**
- * A link stored in the-index
- */
-export interface Link {
-  /**
-   * The ID of the link
-   */
-  id: string;
-  /**
-   * The URL of the link
-   */
-  url: string;
-  /**
-   * List of tags associated with the link
-   */
-  tags: string[];
-  /**
-   * The date the link was added
-   */
-  inserted: string;
-  user: User;
-}
-
-/**
  * An error
  */
 export interface Error {
@@ -172,6 +149,29 @@ export interface Error {
    * An object containing additional information about the problem
    */
   meta?: { [key: string]: any };
+}
+
+/**
+ * A link stored in the-index
+ */
+export interface Link {
+  /**
+   * The ID of the link
+   */
+  id: string;
+  /**
+   * The URL of the link
+   */
+  url: string;
+  /**
+   * List of tags associated with the link
+   */
+  tags: string[];
+  /**
+   * The date the link was added
+   */
+  inserted: string;
+  user: User;
 }
 
 /**
@@ -332,6 +332,89 @@ export function getLinksId({
   id: string;
 }) {
   return customGet<GetLinksIdResponse, void, void, GetLinksIdPathParams>(`/links/${id}`, props);
+}
+
+export interface PostV2AuthResponse {
+  user: User;
+}
+
+export interface PostV2AuthRequestBody {
+  /**
+   * The name of the user
+   */
+  name: string;
+  /**
+   * The TOTP code entered by the user
+   */
+  code?: string;
+}
+
+/**
+ * Log in
+ *
+ * Logs a user in
+ *
+ */
+export function postV2Auth(
+  props: CustomMutateProps<
+    PostV2AuthResponse,
+    | {
+        /**
+         * Parameters for the user to set up their authentication
+         */
+        auth: {
+          /**
+           * The method the user will need to set up
+           */
+          method: 'totp';
+          /**
+           * The TOTP secret code
+           */
+          code: string;
+        };
+      }
+    | ErrorResponseResponse,
+    void,
+    PostV2AuthRequestBody,
+    void
+  >,
+) {
+  return customMutate<
+    PostV2AuthResponse,
+    | {
+        /**
+         * Parameters for the user to set up their authentication
+         */
+        auth: {
+          /**
+           * The method the user will need to set up
+           */
+          method: 'totp';
+          /**
+           * The TOTP secret code
+           */
+          code: string;
+        };
+      }
+    | ErrorResponseResponse,
+    void,
+    PostV2AuthRequestBody,
+    void
+  >('POST', `/v2/auth`, props);
+}
+
+export interface DeleteV2AuthResponse {
+  [key: string]: any;
+}
+
+/**
+ * Log out
+ *
+ * Logs the current user out
+ *
+ */
+export function deleteV2Auth(props: CustomMutateProps<DeleteV2AuthResponse, ErrorResponseResponse, void, void, void>) {
+  return customMutate<DeleteV2AuthResponse, ErrorResponseResponse, void, void, void>('DELETE', `/v2/auth`, props);
 }
 
 export interface GetV2LinksResponse {

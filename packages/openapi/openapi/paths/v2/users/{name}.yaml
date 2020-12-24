@@ -6,7 +6,7 @@ get:
   tags:
     - Users
   security:
-    - bearer: []
+    - cookie: []
   parameters:
     - name: name
       in: path

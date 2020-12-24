@@ -23,6 +23,8 @@ paths:
     $ref: ./paths/links/index.yaml
   /links/{id}:
     $ref: ./paths/links/id.yaml
+  /v2/auth:
+    $ref: ./paths/v2/auth.yaml
   /v2/links:
     $ref: ./paths/v2/links/index.yaml
   /v2/links/{id}:
@@ -38,3 +40,8 @@ components:
       description: Authenticatin by bearer token
       scheme: bearer
       bearerFormat: JWT
+    cookie:
+      type: apiKey
+      description: Authentication by session cookie
+      in: cookie
+      name: session
