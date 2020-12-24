@@ -5,6 +5,7 @@ import { ConnectionOptions } from 'typeorm';
 
 export interface ExpressConfig {
   port: number;
+  sessionSecret: string;
 }
 
 export default interface IConfig {

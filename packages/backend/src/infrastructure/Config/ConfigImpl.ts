@@ -17,6 +17,11 @@ export default class ConfigImpl implements IConfig {
 
   express: ExpressConfig = {
     port: parseInt(process.env.SERVER_PORT ?? `${DEFAULT_PORT}`, 10) || DEFAULT_PORT,
+    sessionSecret:
+      process.env.SESSION_SECRET ??
+      (() => {
+        throw new Error('No SESSION_SECRET provided');
+      })(),
   };
 
   logger: LoggerOptions = {

@@ -1,4 +1,5 @@
 import compression from 'compression';
+import cookieSession from 'cookie-session';
 import cors from 'cors';
 import express, { json, urlencoded } from 'express';
 import correlator from 'express-correlation-id';
@@ -39,6 +40,7 @@ export default class ExpressServerImpl implements IExpressServer {
     app.use(expressPinoLogger({ logger: this.log.pino }));
     app.use(urlencoded(this.config.urlEncoded));
     app.use(helmet());
+    app.use(cookieSession({ secret: this.config.express.sessionSecret }));
     app.disable('x-powered-by');
 
     app.use(this.controller.router());
