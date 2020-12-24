@@ -20,20 +20,21 @@ export default class TypeOrmServiceImpl implements ITypeOrmService {
   }
 
   async start() {
+    this.log.debug('Creating connection');
     const connectionManager = getConnectionManager();
     this.connection = connectionManager.create(this.config.typeOrm);
+
+    await this.connection.connect();
 
     return this.connection;
   }
 
   getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>) {
     if (!this.connection) {
-      const message = 'Tried to get repository but the TypeOrmService did not start';
+      const message = 'Tried to get repository but the TypeOrmService has not been started';
       this.log.error(message);
       throw new Error(message);
     }
-
-    this.log.info('Getting entity', { entity: entity.toString(), opts: this.connection.options });
 
     return this.connection.getRepository(entity);
   }

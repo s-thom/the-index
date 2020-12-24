@@ -10,8 +10,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import Tag from '../../Tags/Tag';
-import User from '../../Users/User';
+import TagModel from '../../Tags/repository/TagModel.entity';
+import UserModel from '../../Users/repository/UserModel.entity';
 
 @Entity({ name: 'links' })
 export default class LinkModel {
@@ -25,12 +25,12 @@ export default class LinkModel {
   @Column({ type: 'text' })
   url!: string;
 
-  @ManyToMany(() => Tag, { cascade: true })
+  @ManyToMany(() => TagModel, { cascade: true })
   @JoinTable()
-  tags!: Tag[];
+  tags!: TagModel[];
 
-  @ManyToOne(() => User)
-  user!: User;
+  @ManyToOne(() => UserModel)
+  user!: UserModel;
 
   @CreateDateColumn()
   created!: Date;
