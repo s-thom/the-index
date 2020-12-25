@@ -22,7 +22,13 @@ export default class UserControllerImpl implements IUserController {
   }
 
   async getByName(currentUser: User, pathParams: GetV2UserIdPathParams) {
-    const user = await this.userService.getByName(pathParams.name);
+    // Handle special case name of "me"
+    let { name } = pathParams;
+    if (name === 'me') {
+      name = currentUser.name;
+    }
+
+    const user = await this.userService.getByName(name);
     return { user };
   }
 
@@ -30,7 +36,7 @@ export default class UserControllerImpl implements IUserController {
     const router = Router();
 
     router.get(
-      ':id',
+      '/:name',
       asyncRoute<void, GetV2UserIdResponse, GetV2UserIdPathParams>(
         {
           params: Yup.object()
