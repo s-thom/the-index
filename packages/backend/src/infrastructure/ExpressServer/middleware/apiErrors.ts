@@ -5,12 +5,16 @@ import ApiError from '../../../errors/ApiError';
 import MultipleError from '../../../errors/MultipleError';
 import IIdentifierService from '../../../services/IdentifierService';
 import IdentifierServiceImpl from '../../../services/IdentifierServiceImpl';
+import ILogger from '../../Logger/Logger';
+import LoggerImpl from '../../Logger/LoggerImpl';
 
 interface JsonApiErrorsOptions {
   defaultStatus: number;
 }
 
 const idService = Container.get<IIdentifierService>(IdentifierServiceImpl);
+const loggerService = Container.get<ILogger>(LoggerImpl);
+const logger = loggerService.child('Express.apiErrors');
 
 /**
  * Determines the final error status for this
@@ -55,8 +59,15 @@ export function errorToJsonErrors(error: unknown): ErrorType[] {
       };
     }
 
+    const id = idService.next();
+    logger.warn('Error is not an API error. No additional information will be associated with it', {
+      error,
+      message: (error as any)?.message,
+      stack: (error as any)?.stack,
+      id,
+    });
     return {
-      id: idService.next(),
+      id,
     };
   });
 }
@@ -82,10 +93,14 @@ export default function apiErrors(options?: Partial<JsonApiErrorsOptions>): Erro
       return next(err);
     }
 
+    // Log the incoming error for tracing
+    logger.error('Error caught by error handler', { error: err, message: err?.message });
+
     const finalStatus = determineErrorStatus(err, mergedOptions.defaultStatus);
     const errorObjects = errorToJsonErrors(err);
-    // Log errors so they can be traced
-    req.log.error(errorObjects, 'API errors');
+
+    // Log the final output
+    logger.error('API errors', { errors: errorObjects });
 
     return res.status(finalStatus).json({ errors: errorObjects });
   };

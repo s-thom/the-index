@@ -72,7 +72,7 @@ export default class AuthServiceImpl implements IAuthService {
       await this.validateUserTotp(info, totpAuth);
       return {
         authenticated: true,
-        user: totpAuth.user,
+        user,
       };
     }
 

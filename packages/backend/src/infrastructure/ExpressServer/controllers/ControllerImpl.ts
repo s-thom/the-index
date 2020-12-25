@@ -2,10 +2,9 @@ import { Router } from 'express';
 import { Inject, Service } from 'typedi';
 import ILogger, { Logger } from '../../Logger/Logger';
 import LoggerImpl from '../../Logger/LoggerImpl';
-import apiErrors from '../middleware/apiErrors';
 import { IController } from './Controller';
-import V2ControllerImpl from './v2';
 import OldControllerImpl from './old';
+import V2ControllerImpl from './v2';
 
 @Service()
 export default class ControllerImpl implements IController {
@@ -22,10 +21,8 @@ export default class ControllerImpl implements IController {
   router() {
     const router = Router();
 
-    router.use(apiErrors());
-
     router.use('/', this.oldController.router());
-    // router.use('/v2', this.v2Controller.router());
+    router.use('/v2', this.v2Controller.router());
 
     return router;
   }

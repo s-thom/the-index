@@ -15,6 +15,7 @@ import LoggerImpl from '../Logger/LoggerImpl';
 import { IController } from './controllers/Controller';
 import ControllerImpl from './controllers/ControllerImpl';
 import IExpressServer from './ExpressServer';
+import apiErrors from './middleware/apiErrors';
 
 @Service()
 export default class ExpressServerImpl implements IExpressServer {
@@ -44,6 +45,8 @@ export default class ExpressServerImpl implements IExpressServer {
     app.disable('x-powered-by');
 
     app.use(this.controller.router());
+
+    app.use(apiErrors());
 
     const { port } = this.config.express;
 

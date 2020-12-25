@@ -18,5 +18,8 @@ export default class MultipleError extends Error {
         return `${this.errors.length} errors`;
       })(),
     );
+
+    // Typescript compiles errors weird
+    Object.setPrototypeOf(this, new.target.prototype);
   }
 }

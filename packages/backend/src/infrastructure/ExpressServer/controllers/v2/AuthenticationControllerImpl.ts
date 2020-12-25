@@ -4,7 +4,9 @@ import * as Yup from 'yup';
 import { DeleteV2AuthResponse, PostV2AuthRequestBody, PostV2AuthResponse } from '../../../../api-types';
 import IAuthService from '../../../../app/Auth/service/AuthService';
 import AuthServiceImpl from '../../../../app/Auth/service/AuthServiceImpl';
-import ApiError from '../../../../errors/ApiError';
+import UnauthorizedError from '../../../../errors/UnauthorizedError';
+import IIdentifierService from '../../../../services/IdentifierService';
+import IdentifierServiceImpl from '../../../../services/IdentifierServiceImpl';
 import ILogger, { Logger } from '../../../Logger/Logger';
 import LoggerImpl from '../../../Logger/LoggerImpl';
 import asyncRoute from '../../middleware/asyncRoute';
@@ -17,6 +19,7 @@ export default class AuthenticationControllerImpl implements IAuthenticationCont
   constructor(
     @Inject(() => LoggerImpl) private readonly logger: ILogger,
     @Inject(() => AuthServiceImpl) private readonly authService: IAuthService,
+    @Inject(() => IdentifierServiceImpl) private readonly idService: IIdentifierService,
   ) {
     this.log = this.logger.child('AuthenticationController');
   }
@@ -25,12 +28,14 @@ export default class AuthenticationControllerImpl implements IAuthenticationCont
     const authResult = await this.authService.authenticate(requestBody);
 
     if (authResult.authenticated) {
+      req.session = { name: authResult.user.name, nonce: this.idService.next() };
+
       return {
         user: authResult.user,
       };
     }
 
-    throw new ApiError(400, {
+    throw new UnauthorizedError({
       code: 'auth.totp.setup',
       message: 'User has not set up TOTP',
       safeMessage: 'TOTP setup required',

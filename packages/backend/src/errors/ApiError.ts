@@ -28,5 +28,8 @@ export default class ApiError extends Error {
 
   constructor(readonly status: number, readonly options: ApiErrorOptions) {
     super(options.message);
+
+    // Typescript compiles errors weird
+    Object.setPrototypeOf(this, new.target.prototype);
   }
 }
