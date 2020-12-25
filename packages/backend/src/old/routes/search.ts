@@ -1,4 +1,4 @@
-import { PostSearchRequestBody, PostSearchResponse } from '../api-types';
+import { PostSearchRequestBody, PostSearchResponse } from '../../api-types';
 import { searchLinksByTagsFn } from '../functions/search';
 import { wrapPromiseRoute } from '../util/request';
 import StatusError, { CODES } from '../util/StatusError';

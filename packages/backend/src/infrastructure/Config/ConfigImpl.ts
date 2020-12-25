@@ -4,7 +4,7 @@ import { join } from 'path';
 import { LoggerOptions } from 'pino';
 import { Service } from 'typedi';
 import { ConnectionOptions } from 'typeorm';
-import '../../util/env';
+import '../../old/util/env';
 import IConfig, { ExpressConfig } from './Config';
 
 const DEFAULT_PORT = 7000;

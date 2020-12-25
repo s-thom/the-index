@@ -1,9 +1,9 @@
 import * as otplib from 'otplib';
 import {
-  getUserById,
-  insertUser,
-  getUserByName,
   getUserAuthByMethod,
+  getUserById,
+  getUserByName,
+  insertUser,
   removeUserAuthByMethod,
   setUserAuth,
 } from '../database/users';

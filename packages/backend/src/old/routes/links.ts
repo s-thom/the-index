@@ -1,4 +1,4 @@
-import { GetLinksIdResponse, PostLinksRequestBody, PostLinksResponse } from '../api-types';
+import { GetLinksIdResponse, PostLinksRequestBody, PostLinksResponse } from '../../api-types';
 import { addNewLinkFn, getLinkDetailByIdFn } from '../functions/links';
 import { wrapPromiseRoute } from '../util/request';
 import StatusError, { CODES } from '../util/StatusError';

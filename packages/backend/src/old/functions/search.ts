@@ -1,4 +1,4 @@
-import { LinkDetail } from '../api-types';
+import { LinkDetail } from '../../api-types';
 import { searchLinkIdsByTags } from '../database/tags';
 import { getLinkDetailByIdFn } from './links';
 

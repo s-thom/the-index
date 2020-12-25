@@ -5,7 +5,7 @@ import {
   PostLoginSetupResponse,
   PostLoginSuccessResponse,
   PostLoginTOTPRequest,
-} from '../api-types';
+} from '../../api-types';
 import { getUserByNameFn, resetUserTotpCode, userHasAuthentication, verifyUserTotpCode } from '../functions/users';
 import { DecodedToken, generateJwt } from '../util/auth';
 import { wrapPromiseRoute } from '../util/request';

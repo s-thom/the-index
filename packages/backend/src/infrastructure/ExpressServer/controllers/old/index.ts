@@ -1,10 +1,10 @@
 import { Request, Response, Router } from 'express';
 import { Inject, Service } from 'typedi';
-import { loginRoute } from '../../../../routes/auth';
-import { addNewLinkRoute, getLinkByIdRoute } from '../../../../routes/links';
-import { searchLinksByTags } from '../../../../routes/search';
-import { getMostCommonTagsRoute } from '../../../../routes/tags';
-import { checkTokenMiddleware } from '../../../../util/auth';
+import { loginRoute } from '../../../../old/routes/auth';
+import { addNewLinkRoute, getLinkByIdRoute } from '../../../../old/routes/links';
+import { searchLinksByTags } from '../../../../old/routes/search';
+import { getMostCommonTagsRoute } from '../../../../old/routes/tags';
+import { checkTokenMiddleware } from '../../../../old/util/auth';
 import ILogger, { Logger } from '../../../Logger/Logger';
 import LoggerImpl from '../../../Logger/LoggerImpl';
 import { IController } from '../Controller';

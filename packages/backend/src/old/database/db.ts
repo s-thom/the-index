@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
 import Container from 'typedi';
-import IIdentifierService from '../services/IdentifierService';
-import IdentifierServiceImpl from '../services/IdentifierServiceImpl';
+import IIdentifierService from '../../services/IdentifierService';
+import IdentifierServiceImpl from '../../services/IdentifierServiceImpl';
 
 const { DB_PATH } = process.env;
 const { DB_USER } = process.env;

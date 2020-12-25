@@ -1,4 +1,4 @@
-import { GetTagsQueryParams, GetTagsResponse } from '../api-types';
+import { GetTagsQueryParams, GetTagsResponse } from '../../api-types';
 import { getMostCommonTagsForUserFn } from '../functions/tags';
 import { wrapPromiseRoute } from '../util/request';
 import StatusError, { CODES } from '../util/StatusError';

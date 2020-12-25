@@ -1,5 +1,5 @@
 import urlRegex from 'url-regex-safe';
-import { LinkDetail } from '../api-types';
+import { LinkDetail } from '../../api-types';
 import { getLinkById, insertLink } from '../database/links';
 import { getOrInsertTags, addTagsToLink, getTagsForLinkId } from '../database/tags';
 import { getUserById } from '../database/users';
