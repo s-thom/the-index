@@ -3,8 +3,8 @@ import 'reflect-metadata';
 import Container from 'typedi';
 import IExpressServer from './infrastructure/ExpressServer/ExpressServer';
 import ExpressServerImpl from './infrastructure/ExpressServer/ExpressServerImpl';
-import ITypeOrmService from './infrastructure/TypeOrmService/TypeOrmService';
-import TypeOrmServiceImpl from './infrastructure/TypeOrmService/TypeOrmServiceImpl';
+import ITypeOrmService from './services/TypeOrmService';
+import TypeOrmServiceImpl from './services/TypeOrmServiceImpl';
 import './util/env';
 
 async function startApp() {

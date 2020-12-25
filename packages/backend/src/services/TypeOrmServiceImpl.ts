@@ -1,9 +1,9 @@
 import { Inject, Service } from 'typedi';
 import { Connection, EntityTarget, getConnectionManager, ObjectLiteral } from 'typeorm';
-import IConfig from '../Config/Config';
-import ConfigImpl from '../Config/ConfigImpl';
-import ILogger, { Logger } from '../Logger/Logger';
-import LoggerImpl from '../Logger/LoggerImpl';
+import IConfig from '../infrastructure/Config/Config';
+import ConfigImpl from '../infrastructure/Config/ConfigImpl';
+import ILogger, { Logger } from '../infrastructure/Logger/Logger';
+import LoggerImpl from '../infrastructure/Logger/LoggerImpl';
 import ITypeOrmService from './TypeOrmService';
 
 @Service()

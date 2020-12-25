@@ -4,7 +4,7 @@ post:
   description: |
     Logs a user in
   tags:
-    - Links
+    - Auth
   requestBody:
     description: Link information
     content:
@@ -36,29 +36,7 @@ post:
               user:
                 $ref: '../../components/schemas/User.yaml'
     '400':
-      description: Setup required
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - auth
-            properties:
-              auth:
-                type: object
-                description: Parameters for the user to set up their authentication
-                required:
-                  - method
-                  - code
-                properties:
-                  method:
-                    type: string
-                    description: The method the user will need to set up
-                    enum:
-                      - totp
-                  code:
-                    type: string
-                    description: The TOTP secret code
+      $ref: ../../components/responses/ErrorResponse.yaml
     '401':
       $ref: ../../components/responses/ErrorResponse.yaml
 delete:
@@ -68,7 +46,6 @@ delete:
     Logs the current user out
   tags:
     - Auth
-    - Users
   security:
     - cookie: []
   responses:

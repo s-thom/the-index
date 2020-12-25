@@ -356,51 +356,13 @@ export interface PostV2AuthRequestBody {
  *
  */
 export function postV2Auth(
-  props: CustomMutateProps<
-    PostV2AuthResponse,
-    | {
-        /**
-         * Parameters for the user to set up their authentication
-         */
-        auth: {
-          /**
-           * The method the user will need to set up
-           */
-          method: 'totp';
-          /**
-           * The TOTP secret code
-           */
-          code: string;
-        };
-      }
-    | ErrorResponseResponse,
-    void,
-    PostV2AuthRequestBody,
-    void
-  >,
+  props: CustomMutateProps<PostV2AuthResponse, ErrorResponseResponse, void, PostV2AuthRequestBody, void>,
 ) {
-  return customMutate<
-    PostV2AuthResponse,
-    | {
-        /**
-         * Parameters for the user to set up their authentication
-         */
-        auth: {
-          /**
-           * The method the user will need to set up
-           */
-          method: 'totp';
-          /**
-           * The TOTP secret code
-           */
-          code: string;
-        };
-      }
-    | ErrorResponseResponse,
-    void,
-    PostV2AuthRequestBody,
-    void
-  >('POST', `/v2/auth`, props);
+  return customMutate<PostV2AuthResponse, ErrorResponseResponse, void, PostV2AuthRequestBody, void>(
+    'POST',
+    `/v2/auth`,
+    props,
+  );
 }
 
 export interface DeleteV2AuthResponse {

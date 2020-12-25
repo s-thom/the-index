@@ -48,6 +48,7 @@ export function errorToJsonErrors(error: unknown): ErrorType[] {
     if (e instanceof ApiError) {
       return {
         id: e.id,
+        code: e.options.code,
         status: e.status,
         detail: e.options.safeMessage,
         meta: e.options.meta,

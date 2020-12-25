@@ -4,6 +4,10 @@ import IdentifierServiceImpl from '../services/IdentifierServiceImpl';
 
 export interface ApiErrorOptions {
   /**
+   * A code unique to the type of problem
+   */
+  code?: string;
+  /**
    * A message for the error
    */
   message: string;

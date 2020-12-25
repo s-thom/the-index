@@ -2,7 +2,16 @@ import { Request, RequestHandler } from 'express';
 import Container from 'typedi';
 import IUserService from '../../../app/Users/service/UserService';
 import UserServiceImpl from '../../../app/Users/service/UserServiceImpl';
+import User from '../../../app/Users/User';
 import UnauthorizedError from '../../../errors/UnauthorizedError';
+
+declare global {
+  namespace Express {
+    export interface Request {
+      user: User;
+    }
+  }
+}
 
 async function getUserFromSession(req: Request) {
   const { session } = req;
