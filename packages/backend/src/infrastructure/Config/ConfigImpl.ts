@@ -1,5 +1,4 @@
 import { OptionsJson as BodyParserOptions, OptionsUrlencoded as UrlEncodedOptions } from 'body-parser';
-import { CorsOptions } from 'cors';
 import { join } from 'path';
 import { LoggerOptions } from 'pino';
 import { Service } from 'typedi';
@@ -11,17 +10,24 @@ const DEFAULT_PORT = 7000;
 
 @Service()
 export default class ConfigImpl implements IConfig {
-  cors: CorsOptions = {
-    origin: process.env.CORS_ALLOWED,
-  };
-
   express: ExpressConfig = {
     port: parseInt(process.env.SERVER_PORT ?? `${DEFAULT_PORT}`, 10) || DEFAULT_PORT,
-    sessionSecret:
-      process.env.SESSION_SECRET ??
-      (() => {
-        throw new Error('No SESSION_SECRET provided');
-      })(),
+    cors: {
+      origin: process.env.CORS_ALLOWED,
+    },
+    bodyParser: {
+      limit: '1mb',
+    },
+    urlEncoded: {
+      extended: true,
+    },
+    cookieSession: {
+      secret:
+        process.env.SESSION_SECRET ??
+        (() => {
+          throw new Error('No SESSION_SECRET provided');
+        })(),
+    },
   };
 
   logger: LoggerOptions = {

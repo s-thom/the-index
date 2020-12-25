@@ -33,15 +33,15 @@ export default class ExpressServerImpl implements IExpressServer {
     const app = express();
 
     // Standard middleware
-    app.use(json(this.config.bodyParser));
-    app.use(cors(this.config.cors));
+    app.use(json(this.config.express.bodyParser));
+    app.use(cors(this.config.express.cors));
     app.use(compression());
     app.use(expressRequestId());
     app.use(correlator());
     app.use(expressPinoLogger({ logger: this.log.pino }));
-    app.use(urlencoded(this.config.urlEncoded));
+    app.use(urlencoded(this.config.express.urlEncoded));
     app.use(helmet());
-    app.use(cookieSession({ secret: this.config.express.sessionSecret }));
+    app.use(cookieSession(this.config.express.cookieSession));
     app.disable('x-powered-by');
 
     app.use(this.controller.router());
