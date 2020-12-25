@@ -1,10 +1,15 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
+import Container from 'typedi';
 import * as Yup from 'yup';
-import pino from 'pino';
 import ApiError from '../../../errors/ApiError';
+import InvalidRequestError from '../../../errors/InvalidRequestError';
 import MultipleError from '../../../errors/MultipleError';
 import UnknownError from '../../../errors/UnknownError';
-import InvalidRequestError from '../../../errors/InvalidRequestError';
+import ILogger from '../../Logger/Logger';
+import LoggerImpl from '../../Logger/LoggerImpl';
+
+const loggerService = Container.get<ILogger>(LoggerImpl);
+const logger = loggerService.child('Express.asyncRoute');
 
 function transformError(error: Error): ApiError | MultipleError {
   if (error instanceof Yup.ValidationError) {
@@ -22,7 +27,7 @@ function transformError(error: Error): ApiError | MultipleError {
   }
 
   // Error was not a yup error
-  pino().error(error, 'Unknown error in request validation');
+  logger.warn('Unknown error in request validation', { error, message: error.message });
   return new UnknownError({ message: error.message });
 }
 
