@@ -11,7 +11,7 @@
     "url": "git+https://github.com/s-thom/the-index.git"
   },
   "scripts": {
-    "start": "ts-node-dev --respawn src/index.ts | pino-pretty -clt",
+    "start": "ts-node-dev --inspect --respawn src/index.ts | pino-pretty -clt",
     "build": "tsc",
     "test": "dotenv -- jest --watchAll=false --coverage",
     "test:watch": "dotenv -- jest --watchAll --coverage",

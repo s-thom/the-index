@@ -6,6 +6,8 @@ import currentUser from '../../middleware/currentUser';
 import { IController } from '../Controller';
 import IAuthenticationController from './AuthenticationController';
 import AuthenticationControllerImpl from './AuthenticationControllerImpl';
+import ITagController from './TagController';
+import TagControllerImpl from './TagControllerImpl';
 import IUserController from './UserController';
 import UserControllerImpl from './UserControllerImpl';
 
@@ -17,6 +19,7 @@ export default class V2Controller implements IController {
     @Inject(() => LoggerImpl) private readonly logger: ILogger,
     @Inject(() => UserControllerImpl) private readonly userController: IUserController,
     @Inject(() => AuthenticationControllerImpl) private readonly authController: IAuthenticationController,
+    @Inject(() => TagControllerImpl) private readonly tagController: ITagController,
   ) {
     this.log = this.logger.child('V2Controller');
   }
@@ -30,6 +33,7 @@ export default class V2Controller implements IController {
     router.use(currentUser());
 
     router.use('/users', this.userController.router());
+    router.use('/tags', this.tagController.router());
 
     return router;
   }
