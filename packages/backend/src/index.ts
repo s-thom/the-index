@@ -1,3 +1,4 @@
+import pino from 'pino';
 import 'reflect-metadata';
 import Container from 'typedi';
 import IExpressServer from './infrastructure/ExpressServer/ExpressServer';
@@ -14,4 +15,4 @@ async function startApp() {
   await expressApp.start();
 }
 
-startApp().catch((error) => console.error(error));
+startApp().catch((error) => pino().error(error));

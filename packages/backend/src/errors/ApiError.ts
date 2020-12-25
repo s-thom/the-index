@@ -8,9 +8,13 @@ export interface ApiErrorOptions {
    */
   message: string;
   /**
-   * A message suitable for transmission over network or
+   * A message suitable for transmission over network
    */
   safeMessage?: string;
+  /**
+   * Additional information suitable for transmission over network
+   */
+  meta?: object;
 }
 
 const idService = Container.get<IIdentifierService>(IdentifierServiceImpl);

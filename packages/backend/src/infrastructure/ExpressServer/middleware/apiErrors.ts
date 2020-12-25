@@ -50,6 +50,7 @@ export function errorToJsonErrors(error: unknown): ErrorType[] {
         id: e.id,
         status: e.status,
         detail: e.options.safeMessage,
+        meta: e.options.meta,
       };
     }
 
