@@ -13,11 +13,17 @@ export const AuthorizationContext = createContext<AuthorizationContextValue>({
 });
 
 export interface AuthorizationRootProps {
-  fallback?: ReactNode;
+  unauthorized?: ReactNode;
+  loading?: ReactNode;
 }
 
-export default function AuthorizationRoot({ children, fallback }: PropsWithChildren<AuthorizationRootProps>) {
+export default function AuthorizationRoot({
+  children,
+  unauthorized: unauthorizedChildren,
+  loading: loadingChildren,
+}: PropsWithChildren<AuthorizationRootProps>) {
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Add request interceptor to inject authorization header
   useEffect(() => {
@@ -53,8 +59,20 @@ export default function AuthorizationRoot({ children, fallback }: PropsWithChild
   // Do a request to get the state on load
   useEffect(() => {
     axios.defaults.baseURL = process.env.REACT_APP_SERVER_PATH;
-    getV2UserId({ name: 'me' }).catch(() => {});
+    getV2UserId({ name: 'me' }).then(
+      () => {
+        setIsAuthorized(true);
+        setIsLoading(false);
+      },
+      () => {
+        setIsLoading(false);
+      },
+    );
   }, []);
+
+  if (isLoading) {
+    return <>{loadingChildren}</>;
+  }
 
   return (
     <AuthorizationContext.Provider
@@ -63,7 +81,7 @@ export default function AuthorizationRoot({ children, fallback }: PropsWithChild
         setIsAuthorized,
       }}
     >
-      {isAuthorized ? children : fallback}
+      {isAuthorized ? children : unauthorizedChildren}
     </AuthorizationContext.Provider>
   );
 }

@@ -35,7 +35,7 @@ export default function App() {
         <BrowserRouter>
           <Suspense fallback={<LoadingPage />}>
             <AppBody>
-              <AuthorizationRoot fallback={<LoggedOutApp />}>
+              <AuthorizationRoot unauthorized={<LoggedOutApp />} loading={<LoadingPage />}>
                 <LoggedInApp />
               </AuthorizationRoot>
             </AppBody>
