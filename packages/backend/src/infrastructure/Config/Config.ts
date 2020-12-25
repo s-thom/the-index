@@ -5,6 +5,8 @@ import { ConnectionOptions } from 'typeorm';
 
 export interface ExpressConfig {
   port: number;
+  proxy: boolean;
+
   cors: CorsOptions;
   bodyParser: BodyParserOptions;
   urlEncoded: UrlEncodedOptions;

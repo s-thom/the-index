@@ -12,6 +12,7 @@ const DEFAULT_PORT = 7000;
 export default class ConfigImpl implements IConfig {
   express: ExpressConfig = {
     port: parseInt(process.env.SERVER_PORT ?? `${DEFAULT_PORT}`, 10) || DEFAULT_PORT,
+    proxy: !!process.env.EXPRESS_PROXY,
     cors: {
       origin: process.env.CORS_ALLOWED,
     },
@@ -22,6 +23,11 @@ export default class ConfigImpl implements IConfig {
       extended: true,
     },
     cookieSession: {
+      name: 'session',
+      secure: true,
+      httpOnly: true,
+      sameSite: true,
+      maxAge: 1000 * 60 * 60 * 24 * 5,
       secret:
         process.env.SESSION_SECRET ??
         (() => {
