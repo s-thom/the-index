@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { postSearch } from '../../api-types';
+import { getV2Links } from '../../api-types';
 import LinkItem from '../../components/LinkItem';
 import SearchForm, { SearchFormValues } from '../../components/SearchForm';
 import { useArrayParam, useParams, useStringParam } from '../../hooks/useParam';
@@ -60,8 +60,12 @@ export default function SearchPage() {
   const { data: links } = useQuery(
     ['links.search', tags, beforeString, afterString],
     async () => {
-      const response = await postSearch({
-        body: { tags, before: beforeString || undefined, after: afterString || undefined },
+      const response = await getV2Links({
+        queryParams: {
+          tags,
+          before: beforeString || undefined,
+          after: afterString || undefined,
+        },
       });
       return response.links;
     },

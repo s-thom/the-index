@@ -7,37 +7,38 @@ import { render, screen, waitFor } from '../../../util/test-utils';
 jest.mock('qrcode');
 jest.mock('../../../api-types');
 
-const { postLogin } = mockedApi as jest.Mocked<typeof mockedApi>;
+const { postV2Auth } = mockedApi as jest.Mocked<typeof mockedApi>;
 
 describe('LoginPage', () => {
   it('should allow a user to log in', async () => {
     const setIsAuthorized = jest.fn();
-    postLogin
-      .mockResolvedValueOnce({ requires: 'challenge', totp: true })
-      .mockResolvedValueOnce({ token: 'abc', content: { userId: '1' } });
+    postV2Auth
+      .mockRejectedValueOnce({ status: 401, reesponse: { errors: [{}] } })
+      .mockResolvedValueOnce({ user: { name: 'stuart' } });
 
     render(
       <AuthorizationContext.Provider value={{ isAuthorized: false, setIsAuthorized }}>
         <LoginPage />
       </AuthorizationContext.Provider>,
     );
-    expect(screen.getByRole('heading')).toHaveTextContent('Login');
+    const headings = screen.getAllByRole('heading');
+    expect(headings).toHaveLength(2);
+    expect(headings[0]).toHaveTextContent('Login');
 
     // Add username
     const userInput = screen.getByPlaceholderText('Name');
     userEvent.type(userInput, 'stuart');
-    userEvent.type(userInput, '{enter}');
-
-    await waitFor(() => expect(postLogin).toHaveBeenCalledTimes(1));
-    expect(postLogin).toHaveBeenLastCalledWith({ body: { name: 'stuart' } });
-
-    // Add TOTP code
     const totpInput = screen.getByPlaceholderText('Code');
     userEvent.type(totpInput, '000000');
     userEvent.type(totpInput, '{enter}');
 
-    await waitFor(() => expect(postLogin).toHaveBeenCalledTimes(2));
-    expect(postLogin).toHaveBeenLastCalledWith({ body: { name: 'stuart', challenge: 'TOTP', response: '000000' } });
+    await waitFor(() => expect(postV2Auth).toHaveBeenCalledTimes(1));
+    expect(postV2Auth).toHaveBeenLastCalledWith({ body: { name: 'stuart', code: '000000' } });
+
+    userEvent.type(totpInput, '{enter}');
+
+    await waitFor(() => expect(postV2Auth).toHaveBeenCalledTimes(2));
+    expect(postV2Auth).toHaveBeenLastCalledWith({ body: { name: 'stuart', code: '000000' } });
 
     expect(setIsAuthorized).toHaveBeenCalledTimes(1);
     expect(setIsAuthorized).toHaveBeenLastCalledWith(true);
@@ -45,41 +46,41 @@ describe('LoginPage', () => {
 
   it('should request a user to set up their TOTP', async () => {
     const setToken = jest.fn();
-    postLogin
-      .mockResolvedValueOnce({
-        requires: 'setup',
-        code: 'AAAA',
-        url: 'otpauth://totp/stuart?secret=AAAA&issuer=the-index',
+    postV2Auth
+      .mockRejectedValueOnce({
+        status: 401,
+        response: { data: { errors: [{ code: 'auth.totp.setup', meta: { code: 'AAAA' } }] } },
       })
-      .mockResolvedValueOnce({ token: 'abc', content: { userId: '1' } });
+      .mockResolvedValueOnce({ user: { name: 'stuart' } });
 
     render(
       <AuthorizationContext.Provider value={{ isAuthorized: false, setIsAuthorized: setToken }}>
         <LoginPage />
       </AuthorizationContext.Provider>,
     );
-    expect(screen.getByRole('heading')).toHaveTextContent('Login');
+    const headings = screen.getAllByRole('heading');
+    expect(headings).toHaveLength(2);
+    expect(headings[0]).toHaveTextContent('Login');
 
     // Add username
     const userInput = screen.getByPlaceholderText('Name');
     userEvent.type(userInput, 'stuart');
-    userEvent.type(userInput, '{enter}');
-
-    await waitFor(() => expect(postLogin).toHaveBeenCalledTimes(1));
-    expect(postLogin).toHaveBeenLastCalledWith({ body: { name: 'stuart' } });
-
-    // Expect setup
-    expect(screen.queryByText('Set up your authenticator app')).toBeInTheDocument();
-
-    // Add TOTP code
     const totpInput = screen.getByPlaceholderText('Code');
     userEvent.type(totpInput, '000000');
     userEvent.type(totpInput, '{enter}');
 
-    await waitFor(() => expect(postLogin).toHaveBeenCalledTimes(2));
-    expect(postLogin).toHaveBeenLastCalledWith({ body: { name: 'stuart', challenge: 'TOTP', response: '000000' } });
+    await waitFor(() => expect(postV2Auth).toHaveBeenCalledTimes(1));
+    expect(postV2Auth).toHaveBeenLastCalledWith({ body: { name: 'stuart', code: '000000' } });
+
+    // Expect setup
+    expect(screen.queryByText('Set up your authenticator app')).toBeInTheDocument();
+
+    userEvent.type(totpInput, '{enter}');
+
+    await waitFor(() => expect(postV2Auth).toHaveBeenCalledTimes(2));
+    expect(postV2Auth).toHaveBeenLastCalledWith({ body: { name: 'stuart', code: '000000' } });
 
     expect(setToken).toHaveBeenCalledTimes(1);
-    expect(setToken).toHaveBeenLastCalledWith('abc');
+    expect(setToken).toHaveBeenLastCalledWith(true);
   });
 });

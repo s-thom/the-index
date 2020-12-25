@@ -5,18 +5,17 @@ import { render, screen, waitFor } from '../../../util/test-utils';
 
 jest.mock('../../../api-types');
 
-const { getLinksId } = mockedApi as jest.Mocked<typeof mockedApi>;
+const { getV2LinkId } = mockedApi as jest.Mocked<typeof mockedApi>;
 
 describe('LinkDetailPage', () => {
   it('should render when successfully retrieving data', async () => {
-    getLinksId.mockResolvedValue({
+    getV2LinkId.mockResolvedValue({
       link: {
         id: 'A00025E91EEBF5400000',
         url: 'https://example.com',
         tags: ['example'],
         inserted: '2020-01-01T00:00:00.000Z',
         user: {
-          id: 'A000241644191C800000',
           name: 'stuart',
         },
       },
@@ -28,14 +27,14 @@ describe('LinkDetailPage', () => {
       </MemoryRouter>,
     );
 
-    await waitFor(() => expect(getLinksId).toHaveBeenCalledTimes(1));
-    expect(getLinksId).toHaveBeenLastCalledWith({ id: 'test' });
+    await waitFor(() => expect(getV2LinkId).toHaveBeenCalledTimes(1));
+    expect(getV2LinkId).toHaveBeenLastCalledWith({ id: 'test' });
 
     expect(screen.getByRole('heading')).toHaveTextContent('https://example.com');
   });
 
   it('should render when it errors while retrieving data', async () => {
-    getLinksId.mockRejectedValue({});
+    getV2LinkId.mockRejectedValue({});
 
     const { container } = render(
       <MemoryRouter initialEntries={['/test']}>
@@ -43,8 +42,8 @@ describe('LinkDetailPage', () => {
       </MemoryRouter>,
     );
 
-    await waitFor(() => expect(getLinksId).toHaveBeenCalledTimes(1));
-    expect(getLinksId).toHaveBeenLastCalledWith({ id: 'test' });
+    await waitFor(() => expect(getV2LinkId).toHaveBeenCalledTimes(1));
+    expect(getV2LinkId).toHaveBeenLastCalledWith({ id: 'test' });
 
     expect(container).toHaveTextContent(/^There was an error/);
   });

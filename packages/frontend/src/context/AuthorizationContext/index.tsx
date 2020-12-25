@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createContext, PropsWithChildren, ReactNode, useContext, useEffect, useState } from 'react';
-import { getTags } from '../../api-types';
+import { getV2UserId } from '../../api-types';
 
 export interface AuthorizationContextValue {
   isAuthorized: boolean;
@@ -53,7 +53,7 @@ export default function AuthorizationRoot({ children, fallback }: PropsWithChild
   // Do a request to get the state on load
   useEffect(() => {
     axios.defaults.baseURL = process.env.REACT_APP_SERVER_PATH;
-    getTags({}).catch(() => {});
+    getV2UserId({ name: 'me' }).catch(() => {});
   }, []);
 
   return (
