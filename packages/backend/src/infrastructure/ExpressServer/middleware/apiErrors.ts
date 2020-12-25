@@ -60,10 +60,9 @@ export function errorToJsonErrors(error: unknown): ErrorType[] {
     }
 
     const id = idService.next();
-    logger.warn('Error is not an API error. No additional information will be associated with it', {
+    logger.warn('Error is not an API error', {
       error,
       message: (error as any)?.message,
-      stack: (error as any)?.stack,
       id,
     });
     return {
