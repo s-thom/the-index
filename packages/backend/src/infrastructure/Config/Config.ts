@@ -14,6 +14,7 @@ export interface ExpressConfig {
 }
 
 export default interface IConfig {
+  isDev(): boolean;
   express: ExpressConfig;
   logger: LoggerOptions;
   typeOrm: ConnectionOptions;

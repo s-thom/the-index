@@ -51,7 +51,7 @@ export default class ExpressServerImpl implements IExpressServer {
     const { port } = this.config.express;
 
     return createServer(app).listen(port, () => {
-      this.log.info(`Listening on port ${port}`);
+      this.log.info(`Listening on port ${port} (${this.config.isDev() ? 'development' : 'production'})`);
     });
   }
 }
