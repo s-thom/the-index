@@ -5,6 +5,7 @@
   "description": "React frontend for the-index",
   "author": "Stuart Thomson <me@sthom.kiwi>",
   "homepage": "https://the-index.sthom.kiwi/",
+  "proxy": "http://localhost:7000",
   "license": "MIT",
   "repository": {
     "type": "git",
