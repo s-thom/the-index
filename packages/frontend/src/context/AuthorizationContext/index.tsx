@@ -3,13 +3,13 @@ import { createContext, PropsWithChildren, ReactNode, useContext, useEffect, use
 import { getTags } from '../../api-types';
 
 export interface AuthorizationContextValue {
-  authorized: boolean;
-  setToken: (token: string) => void;
+  isAuthorized: boolean;
+  setIsAuthorized: (value: boolean) => void;
 }
 
 export const AuthorizationContext = createContext<AuthorizationContextValue>({
-  authorized: false,
-  setToken: () => {},
+  isAuthorized: false,
+  setIsAuthorized: () => {},
 });
 
 export interface AuthorizationRootProps {
@@ -17,14 +17,14 @@ export interface AuthorizationRootProps {
 }
 
 export default function AuthorizationRoot({ children, fallback }: PropsWithChildren<AuthorizationRootProps>) {
-  const [token, setToken] = useState<string>();
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   // Add request interceptor to inject authorization header
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use((request) => {
-      if (token) {
+      if (isAuthorized) {
         request.withCredentials = true;
-        request.headers = { ...request.headers, Authorization: `Bearer ${token}` };
+        request.headers = { ...request.headers, Authorization: `Bearer ${isAuthorized}` };
       }
 
       return request;
@@ -33,15 +33,13 @@ export default function AuthorizationRoot({ children, fallback }: PropsWithChild
     return () => {
       axios.interceptors.request.eject(requestInterceptor);
     };
-  }, [token]);
+  }, [isAuthorized]);
 
   // Add response interceptor to handle 401 status codes and new tokens
   useEffect(() => {
     const responseInterceptor = axios.interceptors.response.use((response) => {
       if (response.status === 401) {
-        setToken(undefined);
-      } else if (response.headers['x-new-token']) {
-        setToken(response.headers['x-new-token']);
+        setIsAuthorized(false);
       }
 
       return response;
@@ -61,11 +59,11 @@ export default function AuthorizationRoot({ children, fallback }: PropsWithChild
   return (
     <AuthorizationContext.Provider
       value={{
-        authorized: !!token,
-        setToken,
+        isAuthorized,
+        setIsAuthorized,
       }}
     >
-      {token ? children : fallback}
+      {isAuthorized ? children : fallback}
     </AuthorizationContext.Provider>
   );
 }

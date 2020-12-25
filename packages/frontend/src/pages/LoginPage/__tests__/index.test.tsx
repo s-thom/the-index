@@ -11,13 +11,13 @@ const { postLogin } = mockedApi as jest.Mocked<typeof mockedApi>;
 
 describe('LoginPage', () => {
   it('should allow a user to log in', async () => {
-    const setToken = jest.fn();
+    const setIsAuthorized = jest.fn();
     postLogin
       .mockResolvedValueOnce({ requires: 'challenge', totp: true })
       .mockResolvedValueOnce({ token: 'abc', content: { userId: '1' } });
 
     render(
-      <AuthorizationContext.Provider value={{ authorized: false, setToken }}>
+      <AuthorizationContext.Provider value={{ isAuthorized: false, setIsAuthorized }}>
         <LoginPage />
       </AuthorizationContext.Provider>,
     );
@@ -39,8 +39,8 @@ describe('LoginPage', () => {
     await waitFor(() => expect(postLogin).toHaveBeenCalledTimes(2));
     expect(postLogin).toHaveBeenLastCalledWith({ body: { name: 'stuart', challenge: 'TOTP', response: '000000' } });
 
-    expect(setToken).toHaveBeenCalledTimes(1);
-    expect(setToken).toHaveBeenLastCalledWith('abc');
+    expect(setIsAuthorized).toHaveBeenCalledTimes(1);
+    expect(setIsAuthorized).toHaveBeenLastCalledWith(true);
   });
 
   it('should request a user to set up their TOTP', async () => {
@@ -54,7 +54,7 @@ describe('LoginPage', () => {
       .mockResolvedValueOnce({ token: 'abc', content: { userId: '1' } });
 
     render(
-      <AuthorizationContext.Provider value={{ authorized: false, setToken }}>
+      <AuthorizationContext.Provider value={{ isAuthorized: false, setIsAuthorized: setToken }}>
         <LoginPage />
       </AuthorizationContext.Provider>,
     );

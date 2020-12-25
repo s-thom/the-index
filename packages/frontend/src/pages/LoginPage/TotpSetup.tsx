@@ -1,13 +1,16 @@
 import qr from 'qrcode';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 interface TotpSetupProps {
   code: string;
-  url: string;
 }
 
-export default function TotpSetup({ code, url }: TotpSetupProps) {
+export default function TotpSetup({ code }: TotpSetupProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const url = useMemo(() => {
+    return `otpauth://totp/the-index?secret=${code}`;
+  }, [code]);
 
   useEffect(() => {
     if (canvasRef.current) {
