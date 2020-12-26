@@ -50,7 +50,7 @@ export default function LoginForm({ onSubmit = noop, challenge }: LoginFormProps
           <input
             name="code"
             placeholder="Code"
-            ref={register({ required: true })}
+            ref={register}
             onKeyPress={onInputKeyPress}
             autoComplete="one-time-code"
           />
