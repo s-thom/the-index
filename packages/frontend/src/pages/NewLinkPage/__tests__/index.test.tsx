@@ -13,7 +13,7 @@ describe('NewLinkPage', () => {
     postV2Links.mockResolvedValue({
       link: {
         id: '1',
-        inserted: '2020-01-01T00:00:00.000Z',
+        created: '2020-01-01T00:00:00.000Z',
         url: 'https://example/com',
         tags: ['suggestion'],
         user: { name: 'stuart' },

@@ -14,7 +14,7 @@ describe('LinkDetailPage', () => {
         id: 'A00025E91EEBF5400000',
         url: 'https://example.com',
         tags: ['example'],
-        inserted: '2020-01-01T00:00:00.000Z',
+        created: '2020-01-01T00:00:00.000Z',
         user: {
           name: 'stuart',
         },
