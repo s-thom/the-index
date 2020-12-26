@@ -1,7 +1,7 @@
 import { ExtSnowflakeGenerator } from 'extended-snowflake';
 import { Inject, Service } from 'typedi';
-import ILogger, { Logger } from '../infrastructure/Logger/Logger';
-import LoggerImpl from '../infrastructure/Logger/LoggerImpl';
+import ILoggerService, { Logger } from '../LoggerService/LoggerService';
+import LoggerServiceImpl from '../LoggerService/LoggerServiceImpl';
 import IIdentifierService from './IdentifierService';
 
 @Service()
@@ -10,7 +10,7 @@ export default class IdentifierServiceImpl implements IIdentifierService {
 
   private readonly idGenerator = new ExtSnowflakeGenerator(0);
 
-  constructor(@Inject(() => LoggerImpl) private readonly logger: ILogger) {
+  constructor(@Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService) {
     this.log = this.logger.child('IdentifierService');
   }
 

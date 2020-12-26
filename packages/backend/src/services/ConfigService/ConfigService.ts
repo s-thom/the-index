@@ -13,7 +13,7 @@ export interface ExpressConfig {
   cookieSession: CookieSessionInterfaces.CookieSessionOptions;
 }
 
-export default interface IConfig {
+export default interface IConfigService {
   isDev(): boolean;
   express: ExpressConfig;
   logger: LoggerOptions;

@@ -1,6 +1,6 @@
 import { Inject, Service } from 'typedi';
-import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
-import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
+import ILoggerService, { Logger } from '../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
 import User from '../../Users/User';
 import ITagRepository from '../repository/TagRepository';
 import TagRepositoryImpl from '../repository/TagRepositoryImpl';
@@ -12,7 +12,7 @@ export default class TagServiceImpl implements ITagService {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => TagRepositoryImpl) private readonly tagRepository: ITagRepository,
   ) {
     this.log = this.logger.child('TagService');

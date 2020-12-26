@@ -14,8 +14,8 @@ import Link from '../../../../app/Links/Link';
 import LinkService from '../../../../app/Links/service/LinkService';
 import LinkServiceImpl from '../../../../app/Links/service/LinkServiceImpl';
 import User from '../../../../app/Users/User';
-import ILogger, { Logger } from '../../../Logger/Logger';
-import LoggerImpl from '../../../Logger/LoggerImpl';
+import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
 import asyncRoute from '../../middleware/asyncRoute';
 import LinkController from './LinkController';
 
@@ -24,7 +24,7 @@ export default class LinkControllerImpl implements LinkController {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => LinkServiceImpl) private readonly linkService: LinkService,
   ) {
     this.log = this.logger.child('LinkController');

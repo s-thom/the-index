@@ -3,17 +3,17 @@ import Container from 'typedi';
 import { Error as ErrorType } from '../../../api-types';
 import ApiError from '../../../errors/ApiError';
 import MultipleError from '../../../errors/MultipleError';
-import IIdentifierService from '../../../services/IdentifierService';
-import IdentifierServiceImpl from '../../../services/IdentifierServiceImpl';
-import ILogger from '../../Logger/Logger';
-import LoggerImpl from '../../Logger/LoggerImpl';
+import IIdentifierService from '../../../services/IdentifierService/IdentifierService';
+import IdentifierServiceImpl from '../../../services/IdentifierService/IdentifierServiceImpl';
+import ILoggerService from '../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
 
 interface JsonApiErrorsOptions {
   defaultStatus: number;
 }
 
 const idService = Container.get<IIdentifierService>(IdentifierServiceImpl);
-const loggerService = Container.get<ILogger>(LoggerImpl);
+const loggerService = Container.get<ILoggerService>(LoggerServiceImpl);
 const logger = loggerService.child('Express.apiErrors');
 
 /**

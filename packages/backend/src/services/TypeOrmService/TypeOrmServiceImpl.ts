@@ -1,9 +1,9 @@
 import { Inject, Service } from 'typedi';
 import { Connection, EntityTarget, getConnectionManager, ObjectLiteral } from 'typeorm';
-import IConfig from '../infrastructure/Config/Config';
-import ConfigImpl from '../infrastructure/Config/ConfigImpl';
-import ILogger, { Logger } from '../infrastructure/Logger/Logger';
-import LoggerImpl from '../infrastructure/Logger/LoggerImpl';
+import IConfigService from '../ConfigService/ConfigService';
+import ConfigServiceImpl from '../ConfigService/ConfigServiceImpl';
+import ILoggerService, { Logger } from '../LoggerService/LoggerService';
+import LoggerServiceImpl from '../LoggerService/LoggerServiceImpl';
 import ITypeOrmService from './TypeOrmService';
 
 @Service()
@@ -13,8 +13,8 @@ export default class TypeOrmServiceImpl implements ITypeOrmService {
   private connection: Connection | undefined;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
-    @Inject(() => ConfigImpl) private readonly config: IConfig,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
+    @Inject(() => ConfigServiceImpl) private readonly config: IConfigService,
   ) {
     this.log = this.logger.child('TypeOrmService');
   }

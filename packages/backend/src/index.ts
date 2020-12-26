@@ -2,12 +2,12 @@ import 'reflect-metadata';
 import Container from 'typedi';
 import IExpressServer from './infrastructure/ExpressServer/ExpressServer';
 import ExpressServerImpl from './infrastructure/ExpressServer/ExpressServerImpl';
-import ILogger from './infrastructure/Logger/Logger';
-import LoggerImpl from './infrastructure/Logger/LoggerImpl';
-import ITypeOrmService from './services/TypeOrmService';
-import TypeOrmServiceImpl from './services/TypeOrmServiceImpl';
+import ILoggerService from './services/LoggerService/LoggerService';
+import LoggerServiceImpl from './services/LoggerService/LoggerServiceImpl';
+import ITypeOrmService from './services/TypeOrmService/TypeOrmService';
+import TypeOrmServiceImpl from './services/TypeOrmService/TypeOrmServiceImpl';
 
-const loggerService = Container.get<ILogger>(LoggerImpl);
+const loggerService = Container.get<ILoggerService>(LoggerServiceImpl);
 const logger = loggerService.child('app');
 
 async function startApp() {

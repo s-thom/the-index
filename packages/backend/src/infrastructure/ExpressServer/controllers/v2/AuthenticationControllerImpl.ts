@@ -5,10 +5,10 @@ import { DeleteV2AuthResponse, PostV2AuthRequestBody, PostV2AuthResponse } from 
 import IAuthService from '../../../../app/Auth/service/AuthService';
 import AuthServiceImpl from '../../../../app/Auth/service/AuthServiceImpl';
 import UnauthorizedError from '../../../../errors/UnauthorizedError';
-import IIdentifierService from '../../../../services/IdentifierService';
-import IdentifierServiceImpl from '../../../../services/IdentifierServiceImpl';
-import ILogger, { Logger } from '../../../Logger/Logger';
-import LoggerImpl from '../../../Logger/LoggerImpl';
+import IIdentifierService from '../../../../services/IdentifierService/IdentifierService';
+import IdentifierServiceImpl from '../../../../services/IdentifierService/IdentifierServiceImpl';
+import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
 import asyncRoute from '../../middleware/asyncRoute';
 import IAuthenticationController from './AuthenticationController';
 
@@ -17,7 +17,7 @@ export default class AuthenticationControllerImpl implements IAuthenticationCont
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => AuthServiceImpl) private readonly authService: IAuthService,
     @Inject(() => IdentifierServiceImpl) private readonly idService: IIdentifierService,
   ) {

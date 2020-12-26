@@ -8,10 +8,10 @@ import expressRequestId from 'express-request-id';
 import helmet from 'helmet';
 import { createServer } from 'http';
 import { Inject, Service } from 'typedi';
-import IConfig from '../Config/Config';
-import ConfigImpl from '../Config/ConfigImpl';
-import ILogger, { Logger } from '../Logger/Logger';
-import LoggerImpl from '../Logger/LoggerImpl';
+import IConfigService from '../../services/ConfigService/ConfigService';
+import ConfigServiceImpl from '../../services/ConfigService/ConfigServiceImpl';
+import ILoggerService, { Logger } from '../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../services/LoggerService/LoggerServiceImpl';
 import IController from './controllers/Controller';
 import ControllerImpl from './controllers/ControllerImpl';
 import IExpressServer from './ExpressServer';
@@ -22,8 +22,8 @@ export default class ExpressServerImpl implements IExpressServer {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => ConfigImpl) private readonly config: IConfig,
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => ConfigServiceImpl) private readonly config: IConfigService,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => ControllerImpl) private readonly controller: IController,
   ) {
     this.log = this.logger.child('ExpressServer');

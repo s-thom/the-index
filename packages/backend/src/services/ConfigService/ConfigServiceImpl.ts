@@ -3,12 +3,12 @@ import { join } from 'path';
 import { LoggerOptions } from 'pino';
 import { Service } from 'typedi';
 import { ConnectionOptions } from 'typeorm';
-import IConfig, { ExpressConfig } from './Config';
+import IConfigService, { ExpressConfig } from './ConfigService';
 
 const DEFAULT_PORT = 7000;
 
 @Service()
-export default class ConfigImpl implements IConfig {
+export default class ConfigServiceImpl implements IConfigService {
   isDev() {
     return process.env.NODE_ENV === 'development';
   }

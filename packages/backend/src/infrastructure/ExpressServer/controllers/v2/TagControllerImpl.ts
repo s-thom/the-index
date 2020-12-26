@@ -5,8 +5,8 @@ import { GetV2TagsQueryParams, GetV2TagsResponse } from '../../../../api-types';
 import ITagService from '../../../../app/Tags/service/TagService';
 import TagServiceImpl from '../../../../app/Tags/service/TagServiceImpl';
 import User from '../../../../app/Users/User';
-import ILogger, { Logger } from '../../../Logger/Logger';
-import LoggerImpl from '../../../Logger/LoggerImpl';
+import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
 import asyncRoute from '../../middleware/asyncRoute';
 import ITagController from './TagController';
 
@@ -15,7 +15,7 @@ export default class TagControllerImpl implements ITagController {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => TagServiceImpl) private readonly tagService: ITagService,
   ) {
     this.log = this.logger.child('TagController');

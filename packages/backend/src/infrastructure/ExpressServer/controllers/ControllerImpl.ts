@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Inject, Service } from 'typedi';
-import ILogger, { Logger } from '../../Logger/Logger';
-import LoggerImpl from '../../Logger/LoggerImpl';
+import ILoggerService, { Logger } from '../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
 import IController from './Controller';
 import V2ControllerImpl from './v2';
 
@@ -10,7 +10,7 @@ export default class ControllerImpl implements IController {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => V2ControllerImpl) private readonly v2Controller: IController,
   ) {
     this.log = this.logger.child('Controller');

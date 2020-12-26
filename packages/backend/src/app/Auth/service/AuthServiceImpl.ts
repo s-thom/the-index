@@ -1,9 +1,9 @@
 import { Inject, Service } from 'typedi';
 import UnauthorizedError from '../../../errors/UnauthorizedError';
-import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
-import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
-import ITotpService from '../../../services/TotpService';
-import TotpServiceImpl from '../../../services/TotpServiceImpl';
+import ILoggerService, { Logger } from '../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
+import ITotpService from '../../../services/TotpService/TotpService';
+import TotpServiceImpl from '../../../services/TotpService/TotpServiceImpl';
 import IUserService from '../../Users/service/UserService';
 import UserServiceImpl from '../../Users/service/UserServiceImpl';
 import User from '../../Users/User';
@@ -19,7 +19,7 @@ export default class AuthServiceImpl implements IAuthService {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => UserServiceImpl) private readonly userService: IUserService,
     @Inject(() => AuthRepositoryImpl) private readonly authRepository: IAuthRepository,
     @Inject(() => TotpServiceImpl) private readonly totpService: ITotpService,

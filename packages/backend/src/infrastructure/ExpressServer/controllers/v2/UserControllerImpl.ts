@@ -5,8 +5,8 @@ import { GetV2UserIdPathParams, GetV2UserIdResponse } from '../../../../api-type
 import User from '../../../../app/Users/User';
 import IUserService from '../../../../app/Users/service/UserService';
 import UserServiceImpl from '../../../../app/Users/service/UserServiceImpl';
-import ILogger, { Logger } from '../../../Logger/Logger';
-import LoggerImpl from '../../../Logger/LoggerImpl';
+import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
 import IUserController from './UserController';
 import asyncRoute from '../../middleware/asyncRoute';
 
@@ -15,7 +15,7 @@ export default class UserControllerImpl implements IUserController {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => UserServiceImpl) private readonly userService: IUserService,
   ) {
     this.log = this.logger.child('UserController');

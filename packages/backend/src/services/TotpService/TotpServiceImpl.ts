@@ -1,14 +1,14 @@
 import * as otplib from 'otplib';
 import { Inject, Service } from 'typedi';
-import ILogger, { Logger } from '../infrastructure/Logger/Logger';
-import LoggerImpl from '../infrastructure/Logger/LoggerImpl';
+import ILoggerService, { Logger } from '../LoggerService/LoggerService';
+import LoggerServiceImpl from '../LoggerService/LoggerServiceImpl';
 import ITotpService from './TotpService';
 
 @Service()
 export default class TotpServiceImpl implements ITotpService {
   private readonly log: Logger;
 
-  constructor(@Inject(() => LoggerImpl) private readonly logger: ILogger) {
+  constructor(@Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService) {
     this.log = this.logger.child('TotpService');
   }
 

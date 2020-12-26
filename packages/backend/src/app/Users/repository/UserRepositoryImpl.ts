@@ -1,10 +1,10 @@
 import { Inject, Service } from 'typedi';
 import { Repository } from 'typeorm';
 import NotFoundError from '../../../errors/NotFoundError';
-import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
-import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
-import ITypeOrmService from '../../../services/TypeOrmService';
-import TypeOrmServiceImpl from '../../../services/TypeOrmServiceImpl';
+import ILoggerService, { Logger } from '../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
+import ITypeOrmService from '../../../services/TypeOrmService/TypeOrmService';
+import TypeOrmServiceImpl from '../../../services/TypeOrmService/TypeOrmServiceImpl';
 import User from '../User';
 import UserModel from './UserModel.entity';
 import IUserRepository from './UserRepository';
@@ -16,7 +16,7 @@ export default class UserRepositoryImpl implements IUserRepository {
   private readonly repository: Repository<UserModel>;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => TypeOrmServiceImpl) private readonly typeOrm: ITypeOrmService,
   ) {
     this.log = this.logger.child('UserRepository');

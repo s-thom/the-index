@@ -1,6 +1,6 @@
 import Container from 'typedi';
-import IIdentifierService from '../services/IdentifierService';
-import IdentifierServiceImpl from '../services/IdentifierServiceImpl';
+import IIdentifierService from '../services/IdentifierService/IdentifierService';
+import IdentifierServiceImpl from '../services/IdentifierService/IdentifierServiceImpl';
 
 export interface ApiErrorOptions {
   /**

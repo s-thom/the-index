@@ -2,9 +2,9 @@
 import correlator from 'express-correlation-id';
 import Pino, { Logger as PinoLogger } from 'pino';
 import { Inject, Service } from 'typedi';
-import IConfig from '../Config/Config';
-import ConfigImpl from '../Config/ConfigImpl';
-import ILogger, { Logger } from './Logger';
+import IConfigService from '../ConfigService/ConfigService';
+import ConfigServiceImpl from '../ConfigService/ConfigServiceImpl';
+import ILoggerService, { Logger } from './LoggerService';
 
 class PinoWrapper implements Logger {
   constructor(readonly pino: PinoLogger) {}
@@ -35,10 +35,10 @@ class PinoWrapper implements Logger {
 }
 
 @Service()
-export default class LoggerImpl implements ILogger {
+export default class LoggerServiceImpl implements ILoggerService {
   private readonly logger: PinoLogger;
 
-  constructor(@Inject(() => ConfigImpl) private readonly config: IConfig) {
+  constructor(@Inject(() => ConfigServiceImpl) private readonly config: IConfigService) {
     this.logger = Pino({
       ...config.logger,
       mixin: () => ({ correlationId: correlator.getId() }),

@@ -1,9 +1,9 @@
 import { Inject, Service } from 'typedi';
 import { Repository } from 'typeorm';
-import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
-import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
-import ITypeOrmService from '../../../services/TypeOrmService';
-import TypeOrmServiceImpl from '../../../services/TypeOrmServiceImpl';
+import ILoggerService, { Logger } from '../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
+import ITypeOrmService from '../../../services/TypeOrmService/TypeOrmService';
+import TypeOrmServiceImpl from '../../../services/TypeOrmService/TypeOrmServiceImpl';
 import UserModel from '../../Users/repository/UserModel.entity';
 import User from '../../Users/User';
 import UserAuth from '../UserAuth';
@@ -17,7 +17,7 @@ export default class AuthRepositoryImpl implements IAuthRepository {
   private readonly repository: Repository<UserAuthModel>;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => TypeOrmServiceImpl) private readonly typeOrm: ITypeOrmService,
   ) {
     this.log = this.logger.child('AuthRepository');

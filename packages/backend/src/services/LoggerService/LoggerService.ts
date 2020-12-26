@@ -15,7 +15,7 @@ export interface Logger {
   pino: PinoLogger;
 }
 
-export default interface ILogger {
+export default interface ILoggerService {
   get(): Logger;
   child(name: string): Logger;
 }

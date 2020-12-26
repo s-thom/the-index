@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Inject, Service } from 'typedi';
-import ILogger, { Logger } from '../../../Logger/Logger';
-import LoggerImpl from '../../../Logger/LoggerImpl';
+import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
 import currentUser from '../../middleware/currentUser';
 import IController from '../Controller';
 import AuthenticationControllerImpl from './AuthenticationControllerImpl';
@@ -14,7 +14,7 @@ export default class V2Controller implements IController {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => UserControllerImpl) private readonly userController: IController,
     @Inject(() => AuthenticationControllerImpl) private readonly authController: IController,
     @Inject(() => TagControllerImpl) private readonly tagController: IController,

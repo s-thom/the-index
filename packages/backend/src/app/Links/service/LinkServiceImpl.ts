@@ -1,8 +1,8 @@
 import { Inject, Service } from 'typedi';
-import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
-import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
-import IIdentifierService from '../../../services/IdentifierService';
-import IdentifierServiceImpl from '../../../services/IdentifierServiceImpl';
+import ILoggerService, { Logger } from '../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
+import IIdentifierService from '../../../services/IdentifierService/IdentifierService';
+import IdentifierServiceImpl from '../../../services/IdentifierService/IdentifierServiceImpl';
 import User from '../../Users/User';
 import Link from '../Link';
 import ILinkRepository from '../repository/LinkRepository';
@@ -14,7 +14,7 @@ export default class LinkServiceImpl implements ILinkService {
   private readonly log: Logger;
 
   constructor(
-    @Inject(() => LoggerImpl) private readonly logger: ILogger,
+    @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => LinkRepositoryImpl) private readonly linkRepository: ILinkRepository,
     @Inject(() => IdentifierServiceImpl) private readonly idService: IIdentifierService,
   ) {

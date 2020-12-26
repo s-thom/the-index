@@ -5,10 +5,10 @@ import ApiError from '../../../errors/ApiError';
 import InvalidRequestError from '../../../errors/InvalidRequestError';
 import MultipleError from '../../../errors/MultipleError';
 import UnknownError from '../../../errors/UnknownError';
-import ILogger from '../../Logger/Logger';
-import LoggerImpl from '../../Logger/LoggerImpl';
+import ILoggerService from '../../../services/LoggerService/LoggerService';
+import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
 
-const loggerService = Container.get<ILogger>(LoggerImpl);
+const loggerService = Container.get<ILoggerService>(LoggerServiceImpl);
 const logger = loggerService.child('Express.asyncRoute');
 
 function transformError(error: Error, type: string): ApiError | MultipleError {
