@@ -10,7 +10,7 @@ import TagServiceImpl from '../../Tags/service/TagServiceImpl';
 import User from '../../Users/User';
 import Link from '../Link';
 import LinkModel from './LinkModel.entity';
-import ILinkRepository from './LinkRepository';
+import ILinkRepository, { LinkSearchOptions } from './LinkRepository';
 
 @Service()
 export default class LinkRepositoryImpl implements ILinkRepository {
@@ -31,6 +31,7 @@ export default class LinkRepositoryImpl implements ILinkRepository {
     return new Link({
       ...model,
       tags: model.tags.map((tag) => tag.name),
+      user: new User(model.user),
     });
   }
 
@@ -69,16 +70,37 @@ export default class LinkRepositoryImpl implements ILinkRepository {
     return this.resolve(model);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async search(user: User, tags: string[], dateRange: { min?: Date; max?: Date }) {
-    // this.log.trace('Searching links', {
-    //   user: user.name,
-    //   tags,
-    //   min: dateRange.min?.toISOString(),
-    //   max: dateRange.max?.toISOString(),
-    // });
-    // const models = await this.repository.createQueryBuilder().innerJoin(TagModel, 'tags');
-    // TODO:
-    return [];
+  async search(user: User, { tags, created, limit = 10 }: LinkSearchOptions): Promise<Link[]> {
+    const { min, max } = created ?? {};
+
+    // Create query builder for getting all links matching the query parameters
+    let queryBuilder = this.repository
+      .createQueryBuilder()
+      .distinct(true)
+      .innerJoin('LinkModel.user', 'u')
+      .innerJoin('LinkModel.tags', 't')
+      .where('u.name = :name', { name: user.name })
+      .andWhere('t.name IN (:...tags)', { tags });
+
+    if (min) {
+      queryBuilder = queryBuilder.andWhere('where LinkModel.created >= datetime(:min)', { min: min.toISOString() });
+    }
+    if (max) {
+      queryBuilder = queryBuilder.andWhere('where LinkModel.created <= datetime(:max)', { max: max.toISOString() });
+    }
+
+    queryBuilder = queryBuilder.groupBy('LinkModel.id').orderBy('count(t.id) DESC, LinkModel.id', 'DESC').limit(limit);
+
+    const matchingLinks = await queryBuilder.getMany();
+    const matchingIds = matchingLinks.map((link) => link.id);
+
+    const links = await this.repository.findByIds(matchingIds, { relations: ['user', 'tags'] });
+
+    // Links array from the second query is not sorted, so must be sorted manually.
+    // This isn't *the most* efficient, but query set lengths should be relatively small.
+    // Use of `.indexOf()` should be OK, as all link IDs were grabbed from the actual data being used.
+    links.sort((a, b) => matchingIds.indexOf(a.id) - matchingIds.indexOf(b.id));
+
+    return Promise.all(links.map((link) => this.resolve(link)));
   }
 }

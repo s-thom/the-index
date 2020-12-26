@@ -7,7 +7,7 @@ import User from '../../Users/User';
 import Link from '../Link';
 import ILinkRepository from '../repository/LinkRepository';
 import LinkRepositoryImpl from '../repository/LinkRepositoryImpl';
-import ILinkService from './LinkService';
+import ILinkService, { LinkSearchOptions } from './LinkService';
 
 @Service()
 export default class LinkServiceImpl implements ILinkService {
@@ -29,5 +29,9 @@ export default class LinkServiceImpl implements ILinkService {
     const reference = this.idService.next();
     const newLink = this.linkRepository.insert(user, { ...link, reference });
     return newLink;
+  }
+
+  async search(user: User, options: LinkSearchOptions): Promise<Link[]> {
+    return this.linkRepository.search(user, options);
   }
 }

@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import {
   GetV2LinkIdPathParams,
   GetV2LinkIdResponse,
+  GetV2LinksQueryParams,
+  GetV2LinksResponse,
   Link as ApiLink,
   PostV2LinksRequestBody,
   PostV2LinksResponse,
@@ -54,8 +56,46 @@ export default class LinkControllerImpl implements LinkController {
     };
   }
 
+  async search(currentUser: User, queryParams: GetV2LinksQueryParams): Promise<GetV2LinksResponse> {
+    const links = await this.linkService.search(currentUser, {
+      tags: queryParams.tags ?? [],
+      created: {
+        min: queryParams.after ? new Date(queryParams.after) : undefined,
+        max: queryParams.before ? new Date(queryParams.before) : undefined,
+      },
+    });
+
+    return {
+      links: links.map((link) => this.serialiseLink(link)),
+    };
+  }
+
   router() {
     const router = Router();
+
+    router.get(
+      '/',
+      asyncRoute<unknown, GetV2LinksResponse, unknown, GetV2LinksQueryParams>(
+        {
+          query: Yup.object()
+            .shape({
+              tags: Yup.array()
+                .transform((value: unknown, originalValue: unknown) => {
+                  if (typeof originalValue === 'string') {
+                    return [originalValue];
+                  }
+                  return originalValue;
+                })
+                .of(Yup.string().required())
+                .notRequired(),
+              before: Yup.string().notRequired(),
+              after: Yup.string().notRequired(),
+            })
+            .defined(),
+        },
+        (req) => this.search(req.user, req.query),
+      ),
+    );
 
     router.post(
       '/',
