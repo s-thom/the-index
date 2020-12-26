@@ -7,7 +7,10 @@ beforeAll(() => {
   env = process.env;
 });
 beforeEach(() => {
-  process.env = { ...env };
+  process.env = {
+    SESSION_SECRET: 'secret-is-required',
+    ...env,
+  };
 });
 afterAll(() => {
   process.env = env;
