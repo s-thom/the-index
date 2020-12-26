@@ -15,8 +15,6 @@ export default class IdentifierServiceImpl implements IIdentifierService {
   }
 
   next() {
-    const id = this.idGenerator.next();
-    this.log.trace('Generated identifier', { id });
-    return id;
+    return this.idGenerator.next();
   }
 }
