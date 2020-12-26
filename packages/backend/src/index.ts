@@ -6,7 +6,6 @@ import ILogger from './infrastructure/Logger/Logger';
 import LoggerImpl from './infrastructure/Logger/LoggerImpl';
 import ITypeOrmService from './services/TypeOrmService';
 import TypeOrmServiceImpl from './services/TypeOrmServiceImpl';
-import './old/util/env';
 
 const loggerService = Container.get<ILogger>(LoggerImpl);
 const logger = loggerService.child('app');
