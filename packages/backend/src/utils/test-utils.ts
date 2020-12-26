@@ -1,5 +1,4 @@
 import { join } from 'path';
-import { getConnectionManager } from 'typeorm';
 import IConfigService from '../services/ConfigService/ConfigService';
 import ILoggerService, { Logger } from '../services/LoggerService/LoggerService';
 
@@ -37,15 +36,4 @@ beforeEach(() => {
   // Mock logger service methods
   mockLoggerService.get.mockReturnValue(mockLogger);
   mockLoggerService.child.mockReturnValue(mockLogger);
-});
-
-afterEach(async () => {
-  // Clean up in-memory database
-  const connectionManager = getConnectionManager();
-  if (connectionManager.has('test')) {
-    const connection = connectionManager.get('test');
-    if (connection.isConnected) {
-      await connection.close();
-    }
-  }
 });

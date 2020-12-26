@@ -55,6 +55,7 @@
     "@types/express-correlation-id": "^1.2.2",
     "@types/express-pino-logger": "^4.0.2",
     "@types/express-request-id": "^1.4.1",
+    "@types/faker": "^5.1.5",
     "@types/helmet": "^4.0.0",
     "@types/jest": "^26.0.19",
     "@types/jsonwebtoken": "^8.5.0",
@@ -68,6 +69,7 @@
     "pino-pretty": "^4.3.0",
     "restful-react": "^15.1.3",
     "ts-jest": "^26.4.4",
-    "ts-node-dev": "^1.1.1"
+    "ts-node-dev": "^1.1.1",
+    "typeorm-seeding": "^1.6.1"
   }
 }

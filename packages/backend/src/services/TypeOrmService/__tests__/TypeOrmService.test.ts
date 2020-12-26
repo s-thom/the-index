@@ -1,6 +1,19 @@
-import { Connection, Repository } from 'typeorm';
+import { Connection, Repository, getConnectionManager } from 'typeorm';
 import { mockConfigService, mockLoggerService } from '../../../utils/test-utils';
 import TypeOrmServiceImpl from '../TypeOrmServiceImpl';
+
+// This is a clone of the cleanup effect in `src/utils/test-db-utils`, and should stay in sync
+afterEach(async () => {
+  // Clean up in-memory database
+  const connectionManager = getConnectionManager();
+  if (connectionManager.has('test')) {
+    const connection = connectionManager.get('test');
+    if (connection.isConnected) {
+      await connection.dropDatabase();
+      await connection.close();
+    }
+  }
+});
 
 describe('TypeOrmServiceImpl', () => {
   describe('start', () => {

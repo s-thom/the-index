@@ -10,7 +10,7 @@ import {
 import UserModel from '../../Users/repository/UserModel.entity';
 
 @Entity({ name: 'user_auth' })
-export default class LinkModel {
+export default class UserAuthModel {
   @PrimaryGeneratedColumn()
   id!: number;
 
