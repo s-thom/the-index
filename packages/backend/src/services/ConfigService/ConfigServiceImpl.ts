@@ -1,4 +1,3 @@
-import { OptionsJson as BodyParserOptions, OptionsUrlencoded as UrlEncodedOptions } from 'body-parser';
 import { join } from 'path';
 import { LoggerOptions } from 'pino';
 import { Service } from 'typedi';
@@ -47,23 +46,11 @@ export default class ConfigServiceImpl implements IConfigService {
     },
   };
 
-  bodyParser: BodyParserOptions = {
-    limit: '1mb',
-  };
-
-  urlEncoded: UrlEncodedOptions = {
-    extended: true,
-  };
-
   typeOrm: ConnectionOptions = {
     name: 'default',
     type: 'sqlite',
-    database:
-      process.env.DATABASE_NAME ??
-      (() => {
-        throw new Error('No DATABASE_NAME provided');
-      })(),
+    database: process.env.DATABASE_NAME ?? './the-index.sqlite',
     entities: [join(__dirname, '/../../**/*.entity.{ts,js}')],
-    synchronize: !process.env.DATABASE_SYNCHRONIZE?.match(/false/i),
+    synchronize: process.env.DATABASE_SYNCHRONIZE ? !process.env.DATABASE_SYNCHRONIZE.match(/false/i) : false,
   };
 }
