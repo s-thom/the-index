@@ -7,7 +7,7 @@ import TypeOrmServiceImpl from '../../../services/TypeOrmServiceImpl';
 import User from '../../Users/User';
 import Tag from '../Tag';
 import TagModel from './TagModel.entity';
-import ITagRepository from './TagRepository';
+import ITagRepository, { GetTagsOptions } from './TagRepository';
 
 @Service()
 export default class TagRepositoryImpl implements ITagRepository {
@@ -27,17 +27,29 @@ export default class TagRepositoryImpl implements ITagRepository {
     return new Tag(model);
   }
 
-  async getUserTags(user: User, exclude = [] as string[], limit = 10): Promise<Tag[]> {
-    const tags = await this.repository
+  async getUserTags(user: User, { allowList, blockList, limit }: GetTagsOptions = {}): Promise<Tag[]> {
+    const finalLimit = limit ?? (allowList ? allowList.length : 10);
+
+    let queryBuilder = this.repository
       .createQueryBuilder()
       .innerJoinAndSelect('TagModel.user', 'u')
-      .innerJoin('links_tags_tags', 'ltt', 'ltt.tagsId = TagModel.id')
-      .where('u.name = :name', { name: user.name })
-      .andWhere('TagModel.name NOT IN (:exclude)', { exclude })
+      .leftJoin('links_tags_tags', 'ltt', 'ltt.tagsId = TagModel.id')
+      .where('u.name = :name', { name: user.name });
+
+    // Add allow/block list filtering
+    if (allowList) {
+      queryBuilder = queryBuilder.andWhere('TagModel.name IN (:...allowList)', { allowList });
+    }
+    if (blockList) {
+      queryBuilder = queryBuilder.andWhere('TagModel.name NOT IN (:...blockList)', { blockList });
+    }
+
+    queryBuilder = queryBuilder
       .groupBy('TagModel.id')
       .orderBy('count(ltt.linksId) DESC, TagModel.name')
-      .limit(limit)
-      .getMany();
+      .limit(finalLimit);
+
+    const tags = await queryBuilder.getMany();
 
     return Promise.all(tags.map((tag) => this.resolve(tag)));
   }

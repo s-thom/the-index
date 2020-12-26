@@ -5,6 +5,8 @@ import ILogger, { Logger } from '../../../infrastructure/Logger/Logger';
 import LoggerImpl from '../../../infrastructure/Logger/LoggerImpl';
 import ITypeOrmService from '../../../services/TypeOrmService';
 import TypeOrmServiceImpl from '../../../services/TypeOrmServiceImpl';
+import ITagService from '../../Tags/service/TagService';
+import TagServiceImpl from '../../Tags/service/TagServiceImpl';
 import User from '../../Users/User';
 import Link from '../Link';
 import LinkModel from './LinkModel.entity';
@@ -19,6 +21,7 @@ export default class LinkRepositoryImpl implements ILinkRepository {
   constructor(
     @Inject(() => LoggerImpl) private readonly logger: ILogger,
     @Inject(() => TypeOrmServiceImpl) private readonly typeOrm: ITypeOrmService,
+    @Inject(() => TagServiceImpl) private readonly tagService: ITagService,
   ) {
     this.log = this.logger.child('LinkRepository');
     this.repository = typeOrm.getRepository(LinkModel);
@@ -32,23 +35,22 @@ export default class LinkRepositoryImpl implements ILinkRepository {
   }
 
   async insert(user: User, link: Omit<Link, 'id' | 'created' | 'deleted' | 'updated' | 'user'>) {
+    const existingTags = await this.tagService.getUserTags(user, { allowList: link.tags });
+    const existingMap = new Map(existingTags.map((tag) => [tag.name, tag]));
+
     const model = await this.repository.save({
       ...link,
-      tags: link.tags.map((tag) => ({ name: tag })),
+      tags: link.tags.map((tag) => {
+        // Use existing object if it exists
+        if (existingMap.has(tag)) {
+          return existingMap.get(tag)!;
+        }
+
+        // Otherwise add new tag
+        return { name: tag, user };
+      }),
       user,
     });
-    return this.resolve(model);
-  }
-
-  async findById(id: number) {
-    this.log.trace('Finding user by id', { id });
-    const model = await this.repository.findOne({ where: { id } });
-    if (!model) {
-      this.log.error('No user by id', { id });
-      throw new NotFoundError({ message: `Could not find user by id ${id}`, safeMessage: 'Link not found' });
-    }
-
-    this.log.trace('Found user by id', { id, reference: model.reference });
     return this.resolve(model);
   }
 

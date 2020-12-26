@@ -7,7 +7,7 @@ import { getMostCommonTagsRoute } from '../../../../old/routes/tags';
 import { checkTokenMiddleware } from '../../../../old/util/auth';
 import ILogger, { Logger } from '../../../Logger/Logger';
 import LoggerImpl from '../../../Logger/LoggerImpl';
-import { IController } from '../Controller';
+import IController from '../Controller';
 
 @Service()
 export default class OldControllerImpl implements IController {

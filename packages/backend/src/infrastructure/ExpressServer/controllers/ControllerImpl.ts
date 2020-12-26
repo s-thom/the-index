@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { Inject, Service } from 'typedi';
 import ILogger, { Logger } from '../../Logger/Logger';
 import LoggerImpl from '../../Logger/LoggerImpl';
-import { IController } from './Controller';
+import IController from './Controller';
 import OldControllerImpl from './old';
 import V2ControllerImpl from './v2';
 

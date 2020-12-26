@@ -5,7 +5,7 @@ import User from '../../Users/User';
 import ITagRepository from '../repository/TagRepository';
 import TagRepositoryImpl from '../repository/TagRepositoryImpl';
 import Tag from '../Tag';
-import ITagService from './TagService';
+import ITagService, { GetTagsOptions } from './TagService';
 
 @Service()
 export default class TagServiceImpl implements ITagService {
@@ -18,8 +18,8 @@ export default class TagServiceImpl implements ITagService {
     this.log = this.logger.child('TagService');
   }
 
-  async getUserTags(user: User, exclude = [] as string[]): Promise<Tag[]> {
-    this.log.trace('Getting tags for user', { name: user.name, exclude });
-    return this.tagRepository.getUserTags(user, exclude);
+  async getUserTags(user: User, options: GetTagsOptions = {}): Promise<Tag[]> {
+    this.log.trace('Getting tags for user', { name: user.name, options });
+    return this.tagRepository.getUserTags(user, options);
   }
 }

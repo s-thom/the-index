@@ -22,7 +22,7 @@ properties:
       type: string
       description: A tag
       example: example
-  inserted:
+  created:
     type: string
     description: The date the link was added
     format: date-time

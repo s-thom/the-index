@@ -12,7 +12,7 @@ import IConfig from '../Config/Config';
 import ConfigImpl from '../Config/ConfigImpl';
 import ILogger, { Logger } from '../Logger/Logger';
 import LoggerImpl from '../Logger/LoggerImpl';
-import { IController } from './controllers/Controller';
+import IController from './controllers/Controller';
 import ControllerImpl from './controllers/ControllerImpl';
 import IExpressServer from './ExpressServer';
 import apiErrors from './middleware/apiErrors';

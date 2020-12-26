@@ -169,7 +169,7 @@ export interface Link {
   /**
    * The date the link was added
    */
-  inserted: string;
+  created?: string;
   user: User;
 }
 

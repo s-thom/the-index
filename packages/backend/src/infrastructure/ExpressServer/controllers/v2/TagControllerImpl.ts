@@ -22,7 +22,7 @@ export default class TagControllerImpl implements ITagController {
   }
 
   async getCommonlyUsedTags(user: User, queryParams: GetV2TagsQueryParams): Promise<GetV2TagsResponse> {
-    const tags = await this.tagService.getUserTags(user, queryParams.exclude);
+    const tags = await this.tagService.getUserTags(user, { blockList: queryParams.exclude });
 
     return {
       tags: tags.map((tag) => tag.name),
