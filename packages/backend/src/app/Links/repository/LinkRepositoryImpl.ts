@@ -54,18 +54,18 @@ export default class LinkRepositoryImpl implements ILinkRepository {
     return this.resolve(model);
   }
 
-  async findByReference(reference: string) {
-    this.log.trace('Finding user by id', { reference });
-    const model = await this.repository.findOne({ where: { reference } });
+  async findByReference(user: User, reference: string) {
+    this.log.trace('Finding link by reference', { name: user.name, reference });
+    const model = await this.repository.findOne({ where: { reference, user }, relations: ['tags', 'user'] });
     if (!model) {
-      this.log.error('No user by reference', { reference });
+      this.log.error('No link by reference', { reference });
       throw new NotFoundError({
-        message: `Could not find user by reference ${reference}`,
+        message: `Could not find link by reference ${reference}`,
         safeMessage: 'Link not found',
       });
     }
 
-    this.log.trace('Found user by reference', { reference, id: model.id });
+    this.log.trace('Found link by reference', { reference, id: model.id });
     return this.resolve(model);
   }
 

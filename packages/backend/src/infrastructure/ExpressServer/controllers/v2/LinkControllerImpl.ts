@@ -1,7 +1,13 @@
 import { Router } from 'express';
 import { Inject, Service } from 'typedi';
 import * as Yup from 'yup';
-import { Link as ApiLink, PostV2LinksRequestBody, PostV2LinksResponse } from '../../../../api-types';
+import {
+  GetV2LinkIdPathParams,
+  GetV2LinkIdResponse,
+  Link as ApiLink,
+  PostV2LinksRequestBody,
+  PostV2LinksResponse,
+} from '../../../../api-types';
 import Link from '../../../../app/Links/Link';
 import LinkService from '../../../../app/Links/service/LinkService';
 import LinkServiceImpl from '../../../../app/Links/service/LinkServiceImpl';
@@ -34,6 +40,13 @@ export default class LinkControllerImpl implements LinkController {
     };
   }
 
+  async getLink(currentUser: User, pathParams: GetV2LinkIdPathParams): Promise<GetV2LinkIdResponse> {
+    const link = await this.linkService.getLink(currentUser, pathParams.id);
+    return {
+      link: this.serialiseLink(link),
+    };
+  }
+
   async addLink(currentUser: User, body: PostV2LinksRequestBody): Promise<PostV2LinksResponse> {
     const link = await this.linkService.addLink(currentUser, body);
     return {
@@ -56,6 +69,20 @@ export default class LinkControllerImpl implements LinkController {
             .defined(),
         },
         (req) => this.addLink(req.user, req.body),
+      ),
+    );
+
+    router.get(
+      '/:id',
+      asyncRoute<unknown, GetV2LinkIdResponse, GetV2LinkIdPathParams, unknown>(
+        {
+          params: Yup.object()
+            .shape({
+              id: Yup.string().required(),
+            })
+            .defined(),
+        },
+        (req) => this.getLink(req.user, req.params),
       ),
     );
 
