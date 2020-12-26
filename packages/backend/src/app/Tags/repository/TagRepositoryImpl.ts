@@ -27,12 +27,16 @@ export default class TagRepositoryImpl implements ITagRepository {
     return new Tag(model);
   }
 
-  async getUserTags(user: User, exclude = [] as string[]): Promise<Tag[]> {
+  async getUserTags(user: User, exclude = [] as string[], limit = 10): Promise<Tag[]> {
     const tags = await this.repository
       .createQueryBuilder()
-      .leftJoinAndSelect('TagModel.user', 'u')
+      .innerJoinAndSelect('TagModel.user', 'u')
+      .innerJoin('links_tags_tags', 'ltt', 'ltt.tagsId = TagModel.id')
       .where('u.name = :name', { name: user.name })
       .andWhere('TagModel.name NOT IN (:exclude)', { exclude })
+      .groupBy('TagModel.id')
+      .orderBy('count(ltt.linksId) DESC, TagModel.name')
+      .limit(limit)
       .getMany();
 
     return Promise.all(tags.map((tag) => this.resolve(tag)));
