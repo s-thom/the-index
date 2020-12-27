@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { Inject, Service } from 'typedi';
+import IUserService from '../../../../app/Users/service/UserService';
+import UserServiceImpl from '../../../../app/Users/service/UserServiceImpl';
 import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
 import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
 import currentUser from '../../middleware/currentUser';
@@ -15,6 +17,7 @@ export default class V2Controller implements IController {
 
   constructor(
     @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
+    @Inject(() => UserServiceImpl) private readonly userService: IUserService,
     @Inject(() => UserControllerImpl) private readonly userController: IController,
     @Inject(() => AuthenticationControllerImpl) private readonly authController: IController,
     @Inject(() => TagControllerImpl) private readonly tagController: IController,
@@ -29,7 +32,7 @@ export default class V2Controller implements IController {
     router.use('/auth', this.authController.router());
 
     // Add user middleware for all further routes
-    router.use(currentUser());
+    router.use(currentUser({ userService: this.userService }));
 
     router.use('/users', this.userController.router());
     router.use('/tags', this.tagController.router());

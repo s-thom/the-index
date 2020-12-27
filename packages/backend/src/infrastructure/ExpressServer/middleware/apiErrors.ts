@@ -1,26 +1,21 @@
 import { ErrorRequestHandler } from 'express';
-import Container from 'typedi';
 import { Error as ErrorType } from '../../../api-types';
 import ApiError from '../../../errors/ApiError';
 import MultipleError from '../../../errors/MultipleError';
-import IIdentifierService from '../../../services/IdentifierService/IdentifierService';
-import IdentifierServiceImpl from '../../../services/IdentifierService/IdentifierServiceImpl';
-import ILoggerService from '../../../services/LoggerService/LoggerService';
-import LoggerServiceImpl from '../../../services/LoggerService/LoggerServiceImpl';
+import { Logger } from '../../../services/LoggerService/LoggerService';
 
 interface JsonApiErrorsOptions {
   defaultStatus: number;
+  idGenerator: { next: () => string };
+  logger?: Logger;
 }
 
-const idService = Container.get<IIdentifierService>(IdentifierServiceImpl);
-const loggerService = Container.get<ILoggerService>(LoggerServiceImpl);
-const logger = loggerService.child('Express.apiErrors');
-
 /**
- * Determines the final error status for this
- * @param error
+ * Determines the error status to send back given an error
+ * @param error Error to check
+ * @param defaultStatus The default status code to use if no code is available
  */
-export function determineErrorStatus(error: unknown, defaultStatus: number): number {
+function determineErrorStatus(error: unknown, defaultStatus: number): number {
   if (error instanceof ApiError) {
     // ApiErrors have a status, so use that.
     return error.status;
@@ -45,34 +40,9 @@ export function determineErrorStatus(error: unknown, defaultStatus: number): num
  * Converts an error object to a list of JSON API errors
  * @param error Error to convert
  */
-export function errorToJsonErrors(error: unknown): ErrorType[] {
-  const errors = error instanceof MultipleError ? error.errors : [error];
-
-  return errors.map<ErrorType>((e) => {
-    if (e instanceof ApiError) {
-      return {
-        id: e.id,
-        code: e.options.code,
-        status: e.status,
-        detail: e.options.safeMessage,
-        meta: e.options.meta,
-      };
-    }
-
-    const id = idService.next();
-    logger.warn('Error is not an API error', {
-      error,
-      message: (error as any)?.message,
-      id,
-    });
-    return {
-      id,
-    };
-  });
-}
-
-const DEFAULT_OPTIONS: JsonApiErrorsOptions = {
+export const DEFAULT_OPTIONS: JsonApiErrorsOptions = {
   defaultStatus: 500,
+  idGenerator: { next: () => '' },
 };
 
 /**
@@ -84,6 +54,33 @@ export default function apiErrors(options?: Partial<JsonApiErrorsOptions>): Erro
     ...DEFAULT_OPTIONS,
     ...options,
   };
+  const { logger, idGenerator } = mergedOptions;
+
+  function errorToJsonErrors(error: unknown): ErrorType[] {
+    const errors = error instanceof MultipleError ? error.errors : [error];
+
+    return errors.map<ErrorType>((e) => {
+      if (e instanceof ApiError) {
+        return {
+          id: e.id,
+          code: e.options.code,
+          status: e.status,
+          detail: e.options.safeMessage,
+          meta: e.options.meta,
+        };
+      }
+
+      const id = idGenerator.next();
+      logger?.warn('Error is not an API error', {
+        error,
+        message: (error as any)?.message,
+        id,
+      });
+      return {
+        id,
+      };
+    });
+  }
 
   return (err, req, res, next) => {
     // Prevent errors from trying to send two responses
@@ -93,13 +90,13 @@ export default function apiErrors(options?: Partial<JsonApiErrorsOptions>): Erro
     }
 
     // Log the incoming error for tracing
-    logger.error('Error caught by error handler', { error: err, message: err?.message });
+    logger?.error('Error caught by error handler', { error: err, message: err?.message });
 
     const finalStatus = determineErrorStatus(err, mergedOptions.defaultStatus);
     const errorObjects = errorToJsonErrors(err);
 
     // Log the final output
-    logger.error('API errors', { errors: errorObjects });
+    logger?.error('API errors', { errors: errorObjects });
 
     return res.status(finalStatus).json({ errors: errorObjects });
   };

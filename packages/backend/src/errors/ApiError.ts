@@ -21,6 +21,8 @@ export interface ApiErrorOptions {
   meta?: object;
 }
 
+// I can't think of a clean way to get rid of this `Container.get` call.
+// It's *mostly* ok, given that the identifier service does not inject any others into itself.
 const idService = Container.get<IIdentifierService>(IdentifierServiceImpl);
 
 export default class ApiError extends Error {

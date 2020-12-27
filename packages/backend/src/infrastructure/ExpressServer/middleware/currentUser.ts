@@ -1,7 +1,5 @@
-import { Request, RequestHandler } from 'express';
-import Container from 'typedi';
+import { RequestHandler } from 'express';
 import IUserService from '../../../app/Users/service/UserService';
-import UserServiceImpl from '../../../app/Users/service/UserServiceImpl';
 import User from '../../../app/Users/User';
 import UnauthorizedError from '../../../errors/UnauthorizedError';
 
@@ -13,36 +11,36 @@ declare global {
   }
 }
 
-async function getUserFromSession(req: Request) {
-  const { session } = req;
-  if (!session) {
-    throw new UnauthorizedError({ message: 'No session' });
-  }
-
-  const { name } = session;
-  if (!name) {
-    throw new UnauthorizedError({ message: 'No session' });
-  }
-
-  const userService = Container.get<IUserService>(UserServiceImpl);
-  try {
-    return userService.getByName(name);
-  } catch (err) {
-    throw new UnauthorizedError({ message: 'Error during user retrieval' });
-  }
+interface CurrentUserConfig {
+  userService: IUserService;
 }
 
 /**
  * Factory for a middleware to attach the currently logged in user to the request
  */
-export default function currentUser(): RequestHandler {
-  return (req, res, next) => {
-    getUserFromSession(req).then(
-      (user) => {
+export default function currentUser({ userService }: CurrentUserConfig): RequestHandler {
+  return async (req, res, next) => {
+    try {
+      // Get session and name of user from session
+      const { session } = req;
+      if (!session) {
+        throw new UnauthorizedError({ message: 'No session', safeMessage: 'Invalid session' });
+      }
+      const { name } = session;
+      if (!name) {
+        throw new UnauthorizedError({ message: 'No session', safeMessage: 'Invalid session' });
+      }
+
+      try {
+        const user = await userService.getByName(name);
         req.user = user;
-        next();
-      },
-      (err) => next(err),
-    );
+      } catch (err) {
+        throw new UnauthorizedError({ message: 'Error during user retrieval', safeMessage: 'Invalid session' });
+      }
+
+      next();
+    } catch (err: unknown) {
+      next(err);
+    }
   };
 }

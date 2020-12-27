@@ -10,6 +10,8 @@ import { createServer } from 'http';
 import { Inject, Service } from 'typedi';
 import IConfigService from '../../services/ConfigService/ConfigService';
 import ConfigServiceImpl from '../../services/ConfigService/ConfigServiceImpl';
+import IIdentifierService from '../../services/IdentifierService/IdentifierService';
+import IdentifierServiceImpl from '../../services/IdentifierService/IdentifierServiceImpl';
 import ILoggerService, { Logger } from '../../services/LoggerService/LoggerService';
 import LoggerServiceImpl from '../../services/LoggerService/LoggerServiceImpl';
 import IController from './controllers/Controller';
@@ -24,6 +26,7 @@ export default class ExpressServerImpl implements IExpressServer {
   constructor(
     @Inject(() => ConfigServiceImpl) private readonly config: IConfigService,
     @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
+    @Inject(() => IdentifierServiceImpl) private readonly idService: IIdentifierService,
     @Inject(() => ControllerImpl) private readonly controller: IController,
   ) {
     this.log = this.logger.child('ExpressServer');
@@ -46,7 +49,7 @@ export default class ExpressServerImpl implements IExpressServer {
 
     app.use(this.controller.router());
 
-    app.use(apiErrors());
+    app.use(apiErrors({ idGenerator: this.idService, logger: this.logger.child('ExpressServer.apiErrors') }));
 
     const { port } = this.config.express;
 
