@@ -16,6 +16,7 @@ import LinkServiceImpl from '../../../../app/Links/service/LinkServiceImpl';
 import User from '../../../../app/Users/User';
 import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
 import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
+import { arrayTransformer } from '../../../../utils/yup';
 import asyncRoute from '../../middleware/asyncRoute';
 import LinkController from './LinkController';
 
@@ -79,15 +80,7 @@ export default class LinkControllerImpl implements LinkController {
         {
           query: Yup.object()
             .shape({
-              tags: Yup.array()
-                .transform((value: unknown, originalValue: unknown) => {
-                  if (typeof originalValue === 'string') {
-                    return [originalValue];
-                  }
-                  return originalValue;
-                })
-                .of(Yup.string().required())
-                .notRequired(),
+              tags: Yup.array().transform(arrayTransformer).of(Yup.string().required()).notRequired(),
               before: Yup.string().notRequired(),
               after: Yup.string().notRequired(),
             })

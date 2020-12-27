@@ -7,6 +7,7 @@ import TagServiceImpl from '../../../../app/Tags/service/TagServiceImpl';
 import User from '../../../../app/Users/User';
 import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
 import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
+import { arrayTransformer } from '../../../../utils/yup';
 import asyncRoute from '../../middleware/asyncRoute';
 import ITagController from './TagController';
 
@@ -38,15 +39,7 @@ export default class TagControllerImpl implements ITagController {
         {
           query: Yup.object()
             .shape({
-              exclude: Yup.array()
-                .transform((value: unknown, originalValue: unknown) => {
-                  if (typeof originalValue === 'string') {
-                    return [originalValue];
-                  }
-                  return originalValue;
-                })
-                .of(Yup.string().required())
-                .notRequired(),
+              exclude: Yup.array().transform(arrayTransformer).of(Yup.string().required()).notRequired(),
             })
             .defined(),
         },
