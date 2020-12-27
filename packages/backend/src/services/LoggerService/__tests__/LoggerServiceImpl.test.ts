@@ -13,7 +13,7 @@ describe('LoggerServiceImpl', () => {
   });
 
   it.each([['trace'], ['debug'], ['info'], ['warn'], ['error'], ['fatal']] as mockedPino.Level[][])(
-    'should get a logger',
+    'should log at %s level',
     (level) => {
       const mockLogger: mockedPino.Logger = {
         trace: jest.fn(),
