@@ -4,10 +4,34 @@ import TagModel from '../app/Tags/repository/TagModel.entity';
 import UserModel from '../app/Users/repository/UserModel.entity';
 import TypeOrmServiceImpl from '../services/TypeOrmService/TypeOrmServiceImpl';
 import { mockConfigService, mockLogger } from './test-utils';
-import { PickPartial } from './types';
+
+interface TestUserModel {
+  id?: number;
+  name: string;
+  created?: Date;
+  updated?: Date;
+  deleted?: Date;
+}
+
+interface TestTagModel {
+  id?: number;
+  name: string;
+  user: Partial<TestUserModel>;
+}
+
+interface TestLinkModel {
+  id?: number;
+  reference: string;
+  url?: string;
+  tags: Partial<TestTagModel>[];
+  user: Partial<TestUserModel>;
+  created?: Date;
+  updated?: Date;
+  deleted?: Date;
+}
 
 // #region make<DataType> function
-export function makeUser({ id, name, created, updated, deleted }: PickPartial<UserModel, 'name'>): UserModel {
+export function makeUser({ id, name, created, updated, deleted }: TestUserModel): UserModel {
   const user = new UserModel();
   user.id = id!; // Explicitly allowing undefined, as when inserted this will be generated
   user.name = name;
@@ -17,30 +41,21 @@ export function makeUser({ id, name, created, updated, deleted }: PickPartial<Us
   return user;
 }
 
-export function makeTag({ id, name, user }: PickPartial<TagModel, 'name'>): TagModel {
+export function makeTag({ id, name, user }: TestTagModel): TagModel {
   const tag = new TagModel();
   tag.id = id!; // Explicitly allowing undefined, as when inserted this will be generated
   tag.name = name;
-  tag.user = user ?? (undefined as any);
+  tag.user = user as UserModel;
   return tag;
 }
 
-export function makeLink({
-  id,
-  reference,
-  url,
-  tags,
-  user,
-  created,
-  updated,
-  deleted,
-}: PickPartial<LinkModel, 'reference'>): LinkModel {
+export function makeLink({ id, reference, url, tags, user, created, updated, deleted }: TestLinkModel): LinkModel {
   const link = new LinkModel();
   link.id = id!; // Explicitly allowing undefined, as when inserted this will be generated
   link.reference = reference;
   link.url = url ?? `https://example.com#${reference}`;
-  link.tags = tags ?? (undefined as any);
-  link.user = user ?? (undefined as any);
+  link.tags = tags as TagModel[];
+  link.user = user as UserModel;
   link.created = created ?? new Date('2020-01-01T00:00:00.000Z');
   link.updated = updated;
   link.deleted = deleted;
@@ -66,9 +81,9 @@ export async function seedDatabase({
   tags,
   links,
 }: {
-  users: PickPartial<UserModel, 'name'>[];
-  tags: PickPartial<TagModel, 'name'>[];
-  links: PickPartial<LinkModel, 'reference'>[];
+  users: TestUserModel[];
+  tags: TestTagModel[];
+  links: TestLinkModel[];
 }): Promise<void> {
   // Save all data to the database
   const connection = getTestConnection();

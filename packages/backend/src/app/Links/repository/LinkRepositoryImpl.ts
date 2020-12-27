@@ -83,10 +83,10 @@ export default class LinkRepositoryImpl implements ILinkRepository {
       .andWhere('t.name IN (:...tags)', { tags });
 
     if (min) {
-      queryBuilder = queryBuilder.andWhere('where LinkModel.created >= datetime(:min)', { min: min.toISOString() });
+      queryBuilder = queryBuilder.andWhere('LinkModel.created >= datetime(:min)', { min: min.toISOString() });
     }
     if (max) {
-      queryBuilder = queryBuilder.andWhere('where LinkModel.created <= datetime(:max)', { max: max.toISOString() });
+      queryBuilder = queryBuilder.andWhere('LinkModel.created <= datetime(:max)', { max: max.toISOString() });
     }
 
     queryBuilder = queryBuilder.groupBy('LinkModel.id').orderBy('count(t.id) DESC, LinkModel.id', 'DESC').limit(limit);

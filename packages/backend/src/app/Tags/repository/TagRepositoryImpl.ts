@@ -28,7 +28,7 @@ export default class TagRepositoryImpl implements ITagRepository {
   }
 
   async getUserTags(user: User, { allowList, blockList, limit }: GetTagsOptions = {}): Promise<Tag[]> {
-    const finalLimit = limit ?? (allowList ? allowList.length : 10);
+    const finalLimit = Math.min(limit ?? (allowList ? allowList.length : 10), 50);
 
     let queryBuilder = this.repository
       .createQueryBuilder()
