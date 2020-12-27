@@ -54,7 +54,7 @@ export default function apiErrors(options?: Partial<JsonApiErrorsOptions>): Erro
     ...DEFAULT_OPTIONS,
     ...options,
   };
-  const { logger, idGenerator } = mergedOptions;
+  const { defaultStatus, logger, idGenerator } = mergedOptions;
 
   function errorToJsonErrors(error: unknown): ErrorType[] {
     const errors = error instanceof MultipleError ? error.errors : [error];
@@ -92,7 +92,7 @@ export default function apiErrors(options?: Partial<JsonApiErrorsOptions>): Erro
     // Log the incoming error for tracing
     logger?.error('Error caught by error handler', { error: err, message: err?.message });
 
-    const finalStatus = determineErrorStatus(err, mergedOptions.defaultStatus);
+    const finalStatus = determineErrorStatus(err, defaultStatus);
     const errorObjects = errorToJsonErrors(err);
 
     // Log the final output
