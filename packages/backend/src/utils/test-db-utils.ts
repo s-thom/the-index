@@ -6,7 +6,7 @@ import TypeOrmServiceImpl from '../services/TypeOrmService/TypeOrmServiceImpl';
 import { mockConfigService, mockLogger } from './test-utils';
 
 interface TestUserModel {
-  id?: number;
+  id: number;
   name: string;
   created?: Date;
   updated?: Date;
@@ -14,13 +14,13 @@ interface TestUserModel {
 }
 
 interface TestTagModel {
-  id?: number;
+  id: number;
   name: string;
   user: Partial<TestUserModel>;
 }
 
 interface TestLinkModel {
-  id?: number;
+  id: number;
   reference: string;
   url?: string;
   tags: Partial<TestTagModel>[];
@@ -33,7 +33,7 @@ interface TestLinkModel {
 // #region make<DataType> function
 export function makeUser({ id, name, created, updated, deleted }: TestUserModel): UserModel {
   const user = new UserModel();
-  user.id = id!; // Explicitly allowing undefined, as when inserted this will be generated
+  user.id = id;
   user.name = name;
   user.created = created ?? new Date('2020-01-01T00:00:00.000Z');
   user.updated = updated;
@@ -43,7 +43,7 @@ export function makeUser({ id, name, created, updated, deleted }: TestUserModel)
 
 export function makeTag({ id, name, user }: TestTagModel): TagModel {
   const tag = new TagModel();
-  tag.id = id!; // Explicitly allowing undefined, as when inserted this will be generated
+  tag.id = id;
   tag.name = name;
   tag.user = user as UserModel;
   return tag;
@@ -51,7 +51,7 @@ export function makeTag({ id, name, user }: TestTagModel): TagModel {
 
 export function makeLink({ id, reference, url, tags, user, created, updated, deleted }: TestLinkModel): LinkModel {
   const link = new LinkModel();
-  link.id = id!; // Explicitly allowing undefined, as when inserted this will be generated
+  link.id = id;
   link.reference = reference;
   link.url = url ?? `https://example.com#${reference}`;
   link.tags = tags as TagModel[];
