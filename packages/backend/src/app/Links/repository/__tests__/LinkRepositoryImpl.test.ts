@@ -1,12 +1,8 @@
 import { mockTypeOrmService, seedDatabase } from '../../../../utils/test-db-utils';
 import { mockLoggerService } from '../../../../utils/test-utils';
 import LinkRepositoryImpl from '../LinkRepositoryImpl';
-import * as mockedTagService from '../../../Tags/service/TagServiceImpl';
 
-jest.mock('../../../Tags/service/TagServiceImpl');
 jest.mock('../../../../services/ConfigService/ConfigServiceImpl');
-
-const { default: TagServiceImpl } = mockedTagService as jest.Mocked<typeof mockedTagService>;
 
 describe('LinkRepositoryImpl', () => {
   describe('insert', () => {
@@ -17,10 +13,11 @@ describe('LinkRepositoryImpl', () => {
         links: [],
       });
 
-      const mockTagService = new TagServiceImpl({} as any, {} as any);
-      (mockTagService.getUserTags as jest.Mock).mockResolvedValue([{ id: 1, name: 'foo' }]);
+      const mockGetUserTags = jest.fn().mockResolvedValue([{ id: 1, name: 'foo' }]);
 
-      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
+      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, {
+        getUserTags: mockGetUserTags,
+      });
       await expect(
         repository.insert(
           { id: 1, name: 'stuart', created: new Date() },
@@ -43,9 +40,7 @@ describe('LinkRepositoryImpl', () => {
         links: [{ id: 1, reference: 'AAA', user: { id: 1 }, tags: [{ id: 1 }], url: 'https://example.com' }],
       });
 
-      const mockTagService = new TagServiceImpl({} as any, {} as any);
-
-      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
+      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, { getUserTags: jest.fn() });
       await expect(
         repository.findByReference({ id: 1, name: 'stuart', created: new Date() }, 'AAA'),
       ).resolves.toMatchObject({
@@ -63,9 +58,7 @@ describe('LinkRepositoryImpl', () => {
         links: [],
       });
 
-      const mockTagService = new TagServiceImpl({} as any, {} as any);
-
-      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
+      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, { getUserTags: jest.fn() });
       await expect(repository.findByReference({ id: 1, name: 'stuart', created: new Date() }, 'AAA')).rejects.toEqual(
         new Error('Could not find link by reference AAA'),
       );
@@ -87,9 +80,7 @@ describe('LinkRepositoryImpl', () => {
         ],
       });
 
-      const mockTagService = new TagServiceImpl({} as any, {} as any);
-
-      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
+      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, { getUserTags: jest.fn() });
       await expect(
         repository.search({ id: 1, name: 'stuart', created: new Date() }, { tags: ['bar', 'baz'] }),
       ).resolves.toMatchObject([
@@ -131,9 +122,7 @@ describe('LinkRepositoryImpl', () => {
         ],
       });
 
-      const mockTagService = new TagServiceImpl({} as any, {} as any);
-
-      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
+      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, { getUserTags: jest.fn() });
       await expect(
         repository.search(
           { id: 1, name: 'stuart', created: new Date() },
