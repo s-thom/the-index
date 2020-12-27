@@ -15,7 +15,7 @@ import IdentifierServiceImpl from '../../services/IdentifierService/IdentifierSe
 import ILoggerService, { Logger } from '../../services/LoggerService/LoggerService';
 import LoggerServiceImpl from '../../services/LoggerService/LoggerServiceImpl';
 import IController from './controllers/Controller';
-import ControllerImpl from './controllers/ControllerImpl';
+import V2Controller from './controllers/v2';
 import IExpressServer from './ExpressServer';
 import apiErrors from './middleware/apiErrors';
 
@@ -27,7 +27,7 @@ export default class ExpressServerImpl implements IExpressServer {
     @Inject(() => ConfigServiceImpl) private readonly config: IConfigService,
     @Inject(() => LoggerServiceImpl) private readonly logger: ILoggerService,
     @Inject(() => IdentifierServiceImpl) private readonly idService: IIdentifierService,
-    @Inject(() => ControllerImpl) private readonly controller: IController,
+    @Inject(() => V2Controller) private readonly v2Controller: IController,
   ) {
     this.log = this.logger.child('ExpressServer');
   }
@@ -47,7 +47,7 @@ export default class ExpressServerImpl implements IExpressServer {
     app.use(cookieSession(this.config.express.cookieSession));
     app.disable('x-powered-by');
 
-    app.use(this.controller.router());
+    app.use('/v2', this.v2Controller.router());
 
     app.use(apiErrors({ idGenerator: this.idService, logger: this.logger.child('ExpressServer.apiErrors') }));
 

@@ -2,13 +2,13 @@ import { Router } from 'express';
 import { Inject, Service } from 'typedi';
 import * as Yup from 'yup';
 import { GetV2UserIdPathParams, GetV2UserIdResponse } from '../../../../api-types';
-import User from '../../../../app/Users/User';
 import IUserService from '../../../../app/Users/service/UserService';
 import UserServiceImpl from '../../../../app/Users/service/UserServiceImpl';
+import User from '../../../../app/Users/User';
 import ILoggerService, { Logger } from '../../../../services/LoggerService/LoggerService';
 import LoggerServiceImpl from '../../../../services/LoggerService/LoggerServiceImpl';
-import IUserController from './UserController';
 import asyncRoute from '../../middleware/asyncRoute';
+import IUserController from './UserController';
 
 @Service()
 export default class UserControllerImpl implements IUserController {
@@ -21,7 +21,7 @@ export default class UserControllerImpl implements IUserController {
     this.log = this.logger.child('UserController');
   }
 
-  async getByName(currentUser: User, pathParams: GetV2UserIdPathParams) {
+  async getByName(currentUser: User, pathParams: GetV2UserIdPathParams): Promise<GetV2UserIdResponse> {
     // Handle special case name of "me"
     let { name } = pathParams;
     if (name === 'me') {
@@ -29,7 +29,7 @@ export default class UserControllerImpl implements IUserController {
     }
 
     const user = await this.userService.getByName(name);
-    return { user };
+    return { user: { name: user.name } };
   }
 
   router() {
