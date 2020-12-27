@@ -2,8 +2,6 @@ import { mockTypeOrmService, seedDatabase } from '../../../../utils/test-db-util
 import { mockLoggerService } from '../../../../utils/test-utils';
 import LinkRepositoryImpl from '../LinkRepositoryImpl';
 
-jest.mock('../../../../services/ConfigService/ConfigServiceImpl');
-
 describe('LinkRepositoryImpl', () => {
   describe('insert', () => {
     it('should add a link and its tags', async () => {
