@@ -2,6 +2,8 @@ import { mockTypeOrmService, seedDatabase } from '../../../../utils/test-db-util
 import { mockLoggerService } from '../../../../utils/test-utils';
 import UserRepositoryImpl from '../UserRepositoryImpl';
 
+jest.mock('../../../../services/ConfigService/ConfigServiceImpl');
+
 describe('UserRepositoryImpl', () => {
   describe('findById', () => {
     it('should return a user', async () => {

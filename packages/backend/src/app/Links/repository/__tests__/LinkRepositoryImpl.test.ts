@@ -4,6 +4,7 @@ import LinkRepositoryImpl from '../LinkRepositoryImpl';
 import * as mockedTagService from '../../../Tags/service/TagServiceImpl';
 
 jest.mock('../../../Tags/service/TagServiceImpl');
+jest.mock('../../../../services/ConfigService/ConfigServiceImpl');
 
 const { default: TagServiceImpl } = mockedTagService as jest.Mocked<typeof mockedTagService>;
 
@@ -16,7 +17,7 @@ describe('LinkRepositoryImpl', () => {
         links: [],
       });
 
-      const mockTagService = new TagServiceImpl(undefined as any, undefined as any);
+      const mockTagService = new TagServiceImpl({} as any, {} as any);
       (mockTagService.getUserTags as jest.Mock).mockResolvedValue([{ id: 1, name: 'foo' }]);
 
       const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
@@ -42,7 +43,7 @@ describe('LinkRepositoryImpl', () => {
         links: [{ id: 1, reference: 'AAA', user: { id: 1 }, tags: [{ id: 1 }], url: 'https://example.com' }],
       });
 
-      const mockTagService = new TagServiceImpl(undefined as any, undefined as any);
+      const mockTagService = new TagServiceImpl({} as any, {} as any);
 
       const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
       await expect(
@@ -62,7 +63,7 @@ describe('LinkRepositoryImpl', () => {
         links: [],
       });
 
-      const mockTagService = new TagServiceImpl(undefined as any, undefined as any);
+      const mockTagService = new TagServiceImpl({} as any, {} as any);
 
       const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
       await expect(repository.findByReference({ id: 1, name: 'stuart', created: new Date() }, 'AAA')).rejects.toEqual(
@@ -86,7 +87,7 @@ describe('LinkRepositoryImpl', () => {
         ],
       });
 
-      const mockTagService = new TagServiceImpl(undefined as any, undefined as any);
+      const mockTagService = new TagServiceImpl({} as any, {} as any);
 
       const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
       await expect(
@@ -130,7 +131,7 @@ describe('LinkRepositoryImpl', () => {
         ],
       });
 
-      const mockTagService = new TagServiceImpl(undefined as any, undefined as any);
+      const mockTagService = new TagServiceImpl({} as any, {} as any);
 
       const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, mockTagService);
       await expect(
