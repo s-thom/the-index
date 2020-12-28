@@ -1,0 +1,59 @@
+post:
+  operationId: postV2Auth
+  summary: Log in
+  description: |
+    Logs a user in
+  tags:
+    - Auth
+  requestBody:
+    description: Link information
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Login parameters
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              description: The name of the user
+              example: stuart
+            code:
+              type: string
+              description: The TOTP code entered by the user
+              example: '000000'
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - user
+            properties:
+              user:
+                $ref: '../../components/schemas/User.yaml'
+    '400':
+      $ref: ../../components/responses/ErrorResponse.yaml
+    '401':
+      $ref: ../../components/responses/ErrorResponse.yaml
+delete:
+  operationId: deleteV2Auth
+  summary: Log out
+  description: |
+    Logs the current user out
+  tags:
+    - Auth
+  security:
+    - cookie: []
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+    '400':
+      $ref: ../../components/responses/ErrorResponse.yaml

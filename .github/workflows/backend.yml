@@ -111,39 +111,31 @@ jobs:
           npm ci
           npx lerna bootstrap
           npx lerna run --scope backend build
-  # The database-migration job is not working inside of Docker containers. I haven't yet figured it out
-  # database-migration:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [14.x]
-  #       java-version: ['8']
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #     - name: Cache node modules
-  #       uses: actions/cache@v2
-  #       env:
-  #         cache-name: cache-node-modules
-  #       with:
-  #         path: ~/.npm
-  #         key: ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #     - name: Use Java ${{ matrix.java-version }}
-  #       uses: actions/setup-java@v1
-  #       with:
-  #         java-version: ${{ matrix.java-version }}
-  #     - name: npm install, run migration
-  #       env:
-  #         CI: 'true'
-  #         FLYWAY_URL: jdbc:sqlite:database.sqlite
-  #         FLYWAY_USER: ${{ secrets.FLYWAY_USER }}
-  #         FLYWAY_PASSWORD: ${{ secrets.FLYWAY_PASSWORD }}
-  #       run: |
-  #         npm ci
-  #         npx lerna bootstrap
-  #         npx lerna run --scope backend migrate
+  database-migration:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-node-${{ matrix.node-version }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, run migration
+        env:
+          CI: 'true'
+        run: |
+          echo '[{"name": "default","type": "sqlite","database": ":memory:","entities": ["src/**/*.entity.{js,ts}"],"migrations": ["migrations/*.{js,ts}"]}]' > packages/backend/ormconfig.json
+          npm ci
+          npx lerna bootstrap
+          npx lerna run --scope backend execute-migrations

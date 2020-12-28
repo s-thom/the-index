@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { postLinks, PostLinksRequestBody, PostLinksResponse } from '../../api-types';
+import { postV2Links, PostV2LinksRequestBody, PostV2LinksResponse } from '../../api-types';
 import NewLinkForm from '../../components/NewLinkForm';
 
 const StyledHeading = styled.h2`
@@ -13,16 +13,16 @@ export default function NewLinkPage() {
   const history = useHistory();
 
   const onSuccessCallback = useCallback(
-    (response: PostLinksResponse) => {
-      history.push(`/links/${response.id}`);
+    (response: PostV2LinksResponse) => {
+      history.push(`/links/${response.link.id}`);
     },
     [history],
   );
 
-  const { mutate } = useMutation<PostLinksResponse, void, PostLinksRequestBody>(
+  const { mutate } = useMutation<PostV2LinksResponse, void, PostV2LinksRequestBody>(
     ['links.create'],
     async (body) => {
-      const response = await postLinks({ body });
+      const response = await postV2Links({ body });
       return response;
     },
     {

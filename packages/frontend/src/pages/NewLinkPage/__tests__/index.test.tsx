@@ -5,19 +5,27 @@ import { render, screen, waitFor } from '../../../util/test-utils';
 
 jest.mock('../../../api-types');
 
-const { getTags, postLinks } = mockedApi as jest.Mocked<typeof mockedApi>;
+const { getV2Tags, postV2Links } = mockedApi as jest.Mocked<typeof mockedApi>;
 
 describe('NewLinkPage', () => {
   it('should allow a user to add a new link', async () => {
-    getTags.mockResolvedValue({ tags: ['suggestion'] });
-    postLinks.mockResolvedValue({ id: '1' });
+    getV2Tags.mockResolvedValue({ tags: ['suggestion'] });
+    postV2Links.mockResolvedValue({
+      link: {
+        id: '1',
+        created: '2020-01-01T00:00:00.000Z',
+        url: 'https://example/com',
+        tags: ['suggestion'],
+        user: { name: 'stuart' },
+      },
+    });
 
     render(<NewLinkPage />);
 
-    await waitFor(() => expect(getTags).toHaveBeenCalledTimes(1));
-    expect(getTags).toHaveBeenLastCalledWith({
+    await waitFor(() => expect(getV2Tags).toHaveBeenCalledTimes(1));
+    expect(getV2Tags).toHaveBeenLastCalledWith({
       queryParams: {
-        excludeTags: [],
+        exclude: [],
       },
     });
 
@@ -31,18 +39,18 @@ describe('NewLinkPage', () => {
     // Add suggested tag
     userEvent.click(addTagButton!);
 
-    await waitFor(() => expect(getTags).toHaveBeenCalledTimes(2));
-    expect(getTags).toHaveBeenLastCalledWith({
+    await waitFor(() => expect(getV2Tags).toHaveBeenCalledTimes(2));
+    expect(getV2Tags).toHaveBeenLastCalledWith({
       queryParams: {
-        excludeTags: ['suggestion'],
+        exclude: ['suggestion'],
       },
     });
 
     // Click submit
     userEvent.click(submitButton!);
 
-    await waitFor(() => expect(postLinks).toHaveBeenCalledTimes(1));
-    expect(postLinks).toHaveBeenLastCalledWith({
+    await waitFor(() => expect(postV2Links).toHaveBeenCalledTimes(1));
+    expect(postV2Links).toHaveBeenLastCalledWith({
       body: {
         url: 'https://example.com',
         tags: ['suggestion'],

@@ -1,0 +1,21 @@
+type: object
+description: An error
+required:
+  - id
+properties:
+  id:
+    type: string
+    description: A unique identifier for this particular occurrence of the problem
+  code:
+    type: string
+    description: An application-specific error code
+  detail:
+    type: string
+    description: A human-readable explanation of the problem
+  status:
+    type: number
+    description: The HTTP status code applicable to the problem
+  meta:
+    type: object
+    description: An object containing additional information about the problem
+    additionalProperties: {}

@@ -1,0 +1,32 @@
+get:
+  operationId: getV2LinkId
+  summary: Get link detail
+  description: |
+    Gets the detail of a single link
+  tags:
+    - Links
+  security:
+    - cookie: []
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: The ID of the link
+      schema:
+        type: string
+        description: The ID of the link
+        example: A00025E91EEBF5400000
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - link
+            properties:
+              link:
+                $ref: '../../../components/schemas/Link.yaml'
+    '400':
+      $ref: ../../../components/responses/ErrorResponse.yaml

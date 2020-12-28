@@ -2,88 +2,45 @@
 
 import { customGet, customMutate, CustomGetProps, CustomMutateProps } from './util/fetchers';
 /**
- * Login request with no credentials
+ * A user
  */
-export interface PostLoginRequest {
+export interface User {
   /**
-   * The name of the user logging in
+   * The name of the user
    */
   name: string;
 }
 
 /**
- * Login request with a TOTP code
+ * An error
  */
-export interface PostLoginTOTPRequest {
+export interface Error {
   /**
-   * The name of the user logging in
+   * A unique identifier for this particular occurrence of the problem
    */
-  name: string;
+  id: string;
   /**
-   * The challenge issued
+   * An application-specific error code
    */
-  challenge: 'TOTP';
+  code?: string;
   /**
-   * The response to the challenge
+   * A human-readable explanation of the problem
    */
-  response: string;
-}
-
-/**
- * Successful response
- */
-export interface PostLoginSuccessResponse {
+  detail?: string;
   /**
-   * The JWT bearer token
+   * The HTTP status code applicable to the problem
    */
-  token: string;
+  status?: number;
   /**
-   * The decoded content of the token
+   * An object containing additional information about the problem
    */
-  content: {
-    /**
-     * The ID of the user
-     */
-    userId: string;
-  };
-}
-
-/**
- * Challenge required response
- */
-export interface PostLoginChallengeResponse {
-  /**
-   * A code referring to why the user was not authorised
-   */
-  requires: 'challenge';
-  /**
-   * Whether TOTP can be used to satisfy the challenge
-   */
-  totp: boolean;
-}
-
-/**
- * Setup required response
- */
-export interface PostLoginSetupResponse {
-  /**
-   * A code referring to why the user was not authorised
-   */
-  requires: 'setup';
-  /**
-   * The secret code for TOTP authentication
-   */
-  code: string;
-  /**
-   * A URL that can be used to import the TOTP secret into an authenticator app
-   */
-  url: string;
+  meta?: { [key: string]: any };
 }
 
 /**
  * A link stored in the-index
  */
-export interface LinkDetail {
+export interface Link {
   /**
    * The ID of the link
    */
@@ -99,89 +56,77 @@ export interface LinkDetail {
   /**
    * The date the link was added
    */
-  inserted: string;
+  created?: string;
+  user: User;
+}
+
+/**
+ * Response for when problems occur in the application
+ */
+export interface ErrorResponseResponse {
   /**
-   * The user that added the link
+   * List of errors
    */
-  user: {
-    /**
-     * The ID of the user
-     */
-    id: string;
-    /**
-     * The name of the user
-     */
-    name: string;
-  };
+  errors: Error[];
+}
+
+export interface PostV2AuthResponse {
+  user: User;
+}
+
+export interface PostV2AuthRequestBody {
+  /**
+   * The name of the user
+   */
+  name: string;
+  /**
+   * The TOTP code entered by the user
+   */
+  code?: string;
 }
 
 /**
  * Log in
  *
- * Log in to the-index
+ * Logs a user in
  *
  */
-export function postLogin(
-  props: CustomMutateProps<
-    PostLoginSuccessResponse | PostLoginChallengeResponse | PostLoginSetupResponse,
-    void,
-    void,
-    PostLoginRequest | PostLoginTOTPRequest,
-    void
-  >,
+export function postV2Auth(
+  props: CustomMutateProps<PostV2AuthResponse, ErrorResponseResponse, void, PostV2AuthRequestBody, void>,
 ) {
-  return customMutate<
-    PostLoginSuccessResponse | PostLoginChallengeResponse | PostLoginSetupResponse,
-    void,
-    void,
-    PostLoginRequest | PostLoginTOTPRequest,
-    void
-  >('POST', `/login`, props);
+  return customMutate<PostV2AuthResponse, ErrorResponseResponse, void, PostV2AuthRequestBody, void>(
+    'POST',
+    `/v2/auth`,
+    props,
+  );
 }
 
-export interface GetTagsResponse {
-  /**
-   * The list of tags
-   */
-  tags: string[];
-}
-
-export interface GetTagsQueryParams {
-  /**
-   * List of tags to exclude
-   */
-  excludeTags?: string[];
+export interface DeleteV2AuthResponse {
+  [key: string]: any;
 }
 
 /**
- * Get common tags
+ * Log out
  *
- * Gets a list of the most commonly used tags by the current user
+ * Logs the current user out
  *
  */
-export function getTags(props: CustomGetProps<GetTagsResponse, void, GetTagsQueryParams, void>) {
-  return customGet<GetTagsResponse, void, GetTagsQueryParams, void>(`/tags`, props);
+export function deleteV2Auth(props: CustomMutateProps<DeleteV2AuthResponse, ErrorResponseResponse, void, void, void>) {
+  return customMutate<DeleteV2AuthResponse, ErrorResponseResponse, void, void, void>('DELETE', `/v2/auth`, props);
 }
 
-export interface PostSearchResponse {
+export interface GetV2LinksResponse {
   /**
    * The list of links
    */
-  links: LinkDetail[];
+  links: Link[];
 }
 
-export interface PostSearchQueryParams {
+export interface GetV2LinksQueryParams {
   /**
-   * List of tags to exclude
+   * List of tags to include
    */
-  excludeTags?: string[];
-}
-
-export interface PostSearchRequestBody {
-  /**
-   * List of tags to search on
-   */
-  tags: string[];
+  tags?: string[];
   /**
    * The upper bound for the time a link was added
    */
@@ -198,24 +143,17 @@ export interface PostSearchRequestBody {
  * Searches for links matching the given parameters
  *
  */
-export function postSearch(
-  props: CustomMutateProps<PostSearchResponse, void, PostSearchQueryParams, PostSearchRequestBody, void>,
+export function getV2Links(
+  props: CustomGetProps<GetV2LinksResponse, ErrorResponseResponse, GetV2LinksQueryParams, void>,
 ) {
-  return customMutate<PostSearchResponse, void, PostSearchQueryParams, PostSearchRequestBody, void>(
-    'POST',
-    `/search`,
-    props,
-  );
+  return customGet<GetV2LinksResponse, ErrorResponseResponse, GetV2LinksQueryParams, void>(`/v2/links`, props);
 }
 
-export interface PostLinksResponse {
-  /**
-   * The ID of the newly added link
-   */
-  id: string;
+export interface PostV2LinksResponse {
+  link: Link;
 }
 
-export interface PostLinksRequestBody {
+export interface PostV2LinksRequestBody {
   /**
    * The link to be added
    */
@@ -232,15 +170,21 @@ export interface PostLinksRequestBody {
  * Adds a new link
  *
  */
-export function postLinks(props: CustomMutateProps<PostLinksResponse, void, void, PostLinksRequestBody, void>) {
-  return customMutate<PostLinksResponse, void, void, PostLinksRequestBody, void>('POST', `/links`, props);
+export function postV2Links(
+  props: CustomMutateProps<PostV2LinksResponse, ErrorResponseResponse, void, PostV2LinksRequestBody, void>,
+) {
+  return customMutate<PostV2LinksResponse, ErrorResponseResponse, void, PostV2LinksRequestBody, void>(
+    'POST',
+    `/v2/links`,
+    props,
+  );
 }
 
-export interface GetLinksIdResponse {
-  link: LinkDetail;
+export interface GetV2LinkIdResponse {
+  link: Link;
 }
 
-export interface GetLinksIdPathParams {
+export interface GetV2LinkIdPathParams {
   /**
    * The ID of the link
    */
@@ -253,14 +197,67 @@ export interface GetLinksIdPathParams {
  * Gets the detail of a single link
  *
  */
-export function getLinksId({
+export function getV2LinkId({
   id,
   ...props
-}: CustomGetProps<GetLinksIdResponse, void, void, GetLinksIdPathParams> & {
+}: CustomGetProps<GetV2LinkIdResponse, ErrorResponseResponse, void, GetV2LinkIdPathParams> & {
   /**
    * The ID of the link
    */
   id: string;
 }) {
-  return customGet<GetLinksIdResponse, void, void, GetLinksIdPathParams>(`/links/${id}`, props);
+  return customGet<GetV2LinkIdResponse, ErrorResponseResponse, void, GetV2LinkIdPathParams>(`/v2/links/${id}`, props);
+}
+
+export interface GetV2TagsResponse {
+  /**
+   * The list of tags
+   */
+  tags: string[];
+}
+
+export interface GetV2TagsQueryParams {
+  /**
+   * List of tags to exclude
+   */
+  exclude?: string[];
+}
+
+/**
+ * Get common tags
+ *
+ * Gets a list of the most commonly used tags by the current user
+ *
+ */
+export function getV2Tags(props: CustomGetProps<GetV2TagsResponse, ErrorResponseResponse, GetV2TagsQueryParams, void>) {
+  return customGet<GetV2TagsResponse, ErrorResponseResponse, GetV2TagsQueryParams, void>(`/v2/tags`, props);
+}
+
+export interface GetV2UserIdResponse {
+  user: User;
+}
+
+export interface GetV2UserIdPathParams {
+  /**
+   * The name of the user, or the special string `me`
+   */
+  name: string;
+}
+
+/**
+ * Get user detail
+ *
+ * Gets the detail of a single user
+ *
+ */
+export function getV2UserId({
+  name,
+  ...props
+}: CustomGetProps<GetV2UserIdResponse, ErrorResponseResponse, void, GetV2UserIdPathParams> & {
+  /**
+   * The name of the user, or the special string `me`
+   */
+  name: string;
+}) {
+  return customGet<GetV2UserIdResponse, ErrorResponseResponse, void, GetV2UserIdPathParams>(`/v2/users/${name}`, props);
 }

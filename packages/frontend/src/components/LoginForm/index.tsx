@@ -6,7 +6,7 @@ export type ChallengeTypes = 'totp';
 
 export interface LoginFormValues {
   name: string;
-  response?: string;
+  code?: string;
 }
 
 interface LoginFormProps {
@@ -48,9 +48,9 @@ export default function LoginForm({ onSubmit = noop, challenge }: LoginFormProps
         <div>
           <h4>Enter a code from your authenticator app</h4>
           <input
-            name="response"
+            name="code"
             placeholder="Code"
-            ref={register({ required: true })}
+            ref={register}
             onKeyPress={onInputKeyPress}
             autoComplete="one-time-code"
           />

@@ -1,8 +1,21 @@
-import './util/env';
-import app from './app';
+import 'reflect-metadata';
+import Container from 'typedi';
+import IExpressServer from './infrastructure/ExpressServer/ExpressServer';
+import ExpressServerImpl from './infrastructure/ExpressServer/ExpressServerImpl';
+import ILoggerService from './services/LoggerService/LoggerService';
+import LoggerServiceImpl from './services/LoggerService/LoggerServiceImpl';
+import ITypeOrmService from './services/TypeOrmService/TypeOrmService';
+import TypeOrmServiceImpl from './services/TypeOrmService/TypeOrmServiceImpl';
 
-const SERVER_PORT = process.env.SERVER_PORT || '7000';
-const port = parseInt(SERVER_PORT, 10);
+const loggerService = Container.get<ILoggerService>(LoggerServiceImpl);
+const logger = loggerService.child('app');
 
-app.listen(port, () => console.log(`Starting ExpressJS server on Port ${port}`));
-export default app;
+async function startApp() {
+  const typeOrmService = Container.get<ITypeOrmService>(TypeOrmServiceImpl);
+  await typeOrmService.start();
+
+  const expressApp = Container.get<IExpressServer>(ExpressServerImpl);
+  await expressApp.start();
+}
+
+startApp().catch((error) => logger.error('Error on start', { error, message: error?.message, stack: error?.stack }));

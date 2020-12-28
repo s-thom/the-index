@@ -13,20 +13,20 @@ externalDocs:
 servers:
   - url: 'https://the-index.sthom.kiwi/api'
 paths:
-  /login:
-    $ref: ./paths/login.yaml
-  /tags:
-    $ref: ./paths/tags.yaml
-  /search:
-    $ref: ./paths/search.yaml
-  /links:
-    $ref: ./paths/links/index.yaml
-  /links/{id}:
-    $ref: ./paths/links/id.yaml
+  /v2/auth:
+    $ref: ./paths/v2/auth.yaml
+  /v2/links:
+    $ref: ./paths/v2/links/index.yaml
+  /v2/links/{id}:
+    $ref: ./paths/v2/links/{id}.yaml
+  /v2/tags:
+    $ref: ./paths/v2/tags.yaml
+  /v2/users/{name}:
+    $ref: ./paths/v2/users/{name}.yaml
 components:
   securitySchemes:
-    bearer:
-      type: http
-      description: Authenticatin by bearer token
-      scheme: bearer
-      bearerFormat: JWT
+    cookie:
+      type: apiKey
+      description: Authentication by session cookie
+      in: cookie
+      name: session

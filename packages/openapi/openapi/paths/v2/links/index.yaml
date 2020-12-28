@@ -1,0 +1,99 @@
+get:
+  operationId: getV2Links
+  summary: Search links
+  description: |
+    Searches for links matching the given parameters
+  tags:
+    - Links
+  security:
+    - cookie: []
+  parameters:
+    - name: tags
+      in: query
+      description: List of tags to include
+      schema:
+        type: array
+        description: List of tags to include
+        items:
+          type: string
+          description: A tag
+          example: example
+        example: []
+    - name: before
+      in: query
+      description: The upper bound for the time a link was added
+      schema:
+        type: string
+        format: date-time
+        description: The upper bound for the time a link was added
+        example: '2020-01-01T00:00:00.000Z'
+    - name: after
+      in: query
+      description: The lower bound for the time a link was added
+      schema:
+        type: string
+        format: date-time
+        description: The lower bound for the time a link was added
+        example: '2020-01-01T00:00:00.000Z'
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - links
+            properties:
+              links:
+                type: array
+                description: The list of links
+                items:
+                  $ref: '../../../components/schemas/Link.yaml'
+    '400':
+      $ref: ../../../components/responses/ErrorResponse.yaml
+post:
+  operationId: postV2Links
+  summary: Add new link
+  description: |
+    Adds a new link
+  tags:
+    - Links
+  security:
+    - cookie: []
+  requestBody:
+    description: Link information
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Link information
+          required:
+            - url
+            - tags
+          properties:
+            url:
+              type: string
+              description: The link to be added
+              example: https://example.com
+            tags:
+              type: array
+              description: List of tags to add to the link
+              items:
+                type: string
+                description: A tag
+                example: example
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - link
+            properties:
+              link:
+                $ref: '../../../components/schemas/Link.yaml'
+    '400':
+      $ref: ../../../components/responses/ErrorResponse.yaml

@@ -9,8 +9,8 @@ describe('LinkItem', () => {
           id: '1',
           url: 'https://example.com',
           tags: ['one', 'two'],
-          user: { id: '1', name: 'stuart' },
-          inserted: '2020-01-01T00:00:00.000Z',
+          user: { name: 'stuart' },
+          created: '2020-01-01T00:00:00.000Z',
         }}
       />,
     );

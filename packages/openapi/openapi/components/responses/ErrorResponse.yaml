@@ -1,0 +1,13 @@
+description: Response for when problems occur in the application
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          description: List of errors
+          items:
+            $ref: ../schemas/Error.yaml

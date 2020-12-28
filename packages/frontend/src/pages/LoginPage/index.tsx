@@ -1,76 +1,51 @@
+import { AxiosError } from 'axios';
 import { useCallback, useState } from 'react';
 import { useMutation } from 'react-query';
 import styled from 'styled-components';
-import {
-  postLogin,
-  PostLoginChallengeResponse,
-  PostLoginRequest,
-  PostLoginSetupResponse,
-  PostLoginSuccessResponse,
-  PostLoginTOTPRequest,
-} from '../../api-types';
+import { ErrorResponseResponse, postV2Auth, PostV2AuthRequestBody, PostV2AuthResponse } from '../../api-types';
 import LoginForm, { LoginFormValues } from '../../components/LoginForm';
 import { useAuthorizationContext } from '../../context/AuthorizationContext';
 import TotpSetup from './TotpSetup';
-
-type LoginResponseCombined = PostLoginSetupResponse | PostLoginSuccessResponse | PostLoginChallengeResponse;
 
 const StyledWrapper = styled.div`
   text-align: center;
 `;
 
 export default function LoginPage() {
-  const [showTotp, setShowTotp] = useState(false);
-  const [totpSetup, setTotpSetup] = useState<PostLoginSetupResponse>();
-  const { setToken } = useAuthorizationContext();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [totpCode, setTotpCode] = useState<string>();
+  const { setIsAuthorized } = useAuthorizationContext();
 
-  const loginResponseCallback = useCallback(
-    (response: LoginResponseCombined) => {
-      if ('token' in response) {
-        setToken(response.token);
-        return;
+  const loginResponseCallback = useCallback(() => setIsAuthorized(true), [setIsAuthorized]);
+  const loginErrorCallback = useCallback((error: unknown) => {
+    // Do a quick test to see if this is an Axios error
+    if (error && typeof error === 'object' && 'response' in error) {
+      const response = (error as AxiosError).response!;
+      // Test to see fi it's probably a well-formed error
+      if ('errors' in response.data) {
+        const data = response.data as ErrorResponseResponse;
+
+        // Try find TOTP setup error
+        const needsSetupError = data.errors.find((e) => e.code === 'auth.totp.setup');
+        if (needsSetupError) {
+          setTotpCode(needsSetupError.meta?.code);
+        }
       }
+    }
+  }, []);
 
-      if (response.requires === 'challenge' && (response as any).totp) {
-        setShowTotp(true);
-        return;
-      }
-
-      if (response.requires === 'setup') {
-        setTotpSetup(response);
-        setShowTotp(true);
-      }
-    },
-    [setToken],
-  );
-
-  const { mutate: submitLogin } = useMutation<
-    LoginResponseCombined,
-    void,
-    { method?: 'TOTP'; code?: string; name: string }
-  >(
+  const { mutate: submitLogin } = useMutation<PostV2AuthResponse, void, PostV2AuthRequestBody>(
     ['login'],
-    async ({ method, code, name }) => {
-      const requestData: PostLoginRequest | PostLoginTOTPRequest =
-        method && code ? { name, challenge: method, response: code } : { name };
-
-      const response = await postLogin({ body: requestData });
+    async ({ code, name }) => {
+      const response = await postV2Auth({ body: { name, code } });
       return response;
     },
-    { onSuccess: loginResponseCallback },
+    { onSuccess: loginResponseCallback, onError: loginErrorCallback },
   );
 
   const onSubmit = useCallback(
     (values: LoginFormValues) => {
-      if (values.response) {
-        submitLogin({
-          name: values.name,
-          method: 'TOTP',
-          code: values.response,
-        });
-      } else {
-        submitLogin({ name: values.name });
-      }
+      submitLogin(values);
     },
     [submitLogin],
   );
@@ -78,8 +53,8 @@ export default function LoginPage() {
   return (
     <StyledWrapper>
       <h2>Login</h2>
-      <LoginForm onSubmit={onSubmit} challenge={showTotp ? 'totp' : undefined} />
-      {totpSetup && <TotpSetup code={totpSetup.code} url={totpSetup.url} />}
+      <LoginForm onSubmit={onSubmit} challenge="totp" />
+      {totpCode && <TotpSetup code={totpCode} />}
     </StyledWrapper>
   );
 }

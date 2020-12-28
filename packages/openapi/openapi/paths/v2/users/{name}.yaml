@@ -1,0 +1,32 @@
+get:
+  operationId: getV2UserId
+  summary: Get user detail
+  description: |
+    Gets the detail of a single user
+  tags:
+    - Users
+  security:
+    - cookie: []
+  parameters:
+    - name: name
+      in: path
+      required: true
+      description: The name of the user, or the special string `me`
+      schema:
+        type: string
+        description: The name of the user, or the special string `me`
+        example: me
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - user
+            properties:
+              user:
+                $ref: '../../../components/schemas/User.yaml'
+    '400':
+      $ref: ../../../components/responses/ErrorResponse.yaml

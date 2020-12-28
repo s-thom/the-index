@@ -1,30 +1,36 @@
 import axios from 'axios';
 import { createContext, PropsWithChildren, ReactNode, useContext, useEffect, useState } from 'react';
-import { getTags } from '../../api-types';
+import { getV2UserId } from '../../api-types';
 
 export interface AuthorizationContextValue {
-  authorized: boolean;
-  setToken: (token: string) => void;
+  isAuthorized: boolean;
+  setIsAuthorized: (value: boolean) => void;
 }
 
 export const AuthorizationContext = createContext<AuthorizationContextValue>({
-  authorized: false,
-  setToken: () => {},
+  isAuthorized: false,
+  setIsAuthorized: () => {},
 });
 
 export interface AuthorizationRootProps {
-  fallback?: ReactNode;
+  unauthorized?: ReactNode;
+  loading?: ReactNode;
 }
 
-export default function AuthorizationRoot({ children, fallback }: PropsWithChildren<AuthorizationRootProps>) {
-  const [token, setToken] = useState<string>();
+export default function AuthorizationRoot({
+  children,
+  unauthorized: unauthorizedChildren,
+  loading: loadingChildren,
+}: PropsWithChildren<AuthorizationRootProps>) {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Add request interceptor to inject authorization header
   useEffect(() => {
     const requestInterceptor = axios.interceptors.request.use((request) => {
-      if (token) {
+      if (isAuthorized) {
         request.withCredentials = true;
-        request.headers = { ...request.headers, Authorization: `Bearer ${token}` };
+        request.headers = { ...request.headers, Authorization: `Bearer ${isAuthorized}` };
       }
 
       return request;
@@ -33,15 +39,13 @@ export default function AuthorizationRoot({ children, fallback }: PropsWithChild
     return () => {
       axios.interceptors.request.eject(requestInterceptor);
     };
-  }, [token]);
+  }, [isAuthorized]);
 
   // Add response interceptor to handle 401 status codes and new tokens
   useEffect(() => {
     const responseInterceptor = axios.interceptors.response.use((response) => {
       if (response.status === 401) {
-        setToken(undefined);
-      } else if (response.headers['x-new-token']) {
-        setToken(response.headers['x-new-token']);
+        setIsAuthorized(false);
       }
 
       return response;
@@ -55,17 +59,29 @@ export default function AuthorizationRoot({ children, fallback }: PropsWithChild
   // Do a request to get the state on load
   useEffect(() => {
     axios.defaults.baseURL = process.env.REACT_APP_SERVER_PATH;
-    getTags({}).catch(() => {});
+    getV2UserId({ name: 'me' }).then(
+      () => {
+        setIsAuthorized(true);
+        setIsLoading(false);
+      },
+      () => {
+        setIsLoading(false);
+      },
+    );
   }, []);
+
+  if (isLoading) {
+    return <>{loadingChildren}</>;
+  }
 
   return (
     <AuthorizationContext.Provider
       value={{
-        authorized: !!token,
-        setToken,
+        isAuthorized,
+        setIsAuthorized,
       }}
     >
-      {token ? children : fallback}
+      {isAuthorized ? children : unauthorizedChildren}
     </AuthorizationContext.Provider>
   );
 }

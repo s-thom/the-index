@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LinkDetail } from '../../api-types';
+import { Link } from '../../api-types';
 import { PlainList } from '../PlainComponents';
 
 const LinkItemWrapper = styled.div`
@@ -26,7 +26,7 @@ const LinkItemTag = styled.li`
 `;
 
 interface LinkItemProps {
-  link: LinkDetail;
+  link: Link;
 }
 
 export default function LinkItem({ link }: LinkItemProps) {
