@@ -135,7 +135,7 @@ jobs:
         env:
           CI: 'true'
         run: |
-          echo '[{"name": "default","type": "sqlite","database": ":memory:","entities": ["src/**/*.entity.{js,ts}"],"migrations": ["migrations/*.{js,ts}"]}]' > ormconfig.json
+          echo '[{"name": "default","type": "sqlite","database": ":memory:","entities": ["src/**/*.entity.{js,ts}"],"migrations": ["migrations/*.{js,ts}"]}]' > packages/backend/ormconfig.json
           npm ci
           npx lerna bootstrap
           npx lerna run --scope backend execute-migrations
