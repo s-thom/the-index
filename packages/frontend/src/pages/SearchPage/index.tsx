@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { getV2Links } from '../../api-types';
-import LinkItem from '../../components/LinkItem';
+import LinksList from '../../components/LinksList';
 import SearchForm, { SearchFormValues } from '../../components/SearchForm';
 import useParams, { QueryType } from '../../hooks/useParams';
 
@@ -21,9 +21,7 @@ const StyledFormWrapper = styled.div`
     width: 250px;
   }
 `;
-
-const StyledListWrapper = styled.div`
-  margin: 0.5em;
+const StyledList = styled(LinksList)`
   flex-grow: 1;
 `;
 
@@ -83,6 +81,19 @@ export default function SearchPage() {
     [setParams],
   );
 
+  const pageChangeCallback = useCallback(
+    (newPage: number) => {
+      const newParams: SearchPageQueryParams = {
+        tags,
+        after,
+        before,
+        page: newPage,
+      };
+      setParams(newParams);
+    },
+    [after, before, setParams, tags],
+  );
+
   const { data } = useQuery(
     ['links.search', tags, before, after, currentPage],
     async () => {
@@ -105,7 +116,7 @@ export default function SearchPage() {
       <StyledFormWrapper>
         <SearchForm initialValues={initialFormValues} onChange={formChangeCallback} />
       </StyledFormWrapper>
-      <StyledListWrapper>{data && data.links.map((link) => <LinkItem key={link.id} link={link} />)}</StyledListWrapper>
+      {data && <StyledList links={data.links} pagination={data.pagination} onPageChange={pageChangeCallback} />}
     </StyledWrapper>
   );
 }

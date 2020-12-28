@@ -42,7 +42,7 @@ export default class LinkServiceImpl implements ILinkService {
         limit,
         offset,
         total,
-        page: Math.max(Math.ceil(offset / limit) + 1, Math.ceil(total / limit)),
+        page: Math.max(Math.min(Math.ceil(offset / limit) + 1, Math.ceil(total / limit)), 1),
       },
     };
   }
