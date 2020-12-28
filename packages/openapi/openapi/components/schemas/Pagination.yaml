@@ -1,0 +1,24 @@
+type: object
+description: Information relating to the pagination of the response
+required:
+  - limit
+  - offset
+  - total
+  - page
+properties:
+  limit:
+    type: number
+    description: The maximum number of items returned in the query
+    example: 100
+  offset:
+    type: number
+    description: The number of items that have been previously
+    example: 0
+  total:
+    type: number
+    description: The total number of items that could be retrieved
+    example: 26
+  page:
+    type: number
+    description: The current page number
+    example: 1
