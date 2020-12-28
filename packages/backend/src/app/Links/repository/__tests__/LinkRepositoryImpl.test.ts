@@ -81,10 +81,13 @@ describe('LinkRepositoryImpl', () => {
       const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, { getUserTags: jest.fn() });
       await expect(
         repository.search({ id: 1, name: 'stuart', created: new Date() }, { tags: ['bar', 'baz'] }),
-      ).resolves.toMatchObject([
-        { id: 2, reference: 'BBB', tags: expect.arrayContaining(['bar', 'baz']) },
-        { id: 1, reference: 'AAA', tags: expect.arrayContaining(['foo', 'bar']) },
-      ]);
+      ).resolves.toMatchObject({
+        links: [
+          { id: 2, reference: 'BBB', tags: expect.arrayContaining(['bar', 'baz']) },
+          { id: 1, reference: 'AAA', tags: expect.arrayContaining(['foo', 'bar']) },
+        ],
+        pagination: { limit: 10, offset: 0, total: 2 },
+      });
     });
 
     it('should filter links by creation date', async () => {
@@ -133,7 +136,10 @@ describe('LinkRepositoryImpl', () => {
             limit: 5,
           },
         ),
-      ).resolves.toMatchObject([{ id: 2, reference: 'BBB', tags: expect.arrayContaining(['bar', 'baz']) }]);
+      ).resolves.toMatchObject({
+        links: [{ id: 2, reference: 'BBB', tags: expect.arrayContaining(['bar', 'baz']) }],
+        pagination: { limit: 5, offset: 0, total: 1 },
+      });
     });
   });
 });

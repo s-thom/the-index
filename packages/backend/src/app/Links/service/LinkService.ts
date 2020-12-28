@@ -1,3 +1,4 @@
+import { Pagination } from '../../../api-types';
 import User from '../../Users/User';
 import Link from '../Link';
 
@@ -7,10 +8,17 @@ export interface LinkSearchOptions {
     min?: Date;
     max?: Date;
   };
+  limit?: number;
+  offset?: number;
+}
+
+export interface LinkSearchReturn {
+  links: Link[];
+  pagination: Pagination;
 }
 
 export default interface ILinkService {
   getLink(user: User, reference: string): Promise<Link>;
   addLink(user: User, link: Pick<Link, 'url' | 'tags'>): Promise<Link>;
-  search(user: User, options: LinkSearchOptions): Promise<Link[]>;
+  search(user: User, options: LinkSearchOptions): Promise<LinkSearchReturn>;
 }

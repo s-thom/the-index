@@ -57,17 +57,23 @@ export default class LinkControllerImpl implements LinkController {
     };
   }
 
-  async search(currentUser: User, queryParams: GetV2LinksQueryParams): Promise<GetV2LinksResponse> {
-    const links = await this.linkService.search(currentUser, {
-      tags: queryParams.tags ?? [],
+  async search(
+    currentUser: User,
+    { tags, after, before, limit, offset }: GetV2LinksQueryParams,
+  ): Promise<GetV2LinksResponse> {
+    const { links, pagination } = await this.linkService.search(currentUser, {
+      tags: tags ?? [],
       created: {
-        min: queryParams.after ? new Date(queryParams.after) : undefined,
-        max: queryParams.before ? new Date(queryParams.before) : undefined,
+        min: after ? new Date(after) : undefined,
+        max: before ? new Date(before) : undefined,
       },
+      limit,
+      offset,
     });
 
     return {
       links: links.map((link) => this.serialiseLink(link)),
+      pagination,
     };
   }
 
@@ -83,6 +89,8 @@ export default class LinkControllerImpl implements LinkController {
               tags: Yup.array().transform(arrayTransformer).of(Yup.string().required()).notRequired(),
               before: Yup.string().notRequired(),
               after: Yup.string().notRequired(),
+              limit: Yup.number().notRequired(),
+              offset: Yup.number().notRequired(),
             })
             .defined(),
         },
