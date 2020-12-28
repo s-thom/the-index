@@ -1,0 +1,9 @@
+[
+  {
+    "name": "dev",
+    "type": "sqlite",
+    "database": "dev.sqlite",
+    "entities": ["src/**/*.entity.{js,ts}"],
+    "migrations": ["migrations/*.{js,ts}"]
+  }
+]
