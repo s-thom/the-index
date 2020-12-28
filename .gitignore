@@ -6,6 +6,7 @@ coverage
 *.sqlite
 
 ormconfig.*
+!ormconfig.example.*
 
 lerna-debug.log
 npm-debug.log

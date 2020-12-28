@@ -6,5 +6,5 @@ module.exports = {
   testEnvironment: 'node',
   resetMocks: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.{js,ts}'],
-  coveragePathIgnorePatterns: ['<rootDir>/src/api-types.ts'],
+  coveragePathIgnorePatterns: ['<rootDir>/src/api-types.ts', '<rootDir>/migrations'],
 };

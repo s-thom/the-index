@@ -19,7 +19,10 @@
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "format": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
-    "generate-types": "restful-react import --skip-react --file ../openapi/build/the-index.yaml --output src/api-types.ts"
+    "generate-types": "restful-react import --skip-react --file ../openapi/build/the-index.yaml --output src/api-types.ts",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "generate-migrations": "npm run typeorm -- migration:generate -d ./migrations -p",
+    "execute-migrations": "npm run typeorm -- migration:run"
   },
   "bugs": {
     "url": "https://github.com/s-thom/the-index/issues"
