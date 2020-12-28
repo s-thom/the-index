@@ -1,4 +1,4 @@
-# the-index
+# [the-index](https://the-index.sthom.kiwi/)
 
 A personal index.
 
