@@ -1,7 +1,6 @@
 import { OptionsJson as BodyParserOptions, OptionsUrlencoded as UrlEncodedOptions } from 'body-parser';
 import { CorsOptions } from 'cors';
 import { LoggerOptions } from 'pino';
-import { ConnectionOptions } from 'typeorm';
 
 export interface ExpressConfig {
   port: number;
@@ -13,9 +12,13 @@ export interface ExpressConfig {
   cookieSession: CookieSessionInterfaces.CookieSessionOptions;
 }
 
+export interface TypeOrmConfig {
+  connection: string;
+}
+
 export default interface IConfigService {
   isDev(): boolean;
   express: ExpressConfig;
   logger: LoggerOptions;
-  typeOrm: ConnectionOptions;
+  typeOrm: TypeOrmConfig;
 }

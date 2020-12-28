@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { ConnectionOptions } from 'typeorm';
 import IConfigService from '../services/ConfigService/ConfigService';
 import ILoggerService, { Logger } from '../services/LoggerService/LoggerService';
 
@@ -22,14 +23,18 @@ export const mockConfigService: jest.Mocked<IConfigService> = {
   express: { bodyParser: {}, cookieSession: {}, cors: {}, port: 7000, proxy: false, urlEncoded: {} },
   logger: {},
   typeOrm: {
-    type: 'sqlite',
-    name: 'test',
-    database: ':memory:',
-    dropSchema: true,
-    entities: [join(__dirname, '/../**/*.entity.{ts,js}')],
-    synchronize: true,
-    logging: false,
+    connection: 'test',
   },
+};
+
+export const mockTypeOrmConnectionOptions: ConnectionOptions = {
+  name: 'test',
+  type: 'sqlite',
+  database: ':memory:',
+  dropSchema: true,
+  entities: [join(__dirname, '/../**/*.entity.{ts,js}')],
+  synchronize: true,
+  logging: false,
 };
 
 beforeEach(() => {

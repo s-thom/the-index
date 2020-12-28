@@ -18,4 +18,4 @@ async function startApp() {
   await expressApp.start();
 }
 
-startApp().catch((error) => logger.error(error));
+startApp().catch((error) => logger.error('Error on start', { error, message: error?.message, stack: error?.stack }));

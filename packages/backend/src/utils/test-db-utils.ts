@@ -3,7 +3,7 @@ import LinkModel from '../app/Links/repository/LinkModel.entity';
 import TagModel from '../app/Tags/repository/TagModel.entity';
 import UserModel from '../app/Users/repository/UserModel.entity';
 import TypeOrmServiceImpl from '../services/TypeOrmService/TypeOrmServiceImpl';
-import { mockConfigService, mockLogger } from './test-utils';
+import { mockConfigService, mockLogger, mockTypeOrmConnectionOptions } from './test-utils';
 
 interface TestUserModel {
   id: number;
@@ -69,6 +69,8 @@ export const mockTypeOrmService = new TypeOrmServiceImpl(
   { child: () => mockLogger, get: () => mockLogger },
   mockConfigService,
 );
+// Manually set the configuration to avoid TypeORM's configuration loader
+mockTypeOrmService.setConfiguration(mockTypeOrmConnectionOptions);
 
 export function getTestConnection() {
   const connectionManager = getConnectionManager();

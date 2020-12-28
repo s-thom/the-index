@@ -50,11 +50,7 @@ describe('ConfigServiceImpl', () => {
       },
     });
     expect(service.typeOrm).toEqual({
-      name: 'default',
-      type: 'sqlite',
-      database: './the-index.sqlite',
-      entities: [expect.any(String)],
-      synchronize: false,
+      connection: 'default',
     });
   });
 
@@ -65,8 +61,7 @@ describe('ConfigServiceImpl', () => {
       SERVER_PORT: '8080',
       LOGGER_LEVEL: 'trace',
       EXPRESS_PROXY: 'true',
-      DATABASE_NAME: './example.sqlite',
-      DATABASE_SYNCHRONIZE: 'true',
+      DATABASE_CONNECTION: 'example',
     };
 
     const service = new ConfigServiceImpl();
@@ -99,11 +94,7 @@ describe('ConfigServiceImpl', () => {
       },
     });
     expect(service.typeOrm).toEqual({
-      name: 'default',
-      type: 'sqlite',
-      database: './example.sqlite',
-      entities: [expect.any(String)],
-      synchronize: true,
+      connection: 'example',
     });
   });
 

@@ -1,8 +1,6 @@
-import { join } from 'path';
 import { LoggerOptions } from 'pino';
 import { Service } from 'typedi';
-import { ConnectionOptions } from 'typeorm';
-import IConfigService, { ExpressConfig } from './ConfigService';
+import IConfigService, { ExpressConfig, TypeOrmConfig } from './ConfigService';
 
 const DEFAULT_PORT = 7000;
 
@@ -46,11 +44,7 @@ export default class ConfigServiceImpl implements IConfigService {
     },
   };
 
-  typeOrm: ConnectionOptions = {
-    name: 'default',
-    type: 'sqlite',
-    database: process.env.DATABASE_NAME ?? './the-index.sqlite',
-    entities: [join(__dirname, '/../../**/*.entity.{ts,js}')],
-    synchronize: process.env.DATABASE_SYNCHRONIZE ? !process.env.DATABASE_SYNCHRONIZE.match(/false/i) : false,
+  typeOrm: TypeOrmConfig = {
+    connection: process.env.DATABASE_CONNECTION ?? 'default',
   };
 }
