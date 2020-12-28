@@ -71,16 +71,19 @@ describe('LinkServiceImpl', () => {
   });
 
   describe('search', () => {
-    it('should add a link', async () => {
-      const mockSearch = jest.fn().mockResolvedValue([
-        {
-          id: 1,
-          reference: 'AAA',
-          user: { id: 1 },
-          tags: ['foo', 'bar'],
-          url: 'https://example.com',
-        },
-      ]);
+    it('should search for links', async () => {
+      const mockSearch = jest.fn().mockResolvedValue({
+        links: [
+          {
+            id: 1,
+            reference: 'AAA',
+            user: { id: 1 },
+            tags: ['foo', 'bar'],
+            url: 'https://example.com',
+          },
+        ],
+        pagination: { limit: 25, offset: 0, total: 1 },
+      });
 
       const service = new LinkServiceImpl(
         mockLoggerService,
@@ -92,15 +95,18 @@ describe('LinkServiceImpl', () => {
         { next: jest.fn() },
       );
 
-      await expect(service.search({ id: 1 } as any, { tags: ['foo', 'bar'] })).resolves.toEqual([
-        {
-          id: 1,
-          reference: 'AAA',
-          user: { id: 1 },
-          tags: ['foo', 'bar'],
-          url: 'https://example.com',
-        },
-      ]);
+      await expect(service.search({ id: 1 } as any, { tags: ['foo', 'bar'] })).resolves.toEqual({
+        links: [
+          {
+            id: 1,
+            reference: 'AAA',
+            user: { id: 1 },
+            tags: ['foo', 'bar'],
+            url: 'https://example.com',
+          },
+        ],
+        pagination: { limit: 25, offset: 0, total: 1, page: 1 },
+      });
 
       expect(mockSearch).toHaveBeenCalledTimes(1);
       expect(mockSearch).toHaveBeenLastCalledWith({ id: 1 }, { tags: ['foo', 'bar'] });

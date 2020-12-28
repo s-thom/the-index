@@ -7,7 +7,7 @@ import User from '../../Users/User';
 import Link from '../Link';
 import ILinkRepository from '../repository/LinkRepository';
 import LinkRepositoryImpl from '../repository/LinkRepositoryImpl';
-import ILinkService, { LinkSearchOptions } from './LinkService';
+import ILinkService, { LinkSearchOptions, LinkSearchReturn } from './LinkService';
 
 @Service()
 export default class LinkServiceImpl implements ILinkService {
@@ -31,7 +31,19 @@ export default class LinkServiceImpl implements ILinkService {
     return newLink;
   }
 
-  async search(user: User, options: LinkSearchOptions): Promise<Link[]> {
-    return this.linkRepository.search(user, options);
+  async search(user: User, options: LinkSearchOptions): Promise<LinkSearchReturn> {
+    const {
+      links,
+      pagination: { limit, offset, total },
+    } = await this.linkRepository.search(user, options);
+    return {
+      links,
+      pagination: {
+        limit,
+        offset,
+        total,
+        page: Math.max(Math.min(Math.ceil(offset / limit) + 1, Math.ceil(total / limit)), 1),
+      },
+    };
   }
 }

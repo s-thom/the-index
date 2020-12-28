@@ -10,7 +10,7 @@ import TagServiceImpl from '../../Tags/service/TagServiceImpl';
 import User from '../../Users/User';
 import Link from '../Link';
 import LinkModel from './LinkModel.entity';
-import ILinkRepository, { LinkSearchOptions } from './LinkRepository';
+import ILinkRepository, { LinkSearchOptions, LinkSearchReturn } from './LinkRepository';
 
 @Service()
 export default class LinkRepositoryImpl implements ILinkRepository {
@@ -70,8 +70,9 @@ export default class LinkRepositoryImpl implements ILinkRepository {
     return this.resolve(model);
   }
 
-  async search(user: User, { tags, created, limit = 10 }: LinkSearchOptions): Promise<Link[]> {
+  async search(user: User, { tags, created, limit = 10, offset = 0 }: LinkSearchOptions): Promise<LinkSearchReturn> {
     const { min, max } = created ?? {};
+    const clampedLimit = Math.max(Math.min(limit, 100), 1);
 
     // Create query builder for getting all links matching the query parameters
     let queryBuilder = this.repository
@@ -89,9 +90,17 @@ export default class LinkRepositoryImpl implements ILinkRepository {
       queryBuilder = queryBuilder.andWhere('LinkModel.created <= datetime(:max)', { max: max.toISOString() });
     }
 
-    queryBuilder = queryBuilder.groupBy('LinkModel.id').orderBy('count(t.id) DESC, LinkModel.id', 'DESC').limit(limit);
+    queryBuilder = queryBuilder
+      .groupBy('LinkModel.id')
+      .addSelect('count(t.id)', 'alias_tag_count')
+      .orderBy({
+        alias_tag_count: 'DESC',
+        'LinkModel.id': 'DESC',
+      })
+      .take(clampedLimit)
+      .skip(offset);
 
-    const matchingLinks = await queryBuilder.getMany();
+    const [matchingLinks, total] = await queryBuilder.getManyAndCount();
     const matchingIds = matchingLinks.map((link) => link.id);
 
     const links = await this.repository.findByIds(matchingIds, { relations: ['user', 'tags'] });
@@ -101,6 +110,15 @@ export default class LinkRepositoryImpl implements ILinkRepository {
     // Use of `.indexOf()` should be OK, as all link IDs were grabbed from the actual data being used.
     links.sort((a, b) => matchingIds.indexOf(a.id) - matchingIds.indexOf(b.id));
 
-    return Promise.all(links.map((link) => this.resolve(link)));
+    const resolvedLinks = await Promise.all(links.map((link) => this.resolve(link)));
+
+    return {
+      links: resolvedLinks,
+      pagination: {
+        limit: clampedLimit,
+        offset,
+        total,
+      },
+    };
   }
 }

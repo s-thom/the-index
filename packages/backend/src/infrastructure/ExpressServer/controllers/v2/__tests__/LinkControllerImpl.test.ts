@@ -63,7 +63,9 @@ describe('LinkControllerImpl', () => {
 
   describe('search', () => {
     it('should search for links with default search parameters', async () => {
-      const mockSearch = jest.fn().mockResolvedValue([]);
+      const mockSearch = jest
+        .fn()
+        .mockResolvedValue({ links: [], pagination: { limit: 25, offset: 0, page: 1, total: 0 } });
 
       const controller = new LinkControllerImpl(mockLoggerService, {
         getLink: jest.fn(),
@@ -73,7 +75,7 @@ describe('LinkControllerImpl', () => {
 
       await expect(
         controller.search({ id: 1, name: 'stuart', created: new Date('2020-01-01T00:00:00.000Z') }, {}),
-      ).resolves.toEqual({ links: [] });
+      ).resolves.toEqual({ links: [], pagination: { limit: 25, offset: 0, page: 1, total: 0 } });
 
       expect(mockSearch).toHaveBeenCalledTimes(1);
       expect(mockSearch).toHaveBeenLastCalledWith(
@@ -83,15 +85,18 @@ describe('LinkControllerImpl', () => {
     });
 
     it('should search for links with given search parameters', async () => {
-      const mockSearch = jest.fn().mockResolvedValue([
-        {
-          id: 1,
-          reference: 'AAA',
-          url: 'https://example.com',
-          tags: ['foo'],
-          user: { id: 1, name: 'stuart' },
-        },
-      ]);
+      const mockSearch = jest.fn().mockResolvedValue({
+        links: [
+          {
+            id: 1,
+            reference: 'AAA',
+            url: 'https://example.com',
+            tags: ['foo'],
+            user: { id: 1, name: 'stuart' },
+          },
+        ],
+        pagination: { limit: 25, offset: 0, page: 1, total: 1 },
+      });
 
       const controller = new LinkControllerImpl(mockLoggerService, {
         getLink: jest.fn(),
@@ -106,6 +111,7 @@ describe('LinkControllerImpl', () => {
         ),
       ).resolves.toEqual({
         links: [{ id: 'AAA', url: 'https://example.com', tags: ['foo'], user: { name: 'stuart' } }],
+        pagination: { limit: 25, offset: 0, page: 1, total: 1 },
       });
 
       expect(mockSearch).toHaveBeenCalledTimes(1);

@@ -60,6 +60,28 @@ export interface Link {
 }
 
 /**
+ * Information relating to the pagination of the response
+ */
+export interface Pagination {
+  /**
+   * The maximum number of items returned in the query
+   */
+  limit: number;
+  /**
+   * The number of items that have been previously
+   */
+  offset: number;
+  /**
+   * The total number of items that could be retrieved
+   */
+  total: number;
+  /**
+   * The current page number
+   */
+  page: number;
+}
+
+/**
  * Response for when problems occur in the application
  */
 export interface ErrorResponseResponse {
@@ -93,6 +115,7 @@ export interface GetV2LinksResponse {
    * The list of links
    */
   links: Link[];
+  pagination: Pagination;
 }
 
 export interface GetV2LinksQueryParams {
@@ -108,6 +131,14 @@ export interface GetV2LinksQueryParams {
    * The lower bound for the time a link was added
    */
   after?: string;
+  /**
+   * The maximum number of links to return
+   */
+  limit?: number;
+  /**
+   * The number of links to skip when returning
+   */
+  offset?: number;
 }
 
 export interface PostV2LinksResponse {

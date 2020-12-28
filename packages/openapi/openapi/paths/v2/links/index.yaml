@@ -35,6 +35,20 @@ get:
         format: date-time
         description: The lower bound for the time a link was added
         example: '2020-01-01T00:00:00.000Z'
+    - name: limit
+      in: query
+      description: The maximum number of links to return
+      schema:
+        type: number
+        description: The maximum number of links to return
+        example: 25
+    - name: offset
+      in: query
+      description: The number of links to skip when returning
+      schema:
+        type: number
+        description: The number of links to skip when returning
+        example: 0
   responses:
     '200':
       description: Success
@@ -44,12 +58,15 @@ get:
             type: object
             required:
               - links
+              - pagination
             properties:
               links:
                 type: array
                 description: The list of links
                 items:
                   $ref: '../../../components/schemas/Link.yaml'
+              pagination:
+                $ref: '../../../components/schemas/Pagination.yaml'
     '400':
       $ref: ../../../components/responses/ErrorResponse.yaml
 post:
