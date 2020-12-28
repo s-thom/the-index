@@ -1,10 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { getV2Links } from '../../api-types';
 import LinkItem from '../../components/LinkItem';
 import SearchForm, { SearchFormValues } from '../../components/SearchForm';
-import { useArrayParam, useParams, useStringParam } from '../../hooks/useParam';
+import useParams, { QueryType } from '../../hooks/useParams';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -28,46 +28,74 @@ const StyledListWrapper = styled.div`
 `;
 
 interface SearchPageQueryParams {
-  t: string[];
-  a?: string;
-  b?: string;
+  tags: string[];
+  after?: string;
+  before?: string;
+  page?: number;
 }
 
-export default function SearchPage() {
-  const [, setParams] = useParams();
-  const [tags] = useArrayParam('t');
-  const [beforeString] = useStringParam('b');
-  const [afterString] = useStringParam('a');
+function extractParams(params: QueryType): SearchPageQueryParams {
+  const { tags, after, before, page } = params;
 
-  const [initialValues] = useState<SearchFormValues>({
+  let finalTags: string[];
+  if (Array.isArray(tags)) {
+    finalTags = tags.map((tag) => tag.toString());
+  } else if (typeof tags !== 'undefined') {
+    finalTags = [tags.toString()];
+  } else {
+    finalTags = [];
+  }
+  const finalAfter = typeof after === 'string' ? after : undefined;
+  const finalBefore = typeof before === 'string' ? before : undefined;
+  const finalPage = typeof page === 'number' ? page : undefined;
+
+  return {
+    tags: finalTags,
+    after: finalAfter,
+    before: finalBefore,
+    page: finalPage,
+  };
+}
+
+const NUM_LINKS = 25;
+
+export default function SearchPage() {
+  const [params, setParams] = useParams();
+  const { tags, after, before, page } = useMemo(() => extractParams(params), [params]);
+  const currentPage = Math.floor(Math.max(page ?? 1, 0));
+
+  const [initialFormValues] = useState<SearchFormValues>({
     tags,
-    before: beforeString || undefined,
-    after: afterString || undefined,
+    before: before || undefined,
+    after: after || undefined,
   });
 
   const formChangeCallback = useCallback(
     (values: SearchFormValues) => {
       const newParams: SearchPageQueryParams = {
-        t: values.tags,
-        a: values.after || undefined,
-        b: values.before || undefined,
+        tags: values.tags,
+        after: values.after || undefined,
+        before: values.before || undefined,
+        page: undefined,
       };
       setParams(newParams);
     },
     [setParams],
   );
 
-  const { data: links } = useQuery(
-    ['links.search', tags, beforeString, afterString],
+  const { data } = useQuery(
+    ['links.search', tags, before, after, currentPage],
     async () => {
       const response = await getV2Links({
         queryParams: {
           tags,
-          before: beforeString || undefined,
-          after: afterString || undefined,
+          before: before || undefined,
+          after: after || undefined,
+          limit: NUM_LINKS,
+          offset: currentPage > 1 ? (currentPage - 1) * NUM_LINKS : 0,
         },
       });
-      return response.links;
+      return response;
     },
     { keepPreviousData: true },
   );
@@ -75,9 +103,9 @@ export default function SearchPage() {
   return (
     <StyledWrapper>
       <StyledFormWrapper>
-        <SearchForm initialValues={initialValues} onChange={formChangeCallback} />
+        <SearchForm initialValues={initialFormValues} onChange={formChangeCallback} />
       </StyledFormWrapper>
-      <StyledListWrapper>{links && links.map((link) => <LinkItem key={link.id} link={link} />)}</StyledListWrapper>
+      <StyledListWrapper>{data && data.links.map((link) => <LinkItem key={link.id} link={link} />)}</StyledListWrapper>
     </StyledWrapper>
   );
 }

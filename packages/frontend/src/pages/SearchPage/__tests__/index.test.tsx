@@ -27,6 +27,7 @@ describe('SearchPage', () => {
           user: { name: 'stuart' },
         },
       ],
+      pagination: { limit: 25, offset: 0, total: 2, page: 1 },
     });
 
     render(<SearchPage />);
@@ -35,17 +36,28 @@ describe('SearchPage', () => {
     expect(getV2Links).toHaveBeenLastCalledWith({
       queryParams: {
         tags: [],
+        limit: 25,
+        offset: 0,
       },
     });
 
     const tagsInput = screen.getByRole('textbox');
-    userEvent.type(tagsInput, 'foo');
-    userEvent.type(tagsInput, ' ');
+    userEvent.type(tagsInput, 'foo ');
+    userEvent.type(tagsInput, 'bar ');
 
-    await waitFor(() => expect(getV2Links).toHaveBeenCalledTimes(2));
-    expect(getV2Links).toHaveBeenLastCalledWith({
+    await waitFor(() => expect(getV2Links).toHaveBeenCalledTimes(3));
+    expect(getV2Links).toHaveBeenNthCalledWith(2, {
       queryParams: {
         tags: ['foo'],
+        limit: 25,
+        offset: 0,
+      },
+    });
+    expect(getV2Links).toHaveBeenNthCalledWith(3, {
+      queryParams: {
+        tags: ['bar', 'foo'],
+        limit: 25,
+        offset: 0,
       },
     });
 
