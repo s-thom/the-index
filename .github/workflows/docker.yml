@@ -14,6 +14,7 @@ jobs:
         image:
           - frontend
           - backend
+          - database-migration
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

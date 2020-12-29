@@ -89,10 +89,20 @@ docker build . -f ./docker/backend.Dockerfile -t sthom/the-index-backend:latest
 
 ### Frontend image
 
-The frontend image is based on `nginx`, and serves the app from port `80` of the container. It's recommended that you have a reverse proxy in front of it (with HTTPS) before receiving traffic.
+The `frontend` image is based on `nginx`, and serves the app from port `80` of the container. It's recommended that you have a reverse proxy in front of it (with HTTPS) before receiving traffic.
 
 Note that if you want to change the `REACT_APP_SERVER_PATH` environment variable (in case your backend is on a different host), you will need to set this during the build.
 
 ### Backend image
 
-The backend image is based on `node`, and runs the app. It requires the same database configuration and environment variables as the non-containerised version (which means that if you're using an `ormconfig.json`, it must be mounted).
+The `backend` image is based on `node`, and runs the app. It requires the same database configuration and environment variables as the non-containerised version (which means that if you're using an `ormconfig.json`, it must be mounted).
+
+### Database migration image
+
+The `database-migration` image runs the database migrations. It requires the same database configuration as the backend (your `ormconfig.json`).
+
+Note: If you're using SQLite, it's best to configure your database file to be in a directory, and then mount that directory.
+
+```sh
+docker run -v ormconfig.json:/app/ormconfig.json -v out:/app/out IMAGE_NAME
+```
