@@ -18,6 +18,8 @@ More details on how to set things up for development are available in each of th
 
 ## Running your own instance
 
+If containers are your thing, then there are instructions for building using Docker below.
+
 All these steps require Node.js (`14.x` or higher, `12.x` will probably work, but hasn't been tested). This project uses [lerna](https://github.com/lerna/lerna) to manage the multiple parts.
 
 ```sh
@@ -75,3 +77,20 @@ npm run build
 
 # Open build/the-index.yaml in the Swagger Editor (https://editor.swagger.io/)
 ```
+
+## Docker
+
+You can build container images for the frontend and backend using Docker.
+
+```sh
+docker build . -f ./docker/frontend.Dockerfile -t sthom/the-index-frontend:latest
+docker build . -f ./docker/backend.Dockerfile -t sthom/the-index-backend:latest
+```
+
+### Frontend image
+
+The frontend image is based on `nginx`, and serves the app from port `80` of the container. It's recommended that you have a reverse proxy in front of it (with HTTPS) before receiving traffic.
+
+### Backend image
+
+The backend image is based on `node`, and runs the app. It requires the same database configuration and environment variables as the non-containerised version (which means that if you're using an `ormconfig.json`, it must be mounted).
