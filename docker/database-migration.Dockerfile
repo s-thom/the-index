@@ -1,5 +1,5 @@
 # Build from Node image
-FROM node:14
+FROM node:15
 USER node
 
 # Add tini

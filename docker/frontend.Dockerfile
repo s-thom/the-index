@@ -1,5 +1,5 @@
 # Build from Node image
-FROM node:14 as builder
+FROM node:15 as builder
 
 WORKDIR /repo
 ENV CI=true

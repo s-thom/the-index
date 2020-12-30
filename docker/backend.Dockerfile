@@ -1,5 +1,5 @@
 # Build from Node image
-FROM node:14 as builder
+FROM node:15 as builder
 
 WORKDIR /repo
 ENV CI=true
@@ -18,7 +18,7 @@ COPY ./packages/backend ./
 RUN npm run build
 
 # Final Node image
-FROM node:14 as release
+FROM node:15 as release
 USER node
 
 # Add tini
