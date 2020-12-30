@@ -60,4 +60,4 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
       - name: Inspect
         run: |
-          docker buildx imagetools inspect localhost:5000/s-thom/the-index/${{ matrix.image }}:latest
+          docker buildx imagetools inspect ghcr.io/s-thom/the-index/${{ matrix.image }}:${{ steps.docker_meta.outputs.version }}
