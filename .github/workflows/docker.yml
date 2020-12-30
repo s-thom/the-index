@@ -51,6 +51,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: ${{ github.event_name != 'pull_request' }}
+          load: true
           file: './docker/${{ matrix.image }}.Dockerfile'
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
@@ -58,4 +59,4 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
       - name: Inspect
         run: |
-          docker buildx imagetools inspect ghcr.io/s-thom/the-index/${{ matrix.image }}:${{ steps.docker_meta.outputs.version }}
+          docker buildx imagetools inspect s-thom/the-index/${{ matrix.image }}:${{ steps.docker_meta.outputs.version }}
