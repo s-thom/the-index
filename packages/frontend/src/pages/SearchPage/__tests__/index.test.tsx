@@ -17,6 +17,7 @@ describe('SearchPage', () => {
           created: '2020-01-01T00:00:00.000Z',
           url: 'https://example.com',
           tags: ['foo', 'bar'],
+          visibility: 'private',
           user: { name: 'stuart' },
         },
         {
@@ -24,6 +25,7 @@ describe('SearchPage', () => {
           created: '2020-01-01T00:00:00.000Z',
           url: 'https://google.com',
           tags: ['foo', 'baz'],
+          visibility: 'private',
           user: { name: 'stuart' },
         },
       ],
