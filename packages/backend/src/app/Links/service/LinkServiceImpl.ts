@@ -25,7 +25,7 @@ export default class LinkServiceImpl implements ILinkService {
     return this.linkRepository.findByReference(user, reference);
   }
 
-  async addLink(user: User, link: Pick<Link, 'url' | 'tags'>): Promise<Link> {
+  async addLink(user: User, link: Pick<Link, 'url' | 'tags' | 'visibility'>): Promise<Link> {
     const reference = this.idService.next();
     const newLink = this.linkRepository.insert(user, { ...link, reference });
     return newLink;

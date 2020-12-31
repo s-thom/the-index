@@ -19,10 +19,10 @@ describe('LinkRepositoryImpl', () => {
       await expect(
         repository.insert(
           { id: 1, name: 'stuart', created: new Date() },
-          { reference: 'AAA', tags: ['foo', 'bar'], url: 'https://example.com' },
+          { reference: 'AAA',visibility:'private', tags: ['foo', 'bar'], url: 'https://example.com' },
         ),
       ).resolves.toMatchObject({
-        reference: 'AAA',
+        reference: 'AAA',visibility:'private',
         tags: ['foo', 'bar'],
         url: 'https://example.com',
         user: { id: 1, name: 'stuart' },
@@ -35,14 +35,14 @@ describe('LinkRepositoryImpl', () => {
       await seedDatabase({
         users: [{ id: 1, name: 'stuart' }],
         tags: [{ id: 1, name: 'foo', user: { id: 1 } }],
-        links: [{ id: 1, reference: 'AAA', user: { id: 1 }, tags: [{ id: 1 }], url: 'https://example.com' }],
+        links: [{ id: 1, reference: 'AAA',visibility:'private', user: { id: 1 }, tags: [{ id: 1 }], url: 'https://example.com' }],
       });
 
       const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, { getUserTags: jest.fn() });
       await expect(
         repository.findByReference({ id: 1, name: 'stuart', created: new Date() }, 'AAA'),
       ).resolves.toMatchObject({
-        reference: 'AAA',
+        reference: 'AAA',visibility:'private',
         tags: ['foo'],
         url: 'https://example.com',
         user: { id: 1, name: 'stuart' },
@@ -73,8 +73,8 @@ describe('LinkRepositoryImpl', () => {
           { id: 3, name: 'baz', user: { id: 1 } },
         ],
         links: [
-          { id: 1, reference: 'AAA', user: { id: 1 }, tags: [{ id: 1 }, { id: 2 }], url: 'https://example.com' },
-          { id: 2, reference: 'BBB', user: { id: 1 }, tags: [{ id: 2 }, { id: 3 }], url: 'https://example.com' },
+          { id: 1, reference: 'AAA',visibility:'private', user: { id: 1 }, tags: [{ id: 1 }, { id: 2 }], url: 'https://example.com' },
+          { id: 2, reference: 'BBB',visibility:'private', user: { id: 1 }, tags: [{ id: 2 }, { id: 3 }], url: 'https://example.com' },
         ],
       });
 
@@ -83,8 +83,8 @@ describe('LinkRepositoryImpl', () => {
         repository.search({ id: 1, name: 'stuart', created: new Date() }, { tags: ['bar', 'baz'] }),
       ).resolves.toMatchObject({
         links: [
-          { id: 2, reference: 'BBB', tags: expect.arrayContaining(['bar', 'baz']) },
-          { id: 1, reference: 'AAA', tags: expect.arrayContaining(['foo', 'bar']) },
+          { id: 2, reference: 'BBB',visibility:'private', tags: expect.arrayContaining(['bar', 'baz']) },
+          { id: 1, reference: 'AAA',visibility:'private', tags: expect.arrayContaining(['foo', 'bar']) },
         ],
         pagination: { limit: 10, offset: 0, total: 2 },
       });
@@ -101,14 +101,14 @@ describe('LinkRepositoryImpl', () => {
         links: [
           {
             id: 1,
-            reference: 'AAA',
+            reference: 'AAA',visibility:'private',
             user: { id: 1 },
             tags: [{ id: 1 }, { id: 2 }],
             created: new Date('2019-01-01T00:00:00.000Z'),
           },
           {
             id: 2,
-            reference: 'BBB',
+            reference: 'BBB',visibility:'private',
             user: { id: 1 },
             tags: [{ id: 2 }, { id: 3 }],
             created: new Date('2020-01-05T00:00:00.000Z'),
@@ -137,7 +137,7 @@ describe('LinkRepositoryImpl', () => {
           },
         ),
       ).resolves.toMatchObject({
-        links: [{ id: 2, reference: 'BBB', tags: expect.arrayContaining(['bar', 'baz']) }],
+        links: [{ id: 2, reference: 'BBB',visibility:'private', tags: expect.arrayContaining(['bar', 'baz']) }],
         pagination: { limit: 5, offset: 0, total: 1 },
       });
     });

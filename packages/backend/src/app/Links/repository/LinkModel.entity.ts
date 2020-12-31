@@ -32,6 +32,9 @@ export default class LinkModel {
   @ManyToOne(() => UserModel)
   user!: UserModel;
 
+  @Column({ type: 'text', default: 'private' })
+  visibility!: string;
+
   @CreateDateColumn()
   created!: Date;
 

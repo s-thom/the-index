@@ -7,6 +7,7 @@ describe('LinkServiceImpl', () => {
       const mockFindByReference = jest.fn().mockResolvedValue({
         id: 1,
         reference: 'AAA',
+        visibility: 'private',
         user: { id: 1 },
         tags: [{ id: 1 }],
         url: 'https://example.com',
@@ -25,6 +26,7 @@ describe('LinkServiceImpl', () => {
       await expect(service.getLink({ id: 1 } as any, 'AAA')).resolves.toEqual({
         id: 1,
         reference: 'AAA',
+        visibility: 'private',
         user: { id: 1 },
         tags: [{ id: 1 }],
         url: 'https://example.com',
@@ -40,6 +42,7 @@ describe('LinkServiceImpl', () => {
       const mockInsert = jest.fn().mockResolvedValue({
         id: 1,
         reference: 'AAA',
+        visibility: 'private',
         user: { id: 1 },
         tags: ['foo', 'bar'],
         url: 'https://example.com',
@@ -56,17 +59,21 @@ describe('LinkServiceImpl', () => {
       );
 
       await expect(
-        service.addLink({ id: 1 } as any, { url: 'https://example.com', tags: ['foo', 'bar'] }),
+        service.addLink({ id: 1 } as any, { url: 'https://example.com', tags: ['foo', 'bar'], visibility: 'private' }),
       ).resolves.toEqual({
         id: 1,
         reference: 'AAA',
+        visibility: 'private',
         user: { id: 1 },
         tags: ['foo', 'bar'],
         url: 'https://example.com',
       });
 
       expect(mockInsert).toHaveBeenCalledTimes(1);
-      expect(mockInsert).toHaveBeenLastCalledWith({ id: 1 }, { url: 'https://example.com', tags: ['foo', 'bar'] });
+      expect(mockInsert).toHaveBeenLastCalledWith(
+        { id: 1 },
+        { url: 'https://example.com', tags: ['foo', 'bar'], visibility: 'private' },
+      );
     });
   });
 
@@ -77,6 +84,7 @@ describe('LinkServiceImpl', () => {
           {
             id: 1,
             reference: 'AAA',
+            visibility: 'private',
             user: { id: 1 },
             tags: ['foo', 'bar'],
             url: 'https://example.com',
@@ -100,6 +108,7 @@ describe('LinkServiceImpl', () => {
           {
             id: 1,
             reference: 'AAA',
+            visibility: 'private',
             user: { id: 1 },
             tags: ['foo', 'bar'],
             url: 'https://example.com',

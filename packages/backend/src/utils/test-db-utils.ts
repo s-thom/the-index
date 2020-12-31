@@ -25,6 +25,7 @@ interface TestLinkModel {
   url?: string;
   tags: Partial<TestTagModel>[];
   user: Partial<TestUserModel>;
+  visibility?: string;
   created?: Date;
   updated?: Date;
   deleted?: Date;
@@ -49,13 +50,24 @@ export function makeTag({ id, name, user }: TestTagModel): TagModel {
   return tag;
 }
 
-export function makeLink({ id, reference, url, tags, user, created, updated, deleted }: TestLinkModel): LinkModel {
+export function makeLink({
+  id,
+  reference,
+  url,
+  tags,
+  user,
+  visibility,
+  created,
+  updated,
+  deleted,
+}: TestLinkModel): LinkModel {
   const link = new LinkModel();
   link.id = id;
   link.reference = reference;
   link.url = url ?? `https://example.com#${reference}`;
   link.tags = tags as TagModel[];
   link.user = user as UserModel;
+  link.visibility = visibility ?? 'private';
   link.created = created ?? new Date('2020-01-01T00:00:00.000Z');
   link.updated = updated;
   link.deleted = deleted;
