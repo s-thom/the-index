@@ -15,7 +15,8 @@ describe('TagRepositoryImpl', () => {
         links: [
           {
             id: 1,
-            reference: 'AAA',visibility:'private',
+            reference: 'AAA',
+            visibility: 'private',
             tags: [{ id: 1 }, { id: 2 }, { id: 3 }],
             user: { id: 1 },
           },
@@ -41,13 +42,15 @@ describe('TagRepositoryImpl', () => {
         links: [
           {
             id: 1,
-            reference: 'AAA',visibility:'private',
+            reference: 'AAA',
+            visibility: 'private',
             tags: [{ id: 1 }, { id: 3 }],
             user: { id: 1 },
           },
           {
             id: 2,
-            reference: 'BBB',visibility:'private',
+            reference: 'BBB',
+            visibility: 'private',
             tags: [{ id: 2 }, { id: 3 }],
             user: { id: 1 },
           },
@@ -73,7 +76,8 @@ describe('TagRepositoryImpl', () => {
         links: [
           {
             id: 1,
-            reference: 'AAA',visibility:'private',
+            reference: 'AAA',
+            visibility: 'private',
             tags: [{ id: 1 }, { id: 2 }, { id: 3 }],
             user: { id: 1 },
           },
@@ -103,7 +107,8 @@ describe('TagRepositoryImpl', () => {
         links: [
           {
             id: 1,
-            reference: 'AAA',visibility:'private',
+            reference: 'AAA',
+            visibility: 'private',
             tags: [{ id: 1 }, { id: 2 }, { id: 3 }],
             user: { id: 1 },
           },

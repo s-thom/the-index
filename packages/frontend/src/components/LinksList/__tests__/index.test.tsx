@@ -7,7 +7,7 @@ describe('LinksList', () => {
   it('should render with one page', async () => {
     render(
       <LinksList
-        links={[{ id: 'AAA',visibility:'private', tags: [], url: 'https://example.com', user: { name: 'stuart' } }]}
+        links={[{ id: 'AAA', visibility: 'private', tags: [], url: 'https://example.com', user: { name: 'stuart' } }]}
         pagination={{ limit: 1, total: 1, offset: 0, page: 1 }}
       />,
     );
@@ -20,7 +20,7 @@ describe('LinksList', () => {
   it('should render with multiple pages', async () => {
     render(
       <LinksList
-        links={[{ id: 'AAA',visibility:'private', tags: [], url: 'https://example.com', user: { name: 'stuart' } }]}
+        links={[{ id: 'AAA', visibility: 'private', tags: [], url: 'https://example.com', user: { name: 'stuart' } }]}
         pagination={{ limit: 1, total: 2, offset: 0, page: 1 }}
       />,
     );
