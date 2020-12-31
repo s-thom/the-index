@@ -70,7 +70,10 @@ export default class LinkRepositoryImpl implements ILinkRepository {
     return this.resolve(model);
   }
 
-  async search(user: User, { tags, created, limit = 10, offset = 0 }: LinkSearchOptions): Promise<LinkSearchReturn> {
+  async search(
+    user: User,
+    { tags, created, limit = 10, offset = 0, visibility }: LinkSearchOptions,
+  ): Promise<LinkSearchReturn> {
     const { min, max } = created ?? {};
     const clampedLimit = Math.max(Math.min(limit, 100), 1);
 
@@ -89,6 +92,23 @@ export default class LinkRepositoryImpl implements ILinkRepository {
     if (max) {
       queryBuilder = queryBuilder.andWhere('LinkModel.created <= datetime(:max)', { max: max.toISOString() });
     }
+
+    // Visibility
+    let allowedVisibilities: string[];
+    switch (visibility) {
+      case 'internal':
+        allowedVisibilities = ['private', 'internal'];
+        break;
+      case 'public':
+        allowedVisibilities = ['private', 'internal', 'public'];
+        break;
+      case undefined:
+      case 'private':
+      default:
+        allowedVisibilities = ['private'];
+        break;
+    }
+    queryBuilder = queryBuilder.andWhere('LinkModel.visibility IN (:...allowedVisibilities)', { allowedVisibilities });
 
     queryBuilder = queryBuilder
       .groupBy('LinkModel.id')

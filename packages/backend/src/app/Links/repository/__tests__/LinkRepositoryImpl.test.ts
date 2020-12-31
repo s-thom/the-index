@@ -168,5 +168,61 @@ describe('LinkRepositoryImpl', () => {
         pagination: { limit: 5, offset: 0, total: 1 },
       });
     });
+
+    it.each<[string, any[]]>([
+      ['public', [{ id: 3 }, { id: 2 }, { id: 1 }]],
+      ['internal', [{ id: 2 }, { id: 1 }]],
+      ['private', [{ id: 1 }]],
+    ])('should filter links by visibility %s', async (actualVisibility, expectedLinks) => {
+      await seedDatabase({
+        users: [{ id: 1, name: 'stuart' }],
+        tags: [
+          { id: 1, name: 'foo', user: { id: 1 } },
+          { id: 2, name: 'bar', user: { id: 1 } },
+          { id: 3, name: 'baz', user: { id: 1 } },
+        ],
+        links: [
+          {
+            id: 1,
+            reference: 'AAA',
+            visibility: 'private',
+            user: { id: 1 },
+            tags: [{ id: 1 }, { id: 2 }],
+            created: new Date('2020-01-01T00:00:00.000Z'),
+          },
+          {
+            id: 2,
+            reference: 'BBB',
+            visibility: 'internal',
+            user: { id: 1 },
+            tags: [{ id: 2 }, { id: 3 }],
+            created: new Date('2020-01-02T00:00:00.000Z'),
+          },
+          {
+            id: 3,
+            reference: 'CCC',
+            visibility: 'public',
+            user: { id: 1 },
+            tags: [{ id: 1 }, { id: 3 }],
+            created: new Date('2020-01-03T00:00:00.000Z'),
+          },
+        ],
+      });
+
+      const repository = new LinkRepositoryImpl(mockLoggerService, mockTypeOrmService, { getUserTags: jest.fn() });
+      await expect(
+        repository.search(
+          { id: 1, name: 'stuart', created: new Date() },
+          {
+            tags: ['foo', 'bar', 'baz'],
+            visibility: actualVisibility,
+            limit: 5,
+          },
+        ),
+      ).resolves.toMatchObject({
+        links: expectedLinks,
+        pagination: { limit: 5, offset: 0, total: expectedLinks.length },
+      });
+    });
   });
 });
