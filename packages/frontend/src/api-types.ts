@@ -57,6 +57,10 @@ export interface Link {
    * The date the link was added
    */
   created?: string;
+  /**
+   * The visibility of the link
+   */
+  visibility: 'private' | 'internal' | 'public';
   user: User;
 }
 
@@ -158,6 +162,10 @@ export interface GetV2LinksQueryParams {
    * The lower bound for the time a link was added
    */
   after?: string;
+  /**
+   * The visibility of links to search for
+   */
+  visibility?: 'private' | 'internal' | 'public';
   /**
    * The maximum number of links to return
    */

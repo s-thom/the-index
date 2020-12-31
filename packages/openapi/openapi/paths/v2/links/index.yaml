@@ -35,6 +35,18 @@ get:
         format: date-time
         description: The lower bound for the time a link was added
         example: '2020-01-01T00:00:00.000Z'
+    - name: visibility
+      in: query
+      description: The visibility of links to search for
+      schema:
+        type: string
+        description: The visibility of links to search for
+        enum:
+          - private
+          - internal
+          - public
+        example: private
+        default: private
     - name: limit
       in: query
       description: The maximum number of links to return
@@ -42,6 +54,7 @@ get:
         type: number
         description: The maximum number of links to return
         example: 25
+        default: 25
     - name: offset
       in: query
       description: The number of links to skip when returning
@@ -49,6 +62,7 @@ get:
         type: number
         description: The number of links to skip when returning
         example: 0
+        default: 0
   responses:
     '200':
       description: Success
