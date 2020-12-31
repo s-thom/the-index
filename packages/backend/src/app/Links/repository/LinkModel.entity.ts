@@ -25,7 +25,7 @@ export default class LinkModel {
   @Column({ type: 'text' })
   url!: string;
 
-  @ManyToMany(() => TagModel, { cascade: true })
+  @ManyToMany(() => TagModel)
   @JoinTable()
   tags!: TagModel[];
 
