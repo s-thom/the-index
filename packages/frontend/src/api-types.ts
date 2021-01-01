@@ -201,6 +201,10 @@ export interface PostV2LinksRequestBody {
    * List of tags to add to the link
    */
   tags: string[];
+  /**
+   * The visibility of links to search for
+   */
+  visibility: 'private' | 'internal' | 'public';
 }
 
 /**

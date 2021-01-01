@@ -69,8 +69,15 @@ export default function SearchForm({ initialValues, onChange = noop }: SearchFor
         </div>
         <div>
           <h4>
-            <span>Include other users&apos; links</span>
-            <PlainInput name="includePublic" placeholder="Include other users' links" type="checkbox" ref={register} />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="search.includePublic">Include other users&apos; links</label>
+            <input
+              id="search.includePublic"
+              name="includePublic"
+              placeholder="Include other users' links"
+              type="checkbox"
+              ref={register}
+            />
           </h4>
         </div>
       </div>

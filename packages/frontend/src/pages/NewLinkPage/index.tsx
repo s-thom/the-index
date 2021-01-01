@@ -3,7 +3,7 @@ import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { postV2Links, PostV2LinksRequestBody, PostV2LinksResponse } from '../../api-types';
-import NewLinkForm from '../../components/NewLinkForm';
+import NewLinkForm, { NewLinkFormValues } from '../../components/NewLinkForm';
 
 const StyledHeading = styled.h2`
   text-align: center;
@@ -30,8 +30,12 @@ export default function NewLinkPage() {
     },
   );
   const onFormSubmit = useCallback(
-    (url, tags) => {
-      mutate({ url, tags });
+    ({ url, tags, isPublic }: NewLinkFormValues) => {
+      mutate({
+        url,
+        tags,
+        visibility: isPublic ? 'internal' : 'private',
+      });
     },
     [mutate],
   );

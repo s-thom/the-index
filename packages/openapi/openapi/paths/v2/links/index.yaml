@@ -102,6 +102,7 @@ post:
           required:
             - url
             - tags
+            - visibility
           properties:
             url:
               type: string
@@ -114,6 +115,14 @@ post:
                 type: string
                 description: A tag
                 example: example
+            visibility:
+              type: string
+              description: The visibility of links to search for
+              enum:
+                - private
+                - internal
+                - public
+              example: private
   responses:
     '200':
       description: Success

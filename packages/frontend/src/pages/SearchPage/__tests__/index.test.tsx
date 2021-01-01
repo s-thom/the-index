@@ -40,6 +40,7 @@ describe('SearchPage', () => {
         tags: [],
         limit: 25,
         offset: 0,
+        visibility: 'private',
       },
     });
 
@@ -53,6 +54,7 @@ describe('SearchPage', () => {
         tags: ['foo'],
         limit: 25,
         offset: 0,
+        visibility: 'private',
       },
     });
     expect(getV2Links).toHaveBeenNthCalledWith(3, {
@@ -60,6 +62,7 @@ describe('SearchPage', () => {
         tags: ['bar', 'foo'],
         limit: 25,
         offset: 0,
+        visibility: 'private',
       },
     });
 

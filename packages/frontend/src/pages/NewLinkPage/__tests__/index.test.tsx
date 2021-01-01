@@ -55,6 +55,7 @@ describe('NewLinkPage', () => {
       body: {
         url: 'https://example.com',
         tags: ['suggestion'],
+        visibility: 'private',
       },
     });
   });

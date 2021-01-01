@@ -36,13 +36,14 @@ const FormUrlInput = styled.input`
   }
 `;
 
-interface NewLinkFormValues {
+export interface NewLinkFormValues {
   url: string;
   tags: string[];
+  isPublic: boolean;
 }
 
 interface NewLinkFormProps {
-  onSubmit?: (url: string, tags: string[]) => void;
+  onSubmit?: (values: NewLinkFormValues) => void;
   initialValues?: Partial<NewLinkFormValues>;
 }
 
@@ -51,6 +52,7 @@ const URL_REGEX = urlRegex({ strict: true, exact: true });
 const DEFAULT_VALUES: NewLinkFormValues = {
   url: '',
   tags: [],
+  isPublic: false,
 };
 
 export default function NewLinkForm({ onSubmit = noop, initialValues }: NewLinkFormProps) {
@@ -64,8 +66,8 @@ export default function NewLinkForm({ onSubmit = noop, initialValues }: NewLinkF
 
   const { isValid, isSubmitting } = formState;
   const onFormSubmit = useCallback(
-    (values: NewLinkFormValues) => {
-      return onSubmit(values.url, values.tags);
+    ({ url, tags, isPublic }: NewLinkFormValues) => {
+      return onSubmit({ url, tags, isPublic });
     },
     [onSubmit],
   );
@@ -100,6 +102,11 @@ export default function NewLinkForm({ onSubmit = noop, initialValues }: NewLinkF
           />
         )}
       />
+      <div>
+        <input id="new-link.isPublic" type="checkbox" name="isPublic" ref={register} />
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label htmlFor="new-link.isPublic">Allow other users to see this link in their search results</label>
+      </div>
     </FormWrapper>
   );
 }
