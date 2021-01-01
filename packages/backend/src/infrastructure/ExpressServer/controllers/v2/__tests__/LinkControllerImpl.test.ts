@@ -53,7 +53,7 @@ describe('LinkControllerImpl', () => {
       await expect(
         controller.addLink(
           { id: 1, name: 'stuart', created: new Date('2020-01-01T00:00:00.000Z') },
-          { url: 'https://example.com', tags: ['foo'] },
+          { url: 'https://example.com', tags: ['foo'], visibility: 'private' },
         ),
       ).resolves.toEqual({
         link: { id: 'AAA', visibility: 'private', url: 'https://example.com', tags: ['foo'], user: { name: 'stuart' } },
