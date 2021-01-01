@@ -56,6 +56,10 @@ export interface Link {
    * The date the link was added
    */
   created?: string;
+  /**
+   * The visibility of the link
+   */
+  visibility: 'private' | 'internal' | 'public';
   user: User;
 }
 
@@ -132,6 +136,10 @@ export interface GetV2LinksQueryParams {
    */
   after?: string;
   /**
+   * The visibility of links to search for
+   */
+  visibility?: 'private' | 'internal' | 'public';
+  /**
    * The maximum number of links to return
    */
   limit?: number;
@@ -154,6 +162,10 @@ export interface PostV2LinksRequestBody {
    * List of tags to add to the link
    */
   tags: string[];
+  /**
+   * The visibility of links to search for
+   */
+  visibility: 'private' | 'internal' | 'public';
 }
 
 export interface GetV2LinkIdResponse {

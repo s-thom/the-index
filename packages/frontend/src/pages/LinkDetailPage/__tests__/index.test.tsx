@@ -15,6 +15,7 @@ describe('LinkDetailPage', () => {
         url: 'https://example.com',
         tags: ['example'],
         created: '2020-01-01T00:00:00.000Z',
+        visibility: 'private',
         user: {
           name: 'stuart',
         },

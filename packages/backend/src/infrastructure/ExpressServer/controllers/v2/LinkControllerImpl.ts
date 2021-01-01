@@ -32,11 +32,24 @@ export default class LinkControllerImpl implements LinkController {
   }
 
   private serialiseLink(link: Link): ApiLink {
+    let visibility: 'public' | 'internal' | 'private';
+    switch (link.visibility) {
+      case 'public':
+      case 'internal':
+      case 'private':
+        visibility = link.visibility;
+        break;
+      default:
+        visibility = 'public';
+        break;
+    }
+
     return {
       id: link.reference,
       url: link.url,
       tags: link.tags,
       created: link.created?.toISOString(),
+      visibility,
       user: {
         name: link.user.name,
       },
@@ -106,6 +119,7 @@ export default class LinkControllerImpl implements LinkController {
             .shape({
               url: Yup.string().required(),
               tags: Yup.array().of(Yup.string().required()).required(),
+              visibility: Yup.string().oneOf(['public', 'internal', 'private']).required(),
             })
             .defined(),
         },

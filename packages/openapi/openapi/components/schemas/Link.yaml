@@ -6,6 +6,7 @@ required:
   - tags
   - inserted
   - user
+  - visibility
 properties:
   id:
     type: string
@@ -27,5 +28,13 @@ properties:
     description: The date the link was added
     format: date-time
     example: '2020-01-01T00:00:00.000Z'
+  visibility:
+    type: string
+    description: The visibility of the link
+    enum:
+      - private
+      - internal
+      - public
+    example: private
   user:
     $ref: ./User.yaml

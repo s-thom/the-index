@@ -25,12 +25,15 @@ export default class LinkModel {
   @Column({ type: 'text' })
   url!: string;
 
-  @ManyToMany(() => TagModel, { cascade: true })
+  @ManyToMany(() => TagModel)
   @JoinTable()
   tags!: TagModel[];
 
   @ManyToOne(() => UserModel)
   user!: UserModel;
+
+  @Column({ type: 'text', default: 'private' })
+  visibility!: string;
 
   @CreateDateColumn()
   created!: Date;

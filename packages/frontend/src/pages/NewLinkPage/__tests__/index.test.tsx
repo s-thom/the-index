@@ -16,6 +16,7 @@ describe('NewLinkPage', () => {
         created: '2020-01-01T00:00:00.000Z',
         url: 'https://example/com',
         tags: ['suggestion'],
+        visibility: 'private',
         user: { name: 'stuart' },
       },
     });
@@ -54,6 +55,7 @@ describe('NewLinkPage', () => {
       body: {
         url: 'https://example.com',
         tags: ['suggestion'],
+        visibility: 'private',
       },
     });
   });

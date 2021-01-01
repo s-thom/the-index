@@ -30,10 +30,11 @@ interface SearchPageQueryParams {
   after?: string;
   before?: string;
   page?: number;
+  visibility?: string;
 }
 
 function extractParams(params: QueryType): SearchPageQueryParams {
-  const { tags, after, before, page } = params;
+  const { tags, after, before, page, visibility } = params;
 
   let finalTags: string[];
   if (Array.isArray(tags)) {
@@ -46,12 +47,14 @@ function extractParams(params: QueryType): SearchPageQueryParams {
   const finalAfter = typeof after === 'string' ? after : undefined;
   const finalBefore = typeof before === 'string' ? before : undefined;
   const finalPage = typeof page === 'number' ? page : undefined;
+  const finalVisibility = typeof visibility === 'string' ? visibility : undefined;
 
   return {
     tags: finalTags,
     after: finalAfter,
     before: finalBefore,
     page: finalPage,
+    visibility: finalVisibility,
   };
 }
 
@@ -59,13 +62,14 @@ const NUM_LINKS = 25;
 
 export default function SearchPage() {
   const [params, setParams] = useParams();
-  const { tags, after, before, page } = useMemo(() => extractParams(params), [params]);
+  const { tags, after, before, page, visibility } = useMemo(() => extractParams(params), [params]);
   const currentPage = Math.floor(Math.max(page ?? 1, 0));
 
   const [initialFormValues] = useState<SearchFormValues>({
     tags,
     before: before || undefined,
     after: after || undefined,
+    includePublic: visibility === 'public',
   });
 
   const formChangeCallback = useCallback(
@@ -75,6 +79,7 @@ export default function SearchPage() {
         after: values.after || undefined,
         before: values.before || undefined,
         page: undefined,
+        visibility: values.includePublic ? 'public' : undefined,
       };
       setParams(newParams);
     },
@@ -88,20 +93,34 @@ export default function SearchPage() {
         after,
         before,
         page: newPage,
+        visibility,
       };
       setParams(newParams);
     },
-    [after, before, setParams, tags],
+    [after, before, setParams, tags, visibility],
   );
 
   const { data } = useQuery(
     ['links.search', tags, before, after, currentPage],
     async () => {
+      let finalVisibility: 'public' | 'internal' | 'private';
+      switch (visibility) {
+        case 'public':
+        case 'internal':
+        case 'private':
+          finalVisibility = visibility;
+          break;
+        default:
+          finalVisibility = 'private';
+          break;
+      }
+
       const response = await getV2Links({
         queryParams: {
           tags,
           before: before || undefined,
           after: after || undefined,
+          visibility: finalVisibility,
           limit: NUM_LINKS,
           offset: currentPage > 1 ? (currentPage - 1) * NUM_LINKS : 0,
         },

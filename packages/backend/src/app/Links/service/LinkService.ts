@@ -8,6 +8,7 @@ export interface LinkSearchOptions {
     min?: Date;
     max?: Date;
   };
+  visibility?: string;
   limit?: number;
   offset?: number;
 }

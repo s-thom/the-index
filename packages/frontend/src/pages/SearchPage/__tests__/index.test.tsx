@@ -17,6 +17,7 @@ describe('SearchPage', () => {
           created: '2020-01-01T00:00:00.000Z',
           url: 'https://example.com',
           tags: ['foo', 'bar'],
+          visibility: 'private',
           user: { name: 'stuart' },
         },
         {
@@ -24,6 +25,7 @@ describe('SearchPage', () => {
           created: '2020-01-01T00:00:00.000Z',
           url: 'https://google.com',
           tags: ['foo', 'baz'],
+          visibility: 'private',
           user: { name: 'stuart' },
         },
       ],
@@ -38,6 +40,7 @@ describe('SearchPage', () => {
         tags: [],
         limit: 25,
         offset: 0,
+        visibility: 'private',
       },
     });
 
@@ -51,6 +54,7 @@ describe('SearchPage', () => {
         tags: ['foo'],
         limit: 25,
         offset: 0,
+        visibility: 'private',
       },
     });
     expect(getV2Links).toHaveBeenNthCalledWith(3, {
@@ -58,6 +62,7 @@ describe('SearchPage', () => {
         tags: ['bar', 'foo'],
         limit: 25,
         offset: 0,
+        visibility: 'private',
       },
     });
 

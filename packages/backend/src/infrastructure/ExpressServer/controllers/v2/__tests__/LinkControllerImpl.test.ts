@@ -7,6 +7,7 @@ describe('LinkControllerImpl', () => {
       const mockGetLink = jest.fn().mockResolvedValue({
         id: 1,
         reference: 'AAA',
+        visibility: 'private',
         url: 'https://example.com',
         tags: ['foo'],
         user: { id: 1, name: 'stuart' },
@@ -20,7 +21,9 @@ describe('LinkControllerImpl', () => {
 
       await expect(
         controller.getLink({ id: 1, name: 'stuart', created: new Date('2020-01-01T00:00:00.000Z') }, { id: 'AAA' }),
-      ).resolves.toEqual({ link: { id: 'AAA', url: 'https://example.com', tags: ['foo'], user: { name: 'stuart' } } });
+      ).resolves.toEqual({
+        link: { id: 'AAA', visibility: 'private', url: 'https://example.com', tags: ['foo'], user: { name: 'stuart' } },
+      });
 
       expect(mockGetLink).toHaveBeenCalledTimes(1);
       expect(mockGetLink).toHaveBeenLastCalledWith(
@@ -35,6 +38,7 @@ describe('LinkControllerImpl', () => {
       const mockAddLink = jest.fn().mockResolvedValue({
         id: 1,
         reference: 'AAA',
+        visibility: 'private',
         url: 'https://example.com',
         tags: ['foo'],
         user: { id: 1, name: 'stuart' },
@@ -49,14 +53,16 @@ describe('LinkControllerImpl', () => {
       await expect(
         controller.addLink(
           { id: 1, name: 'stuart', created: new Date('2020-01-01T00:00:00.000Z') },
-          { url: 'https://example.com', tags: ['foo'] },
+          { url: 'https://example.com', tags: ['foo'], visibility: 'private' },
         ),
-      ).resolves.toEqual({ link: { id: 'AAA', url: 'https://example.com', tags: ['foo'], user: { name: 'stuart' } } });
+      ).resolves.toEqual({
+        link: { id: 'AAA', visibility: 'private', url: 'https://example.com', tags: ['foo'], user: { name: 'stuart' } },
+      });
 
       expect(mockAddLink).toHaveBeenCalledTimes(1);
       expect(mockAddLink).toHaveBeenLastCalledWith(
         { id: 1, name: 'stuart', created: new Date('2020-01-01T00:00:00.000Z') },
-        { url: 'https://example.com', tags: ['foo'] },
+        { url: 'https://example.com', tags: ['foo'], visibility: 'private' },
       );
     });
   });
@@ -90,6 +96,7 @@ describe('LinkControllerImpl', () => {
           {
             id: 1,
             reference: 'AAA',
+            visibility: 'private',
             url: 'https://example.com',
             tags: ['foo'],
             user: { id: 1, name: 'stuart' },
@@ -110,7 +117,9 @@ describe('LinkControllerImpl', () => {
           { tags: ['foo'], before: '2021-01-01T00:00:00.000Z', after: '2020-01-01T00:00:00.000Z' },
         ),
       ).resolves.toEqual({
-        links: [{ id: 'AAA', url: 'https://example.com', tags: ['foo'], user: { name: 'stuart' } }],
+        links: [
+          { id: 'AAA', visibility: 'private', url: 'https://example.com', tags: ['foo'], user: { name: 'stuart' } },
+        ],
         pagination: { limit: 25, offset: 0, page: 1, total: 1 },
       });
 

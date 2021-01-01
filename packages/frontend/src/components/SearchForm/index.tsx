@@ -10,6 +10,7 @@ export interface SearchFormValues {
   tags: string[];
   before?: string;
   after?: string;
+  includePublic?: boolean;
 }
 
 interface SearchFormProps {
@@ -19,6 +20,7 @@ interface SearchFormProps {
 
 const DEFAULT_VALUES: SearchFormValues = {
   tags: [],
+  includePublic: false,
 };
 
 export default function SearchForm({ initialValues, onChange = noop }: SearchFormProps) {
@@ -64,6 +66,19 @@ export default function SearchForm({ initialValues, onChange = noop }: SearchFor
         <div>
           <h4>After</h4>
           <PlainInput name="after" placeholder="Date" type="date" ref={register} />
+        </div>
+        <div>
+          <h4>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="search.includePublic">Include other users&apos; links</label>
+            <input
+              id="search.includePublic"
+              name="includePublic"
+              placeholder="Include other users' links"
+              type="checkbox"
+              ref={register}
+            />
+          </h4>
         </div>
       </div>
     </form>
