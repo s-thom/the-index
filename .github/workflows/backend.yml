@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         env:
           cache-name: cache-node-modules
         with:
@@ -63,7 +63,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         env:
           cache-name: cache-node-modules
         with:
@@ -92,7 +92,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         env:
           cache-name: cache-node-modules
         with:
@@ -119,7 +119,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         env:
           cache-name: cache-node-modules
         with:
