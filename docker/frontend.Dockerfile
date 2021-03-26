@@ -18,7 +18,7 @@ COPY ./packages/frontend ./
 RUN npm run build
 
 # Final nginx image
-FROM nginx:1.19-alpine as release
+FROM nginx:1.19.8-alpine as release
 
 # Copy nginx configuration
 COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
