@@ -35,6 +35,10 @@ export default class ExpressServerImpl implements IExpressServer {
   async start() {
     const app = express();
 
+    if (this.config.express.proxy) {
+      app.set('trust proxy', 1);
+    }
+
     // Standard middleware
     app.use(json(this.config.express.bodyParser));
     app.use(cors(this.config.express.cors));
